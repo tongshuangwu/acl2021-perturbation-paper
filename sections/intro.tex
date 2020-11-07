@@ -1,0 +1,28 @@
+\begin{comment}
+Motivation:
+	- Counterfactual is important. Used in many evaluation and model improvement approaches. Like mentioned in other papers, perturbations of inputs would allow us to highlight what really matters more efficiently than getting different examples
+	- Existing methods have limitations:
+		○ Auto-method seems to focus on word substitution, or paraphrasing. More scalable, but usually too simplistic.
+		○ More diverse counterfactuals rely on human effort. More diverse and natural, but hard to scale:
+			§ Cannot create this for all instances
+			§ For just one instance, just getting one perturbation (good -> bad) still ignores many other decision boundary dimensions (good -> not good)
+	- Goal: To create a counterfactual generator that
+		○ can automatically cover more patterns
+		○ But still systematic enough for scaled analysis
+
+Contribution bullets:
+	- Survey on prior work, summarize applications + desired properties
+	- Perturbation as a generation model, the design of perturbation type control and the importance of [BLANK]
+	- Application - counterfactual explanation
+		○ Design - categorize patterns to search for, grouping/ranking/summarization, interactive mode
+		○ Validly - User study
+		○ Finding - case study on some model
+	- Application - labeling
+		○ Ranking, grouped labeling
+		○ Training data: get better results compared to
+			§ Adding the same amount of training data
+			§ asking people to generate counterfactuals using the same budget
+		○ Evaluation data: further decrease the SOTA model performance
+		○ Vision - not tested, but we think presenting some existing perturbations first should help people get more creative when they come up with their owns [future work…]
+
+\end{comment}

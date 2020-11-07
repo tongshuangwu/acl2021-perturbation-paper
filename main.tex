@@ -16,6 +16,7 @@
 \usepackage[hyperref]{acl2020}
 \usepackage{times}
 \usepackage{latexsym}
+
 \renewcommand{\UrlFont}{\ttfamily\small}
 
 % This is not strictly necessary, and may be commented out,
@@ -27,9 +28,17 @@
 \usepackage{verbatim}
 \usepackage[normalem]{ulem}
 \usepackage[vlined,ruled,linesnumbered]{algorithm2e}
+\usepackage{makecell}
+\usepackage{txfonts}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc}
 
 
-%\aclfinalcopy % Uncomment this line for the final submission
+
+\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
 
 %\setlength\titlebox{5cm}
@@ -37,10 +46,33 @@
 % to show all the authors. Please do not make the titlebox
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
-
+\renewcommand{\ttdefault}{txtt}
 \newcommand\BibTeX{B\textsc{ib}\TeX}
 %\newcommand*{\emailfont}{\fontfamily{pcr}\selectfont}
 
+\newcommand{\colbox}[2]{
+\begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{#1}{#2\/}%\reducedstrut
+\endgroup}
+  
+ 
+\newcommand{\veryshortarrow}[1][3pt]{\mathrel{%
+   \hbox{\rule[\dimexpr\fontdimen22\textfont2-.2pt\relax]{#1}{.4pt}}%
+   \mkern-4mu\hbox{\usefont{U}{lasy}{m}{n}\symbol{41}}}}
+   
+  
+\definecolor{caddback}{rgb}{0.90, 0.98, 0.96}
+\definecolor{cadd}{rgb}{0, 0.47, 0.34}
+\definecolor{cdelback}{rgb}{1, 0.94, 0.92}
+\definecolor{cdel}{rgb}{0.83, 0.32, 0.16}
+\def \arrow{$\veryshortarrow$}
+\newcommand{\add}[1]{\colbox{caddback}{{\color{cadd}#1\xspace}}} %
+\newcommand{\remove}[1]{\colbox{cdelback}{{\color{cdel}#1\xspace}}}%
+\newcommand{\swap}[2]{\remove{#1} \arrow\add{#2}}
+\newcommand{\changed}[2]{{#1}\arrow ~\add{#2}}
+
+\newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
 
 
 \title{Augmentation}
@@ -57,20 +89,21 @@ Tongshuang Wu \\
   Affiliation / Address line 3 \\
   \texttt{email@domain} \\}
 \end{comment}
+
 \author{
 \makecell{
 Tongshuang Wu$^{1}$ ~~~~~~~ 
 Marco Tulio Ribeiro$^{2}$ ~~~~~~~ 
 Jeffrey Heer$^{1}$ ~~~~~ 
-Daniel S. Weld$^{1}$ } \\ 
+Daniel S. Weld$^{1}$}  \\ 
 $^{1}$University of Washington\hspace{5mm}
-$^{1}$Microsoft Research\hspace{5mm} \\ 
-\href{mailto:wtshuang@cs.uw.edu}{\url{wtshuang@cs.uw.edu}}
-\hspace{0.5mm}
-\href{mailto:marcotcr@microsoft.com}{\url{marcotcr@gmail.com}}
-\hspace{0.5mm}
-\href{mailto:dan@cs.washington.edu}{\url{emailfont \{jheer,weld\}@cs.uw.edu}}
-  }
+$^{2}$Microsoft Research\hspace{5mm} \\ 
+\href{mailto:wtshuang@cs.uw.edu}{\UrlFont {wtshuang@cs.uw.edu}}
+\hspace{2mm}
+\href{mailto:marcotcr@microsoft.com}{\UrlFont {marcotcr@gmail.com}}
+\hspace{2mm}
+\href{mailto:dan@cs.washington.edu}{\UrlFont {\{jheer,weld\}@cs.uw.edu}}
+}
 
 \date{}
 
@@ -84,10 +117,17 @@ Authors are asked to conform to all the directions reported in this document.
 \end{abstract}
 
 \input{sections/intro}
+\input{sections/model}
+\input{sections/use_label}
+\input{sections/use_explanation}
+\input{sections/relate}
+\input{sections/conclusion}
 
 \bibliography{anthology,ref}
 \bibliographystyle{acl_natbib}
 
 \appendix
+\input{sections/app_label_instruction}
+\input{sections/app_train_datasets}
 
 \end{document}
