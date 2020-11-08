@@ -1,0 +1,56 @@
+\begin{thebibliography}{8}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Gardner et~al.(2020)Gardner, Artzi, Basmova, Berant, Bogin, Chen,
+  Dasigi, Dua, Elazar, Gottumukkala et~al.}]{gardner2020contrast}
+Matt Gardner, Yoav Artzi, Victoria Basmova, Jonathan Berant, Ben Bogin, Sihao
+  Chen, Pradeep Dasigi, Dheeru Dua, Yanai Elazar, Ananth Gottumukkala, et~al.
+  2020.
+\newblock Evaluating models' local decision boundaries via contrast sets.
+\newblock \emph{Findings of EMNLP}.
+
+\bibitem[{Kaushik et~al.(2019)Kaushik, Hovy, and Lipton}]{kaushik2019learning}
+Divyansh Kaushik, Eduard Hovy, and Zachary~C Lipton. 2019.
+\newblock Learning the difference that makes a difference with
+  counterfactually-augmented data.
+\newblock \emph{arXiv preprint arXiv:1909.12434}.
+
+\bibitem[{Khashabi et~al.(2020)Khashabi, Khot, and
+  Sabharwal}]{Khashabi2020MoreBF}
+Daniel Khashabi, Tushar Khot, and A.~Sabharwal. 2020.
+\newblock More bang for your buck: Natural perturbation for robust question
+  answering.
+\newblock \emph{EMNLP}.
+
+\bibitem[{McCoy et~al.(2019)McCoy, Pavlick, and Linzen}]{mccoy2019right}
+R~Thomas McCoy, Ellie Pavlick, and Tal Linzen. 2019.
+\newblock Right for the wrong reasons: Diagnosing syntactic heuristics in
+  natural language inference.
+\newblock \emph{arXiv preprint arXiv:1902.01007}.
+
+\bibitem[{Sakaguchi et~al.(2019)Sakaguchi, Bras, Bhagavatula, and
+  Choi}]{sakaguchi2019winogrande}
+Keisuke Sakaguchi, Ronan~Le Bras, Chandra Bhagavatula, and Yejin Choi. 2019.
+\newblock Winogrande: An adversarial winograd schema challenge at scale.
+\newblock \emph{arXiv preprint arXiv:1907.10641}.
+
+\bibitem[{Suhr et~al.(2018)Suhr, Zhou, Zhang, Zhang, Bai, and
+  Artzi}]{suhr2018corpus}
+Alane Suhr, Stephanie Zhou, Ally Zhang, Iris Zhang, Huajun Bai, and Yoav Artzi.
+  2018.
+\newblock A corpus for reasoning about natural language grounded in
+  photographs.
+\newblock \emph{arXiv preprint arXiv:1811.00491}.
+
+\bibitem[{Wieting and Gimpel(2017)}]{wieting2017paranmt}
+John Wieting and Kevin Gimpel. 2017.
+\newblock Paranmt-50m: Pushing the limits of paraphrastic sentence embeddings
+  with millions of machine translations.
+\newblock \emph{arXiv preprint arXiv:1711.05732}.
+
+\bibitem[{Zhang et~al.(2019)Zhang, Baldridge, and He}]{zhang2019paws}
+Yuan Zhang, Jason Baldridge, and Luheng He. 2019.
+\newblock Paws: Paraphrase adversaries from word scrambling.
+\newblock \emph{arXiv preprint arXiv:1904.01130}.
+
+\end{thebibliography}

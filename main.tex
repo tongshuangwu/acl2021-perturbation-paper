@@ -71,10 +71,27 @@
 \newcommand{\remove}[1]{\colbox{cdelback}{{\color{cdel}#1\xspace}}}%
 \newcommand{\swap}[2]{\remove{#1} \arrow\add{#2}}
 \newcommand{\changed}[2]{{#1}\arrow ~\add{#2}}
-
 \newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
 
+% tasks
+\newcommand{\nli}{NLI\xspace}
+\newcommand{\sst}{Sentiment\xspace}
+\newcommand{\qqp}{QQP\xspace}
 
+% format
+\newcommand{\clabel}[1]{\emph{#1}\xspace}
+
+% constants
+\newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
+\newcommand{\tagstr}{control code\xspace}
+\newcommand{\Tagstr}{Control code\xspace}
+\newcommand{\tagstrs}{control codes\xspace}
+
+% annotations
+\newcommand{\note}[2]{\xspace{\color{#1}[ #2 ]}\xspace}
+%\newcommand{\note}[2]{}
+\newcommand{\wts}[1]{\note{violet}{Sherry: #1}}
+% teal, cyan
 \title{Augmentation}
 \begin{comment}
 \author{
@@ -126,8 +143,12 @@ Authors are asked to conform to all the directions reported in this document.
 \bibliography{anthology,ref}
 \bibliographystyle{acl_natbib}
 
+\clearpage
+\newpage
+
 \appendix
-\input{sections/app_label_instruction}
 \input{sections/app_train_datasets}
+\input{sections/app_label_instruction}
+\input{sections/app_examples}
 
 \end{document}

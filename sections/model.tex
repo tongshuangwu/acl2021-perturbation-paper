@@ -25,50 +25,6 @@
 - Diversity
 \end{comment}
 
-
-@article{gardner2020contrast,
-  title={Evaluating models' local decision boundaries via contrast sets},
-  author={Gardner, Matt and Artzi, Yoav and Basmova, Victoria and Berant, Jonathan and Bogin, Ben and Chen, Sihao and Dasigi, Pradeep and Dua, Dheeru and Elazar, Yanai and Gottumukkala, Ananth and others},
-  journal={Findings of EMNLP},
-  year={2020}
-}
-
-@article{kaushik2019learning,
-  title={Learning the difference that makes a difference with counterfactually-augmented data},
-  author={Kaushik, Divyansh and Hovy, Eduard and Lipton, Zachary C},
-  journal={arXiv preprint arXiv:1909.12434},
-  year={2019}
-}
-
-@article{kaushik2020explaining,
-  title={Explaining The Efficacy of Counterfactually-Augmented Data},
-  author={Kaushik, Divyansh and Setlur, Amrith and Hovy, Eduard and Lipton, Zachary C},
-  journal={arXiv preprint arXiv:2010.02114},
-  year={2020}
-}
-
-@article{teney2020learning,
-  title={Learning what makes a difference from counterfactual examples and gradient supervision},
-  author={Teney, Damien and Abbasnedjad, Ehsan and Hengel, Anton van den},
-  journal={arXiv preprint arXiv:2004.09034},
-  year={2020}
-}
-
-
-@article{sakaguchi2019winogrande,
-  title={Winogrande: An adversarial winograd schema challenge at scale},
-  author={Sakaguchi, Keisuke and Bras, Ronan Le and Bhagavatula, Chandra and Choi, Yejin},
-  journal={arXiv preprint arXiv:1907.10641},
-  year={2019}
-}
-
-@article{zhang2019paws,
-  title={PAWS: Paraphrase adversaries from word scrambling},
-  author={Zhang, Yuan and Baldridge, Jason and He, Luheng},
-  journal={arXiv preprint arXiv:1904.01130},
-  year={2019}
-}
-
 \newcommand{\tagdefine}[1]{\emph{{\color{darkgray}#1} }}
 \renewcommand{\arraystretch}{1.1}
 \begin{table*}
@@ -76,46 +32,50 @@
 \centering
 \begin{tabular}{p{0.11\linewidth} p{0.6\linewidth}  p{0.2\linewidth}}
 \toprule
-\textbf{Code} & \textbf{Definitions and Examples} & \textbf{Datasets} \\ 
+\textbf{\Tagstr} & \textbf{Definitions and Examples} & \textbf{Datasets} \\ 
 \midrule
-\ctrltag{Negation}
+\ctrltag{negation}
     & You'd \swap{figure that out}{never know} by watching it though.
     & \cite{kaushik2019learning, gardner2020contrast}
 \\ \midrule
-\ctrltag{Quantifier}
+\ctrltag{quantifier}
     & Where can buy Jordan \swap{5}{6} shoes?
     & \cite{gardner2020contrast}
 \\ \midrule
-\ctrltag{Lexical}
+\ctrltag{lexical}
     & \tagdefine{Changing just one word or noun chunks without breaking the POS tags.} \newline
       He found them \swap{exciting}{dull}.
     & \cite{sakaguchi2019winogrande}
 \\ \midrule
-\ctrltag{Re-semantic}
+\ctrltag{resemantic}
     & \tagdefine{To replace short phrases or clauses without affecting the parsing tree.}\newline
       How do you \swap{access Snapchat}{brand yourself} online?
-    & \cite{zhang2019paws}
+    & \cite{wieting2017paranmt}
 \\ \midrule
-\ctrltag{Insert}
+\ctrltag{insert}
     & \tagdefine{To add constraints without affecting the parsing structure of other parts.} \newline
       I liked a \add{Bangali} boy.
-    & \cite{zhang2019paws, gardner2020contrast}
+    & \cite{wieting2017paranmt}
 \\ \midrule
-\ctrltag{Delete}
+\ctrltag{delete}
     & \tagdefine{To remove constraints without affecting the parsing structure of other parts.} \newline
     The lawyers paid \remove{the tourists}.
-    & \cite{zhang2019paws, gardner2020contrast}
-\\
-\ctrltag{Delete}
-    & \tagdefine{To remove constraints without affecting the parsing structure of other parts.} \newline
-    The lawyers paid \remove{the tourists}.
-    & \cite{zhang2019paws, gardner2020contrast}
+    & \cite{wieting2017paranmt}
+\\ \midrule
+\ctrltag{restructure}
+    & \tagdefine{To alter the dependency tree structure, e.g., changing from passive to positive.} \newline
+    How do you study \swap{well}{animals}?
+    & \cite{zhang2019paws, mccoy2019right}
+\\ \midrule
+\ctrltag{shuffle}
+    & \tagdefine{To move (or swap) key phrases or entities around the sentence.} \newline
+    Why do so many more \swap{women}{men} commit suicide than \swap{men}{women}?
+    & \cite{zhang2019paws, mccoy2019right}
 \\
 \bottomrule
 \end{tabular}
-\caption{Examples of extracted top (topics) using Empath~\cite{Fast2016EmpathUT} and original messages. Empath could correctly extract most topics ({\em e.g.}, \emph{``competing''}) from greeting card messages, but might also be misled by the frequent occurrence of some keywords and extracts unwanted topics ({\em e.g.}, \emph{``crime''}).}
-% We want to extract good topics like ``competing'' that has diverse keywords, and crime is an example of what we filtered. \sherry{Just use one color to highlight related words, no need to distinguish between them; And, add captions saying competing is a good topic and crime is a sample of what we filtered and rectified.}}
-\label{table:examples}
+\caption{A list of \tagstrs used for semantically driving the GPT-2 generation, the model generated examples, and the training datasets that contains most of the corresponding patterns. \wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
+\label{table:ctrltag}
 \end{table*}
 
 
@@ -124,5 +84,14 @@ Given a paired sentence $x$ and $x'$, We form the training prompts as
 
 
 and finetune GPT-2 model
+
+
+We combined multiple existing NLP datasets in finetuning our GPT-2 perturbation model. 
+
+
+All datasets provide pairs of sentences $(s_1, s_2)$.
+We first compute the \tagstrs introduced in Table~\ref{table:ctrltag}, based on the POS-tag and parsing structure heuristics.
+Then, to construct the training texts, we concatenate the two sentences, the control tag, and the special tokens. 
+
 
 To control \emph{where to change}

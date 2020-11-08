@@ -26,41 +26,20 @@
 \ref{sec:app_label}
 
 \subsection{Annotation Procedure}
-Labelers went through the following steps (Please see Appendix \S\ref{sec:app_label_instruct} for detailed screenshots):
-1) A landing page first explained the task objective: given a reference example, 
-2) To familiarize them with the task and verify their understanding, a screening phase required the participant to correctly label four of six reviews
 
-
-\paragraph{\noindent {\bf Sentiment Classification}}
-For the final study, participants went through the following steps:
-% \Bug{BN: Easier to read if it is an actual bullet list}
-1) 
-A landing page first explained the payment scheme; the classification task was presented (here, predicting the sentiment of reviews); and they were shown dataset-specific examples. 
-2) To familiarize them with the task and verify their understanding, a screening phase required the participant to correctly label four of six reviews~\cite{liu-naacl16}.
-Only participants who passed the gating test were allowed to proceed to the main task.
-3) The main task randomly assigned participants to one of our study conditions (Section~\ref{sec:conditions_sentiment}) and presented condition-specific instructions, including the meaning and positioning of AI's prediction, confidence, and explanations.
-Participants then labeled all 50 study samples one-by-one. 
-%We obtained multiple labels from each worker to allow users to learn how to work with the AI, which may not be possible in a single-shot interaction.
-% \Bug{BN: Somewhere we need to say why we choose to have workers repeat the same task 50 times: i.e. workers need to learn how to work with the AI and how to use explanations. It is impossible to achieve this with a single shot interaction. IMHO this is also a flaw of other studies that aim at measuring collaboration with only a single interaction. This also makes me think whether our results look different for the second half of the experiment. Did we ever try to look at this? This would show the results after learning how to collaborate with the AI and learning how to do the task.} 
-For a given dataset, all conditions used the same ordering of examples.
-4) A post-task survey was administered, asking whether they found the model assistance to be helpful, their rating of the usefulness of explanations in particular (if they were present), and their strategy for using model assistance.
-% We wished to see if their self-reflections matched their sentiment judgments on reviews.
-
-% For All conditions within a dataset) used the same ordering of examples.
-
-% In the main task, we first presented additional condition-specific instructions, including conditions in which model confidence and a form of explanation is provided. 
-% Then, each subject performed 50 tasks using the condition-specific interface in Section~\ref{subsec:interface_sentiment}, each judging the sentiment of a review.
-% The large number of examples could help workers gain enough experience to develop strategies for making decisions in the presence of AI recommendations.
-
-% \noindent {\bf \em Logging}: We logged user responses and reaction time for each example. 
-
-% {\noindent} \textbf{Participants}:
-We recruited participants from Amazon's Mechanical Turk (MTurk), limiting the pool to subjects from within the United States with a prior task approval rating of at least 97\% and a minimum of 1,000 approved tasks.
-To ensure data quality, we removed data from participants whose median labeling time was less than 2 seconds or those who assigned the same label to all examples. 
-%We pre-registered this process based on our experiences with the pilot study.
-%We additionally removed workers within the lowest quartile of accuracy for each condition, as they were clear noisy outliers in the pilot study.
-In total, we recruited 566 (\dbeer) and 552 (\damz) crowd workers, and in both datasets, 84\% of participants passed the screening and post-filtering. 
-Eventually, we collected data from around 100 participants (ranging from 93 to 101 due to filtering) per condition.
-\subsection{}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/mturk_label}
+\vspace{-15pt}
+\caption{A sample labeling task. For each round of labeling, the annotator is given the original instance (and its label) as a reference, and they are tasked to label three variations of the instance by (1) grammatically validity and (2) classification task label. A more detailed instruction is in \S\ref{appendix:label_instruct}. \wts{This is placeholder screenshot. Change width/height ratio, choose a better example}}
+\vspace{-10pt}
+\label{fig:mturk_instruction}
+\end{figure}
 
 \subsection{Counterfactual Data Augmentation}
+
+\begin{comment}
+For testing on other datasets, we use a random subset (2000 examples) of the test sets of Amazon Reviews [45], Semeval 2017 (Twitter data) [55], and Yelp reviews [77] similarly to [34].
+from Learning What Makes a Difference from Counterfactual Examples and Gradient Supervision
+	
+\end{comment}
