@@ -1,29 +1,29 @@
 \section{Datasets for GPT-2 Finetuning}
 \label{appendix:train_data}
 
+%\begin{comment}
 \begin{table*}
 \small
 \centering
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{c c c c c c c c c c}
+\begin{tabular}{lrrrrrrrrr}
 \toprule
 \textbf{Dataset} & \textbf{\ctrltag{negation}} & \textbf{\ctrltag{quantifier}} & \textbf{\ctrltag{leixcal}} & \textbf{\ctrltag{resemantic}} & \textbf{\ctrltag{insert}} & \textbf{\ctrltag{delete}} & \textbf{\ctrltag{restructure}} & \textbf{\ctrltag{shuffle}} & \emph{\ctrltag{global}} \\ 
 \midrule
-Contrast	& 147	& 194	& 652	& 743	& 349	& 354	& 707 	& 95	& 459\\
-CAD		 	& 3,654 & 431	& 7,299	& 3,832	& 2,401	& 2,403 & 3,798 	& 822	& 3,702\\
-WINOGRAND 	& 3,817	& 110 	& 10,000	& 7243	& 170 	& 171	& 4,143	& 235	& 3,399\\
-PAWS 		& 75 	& 280 	& 5,672 	& 2,730 & 4,161 	& 4,155	& 10,000	& 10,000& 10,000\\
-PARANMT 	& 2,477 & 507 	& 5,196 	& 10,000	& 5,436 	& 5,424	& 10,000	& 1,594 & 10,000\\
-HANS	 	& 50	& 0	 	& 0	 	& 0		& 3,893 	& 3,891	& 798	& 1,139 & 229	\\
-\emph{Crawled}
-		 	& 0		& 0	 	& 5,000	& 0		& 5,000 	& 5,000	& 0		& 93	& 5,000	\\
-\toprule
-Total & 10,220 & 1,522 & 33,819 & 24,548 & 21,407 & 21,398 & 29,446 & 13,978 & 32,789\\
+        CAD &      3418 &         435 &     7335 &        3896 &    2430 &    2432 &         3872 &       82 &    3702 \\
+    Crawled &         0 &           0 &     5000 &           0 &    5000 &    5000 &            0 &       91 &    5000 \\
+   contrast &       314 &         294 &     1180 &        1167 &     575 &     575 &         1085 &      113 &     843 \\
+       hans &        46 &           0 &        0 &           0 &    3893 &    3891 &          791 &     1180 &     199 \\
+    paranmt &      2201 &         513 &     5262 &       10000 &    5446 &    5400 &        10000 &     1592 &   10000 \\
+       paws &        61 &         284 &     5672 &        2732 &    4161 &    4155 &        10000 &    10000 &   10000 \\
+ winogrande &      3134 &         116 &    10000 &        7612 &     169 &     170 &         4271 &      233 &    3395 \\
+      total &      9174 &        1642 &    34449 &       25407 &   21674 &   21623 &        30019 &    13291 &   33139 \\
 \bottomrule
 \end{tabular}
 \caption{The datasets used for finetuning the GPT-2 perturbation model, and the \tagstr distributions.}
 \label{table:gpt_train_stats}
 \end{table*}
+%\end{comment}
 
 
 We combined the following NLP datasets in finetuning our GPT-2 perturbation model.
@@ -35,7 +35,8 @@ In \cite{gardner2020contrast}, authors of 10 existing NLP dataset manually each 
 \wts{Make sure NLP is expanded somewhere in intro}
 The perturbation pattern varies based on the tasks and the annotators, allowing us to learn diverse perturbation methods.
 To make sure we can use the contrast set to evaluate the sentiment analysis model, we excluded the IMDB movie review from the training.
-\wts{Re-train the model with other contrast sets.}
+\footnote{Similarly, though QQP would be a potentially interesting dataset for training the perturbation model, we omitted it so QQP can be used in our evaluation.}
+%\wts{Re-train the model with other contrast sets.}
 
 
 \paragraph{Counterfactually-augmented data (CAD)}

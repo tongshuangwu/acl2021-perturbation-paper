@@ -73,10 +73,15 @@
 \newcommand{\changed}[2]{{#1}\arrow ~\add{#2}}
 \newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
 
-% tasks
-\newcommand{\nli}{NLI\xspace}
-\newcommand{\sst}{Sentiment\xspace}
-\newcommand{\qqp}{QQP\xspace}
+
+\definecolor{cexample}{rgb}{0.23, 0.30, 0.45}
+\newcommand{\exinline}[1]{ {\color{cexample}``#1''\xspace}}
+\newcommand{\fillin}[1]{ {\color{cexample}#1\xspace}}
+
+\definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
+%\definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
+\definecolor{cword}{rgb}{0, 0, 0.7}
+\newcommand{\BLANK}{\texttt{ {\color{cword}[BLANK]} }}
 
 % format
 \newcommand{\clabel}[1]{\emph{#1}\xspace}
@@ -86,6 +91,16 @@
 \newcommand{\tagstr}{control code\xspace}
 \newcommand{\Tagstr}{Control code\xspace}
 \newcommand{\tagstrs}{control codes\xspace}
+
+
+% tasks
+\newcommand{\nli}{NLI\xspace}
+\newcommand{\sst}{Sentiment\xspace}
+\newcommand{\qqp}{QQP\xspace}
+
+\def \dsst{SST-2\xspace}
+\def \dqqp{QQP\xspace}
+\def \dnli{SNLI\xspace}
 
 % annotations
 \newcommand{\note}[2]{\xspace{\color{#1}[ #2 ]}\xspace}
