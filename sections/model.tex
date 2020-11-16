@@ -174,6 +174,8 @@ If we cannot identify the \tagstr for a pair or if the editing distance is too l
 Importantly, to allow flexible blanking at the generation time, instead of merely blanking the edited spans, we also extend the blank to cover their associated parsing structures, etc.
 As a result, we form up to four unique training prompts given one $(x, \xp)$ pair (Figure~\ref{fig:blank}).
 
+%max_log_prob_diff
+
 We put \tagstrs before $\xp$ because we would like to prioritize \emph{how} over \emph{where}, such that when given a \tagstr, the model can determine the appropriate changing places, and generate the blanked prompt on its own. 
 However, in cases where it is more essential to inspecting particular subphrases, it is possible to reverse the order, so we can provide the blanked prompts, and let the model figure out the \emph{how}.
 It is also possible to swap the order of the blanked $\xp$ and the \tagstrs. 
@@ -185,14 +187,33 @@ We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch
 
 \paragraph{Filtering on the generations.}
 The infilling structure does not always generate \emph{valid} sentences, and therefore require additional filtering.
+Inspired by the language model constraints in \citet{morris2020textattack}, we score both $x$ and $\xp$ using un-finetuned GPT-2, and invalidate all $\xp$ whose log-probability (either on the full sentence or on the perturbed chunks) decreases more than $k=10$ points compared to $x$ (though their other constraints may also be useful.)
+
+
+%pr["pr_sent"]<=10 and pr["pr_phrase"] <=10
 %Perplexity is instantiating; Language modeling as an approximation because it measures real world distribution.
 
+
 \subsection{Intrinsic Evaluations \& Ablation Studies}
+% random no-pair models. 1142508
+We verify the impact of the filtering and the \tagstrs through human evaluations.
 \paragraph{Validity.}
-\paragraph{Diversity.}
+One of the coauthors manually labeled the validity of 600 augmentations generated on 120 instances from three datasets: \dsst~\cite{socher2013recursive}, \dnli~\cite{bowman-etal-2015-large}, and \dqqp~\cite{wang2018glue}.
+The validity rate among all the generated instances were $61.5\%$, which increased to $78.3\%$ after the filtering. 
+As part of the data labeling task in \S\ref{sec:app_label}, we also asked crowdworkers to label whether a perturbed sentence is valid (\emph{``whether the sentence is grammatically correct and semantically meaningful, likely written by a native English speaker''}), and they arrived at similar validation rates ($75.0\%$ for \dsst, $70.0\%$ for \dqqp, and $81.7\%$ for \dnli).
+%If no filter at all, the instances you see will only have 60% valid stuff (we care more about precision, every invalid counterfactual shown to a human is wasted time):
+\wts{Maybe no need for the instruction; It's in appendix.}
+
+
 \paragraph{Controllability.}
-One of the authors labeled ...
-\wts{Mention that the rate can be lower when we also control where to change. And this is TODO.}
+One of the coauthors manually labeled ...\wts{this is TODO.}
+the validity of 600 augmentations generated on 120 instances from three datasets.
+Note that we only labeled instances generated with $\xp$ fully \BLANK-ed or being empty, so the model has the potential of fully follow the \tagstrs.
+Further restricting the blank placements will lower the control rate, as it may be impossible to follow the strategy at the given blanked place (\eg \ctrltag{shuffle} is absolutely impossible when we only blank out a single token in the sentence.)
+
+
+
+\paragraph{Diversity.}
 
 
 
