@@ -29,3 +29,29 @@ Contribution bullets:
 		○ Vision - not tested, but we think presenting some existing perturbations first should help people get more creative when they come up with their owns [future work…]
 
 \end{comment}
+
+
+prior work on counterfactual generation typically follows one of two extremes.
+On the one hand, templates or perturbation rules (used by Errudite and Checklist) allow targeted inspections, but can only cover limited linguistic patterns.
+On the other hand, those that thrive in diversity are either too uncontrolled (e.g., text generation~\cite{iyyer2018adversarial}) or hard to scale (e.g., manual rewrites~\cite{kaushik2019learning, gardner2020contrast}).
+
+I seek to achieve a balance between control and generation diversity. 
+To this end, I have fine-tuned language models for perturbation generation.
+To enable targeted inspection, I allow practitioners to control \emph{how} to change a sentence (with perturbation types defined based on common linguistic capabilities), and \emph{where} to change (based on linguistic features like part-of-speech tagging or dependency trees.)
+For example, to test the impact of negation, instead of enumerating rules like \swap{did}{didn't}, \swap{\texttt{VERB}}{would never \texttt{VERB}}, one can say \emph{``add negation modifiers to aux.''}
+
+%Through intrinsic evaluation, we have found that our method works as we expect.
+Moving forward, I plan to explore whether our method is helpful in various downstream tasks. 
+First, the perturbations can potentially serve as extensive counterfactual explanations, i.e., explaining models' reaction to \emph{a set of changes}, rather than \emph{one change}~\cite{ribeiro2018semantically, ribeiro2018anchors, feder2020causalm}.
+%We plan to use groups of perturbations as explanations, and suggests insightful groups to the practitioner based on certain predefined criteria.
+A group of highly related changes may reveal model insufficiencies that are hard to spot otherwise (e.g., sentiment analysis model only recognizing certain kinds of negations like ``did not'', but misclassifying others like ``I would never.'')
+%We plan to design a mixed-initiative method, where a system ranks groups of perturbations based on certain predefined criteria, and suggests the most insightful ones to the practitioner. 
+%For example, minimal changes that affected the models' prediction possibly indicate the model is unstable.
+%In turn, the practitioner can customize the exploration based on where or how s/he would like to inspect the model, and decide when to move to a different angle, or further drill down.
+We plan to verify the insightfulness of these explanations through typical evaluation methods, e.g., surprise, simulatability~\cite{hase2020evaluating}.
+Second, I hope to collect more effective contrast sets~\cite{gardner2020evaluating} that can reveal the vulnerability of the model.
+I plan to annotate the generated perturbations with class labels in crowdsourcing tasks (e.g., positive or negative in sentiment analysis). 
+%where a crowdworker label each sentence with a .%, or invalid (the sentence does not make sense, etc.). 
+Then, to evaluate, I plan to verify whether we can find more bugs in the state-of-the-art models (i.e., if the accuracy further drops on these datasets).
+Further, the data collected can be used for data augmentation~\cite{kaushik2019learning}. 
+I plan to explore whether models trained with such perturbations can become more capable of handling certain capabilities (e.g., pass more tests in CheckList related to negation).

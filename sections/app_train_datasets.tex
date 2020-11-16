@@ -31,7 +31,7 @@ To achieve a more balanced distribution, for each dataset, we extract \tagstrs f
 The distribution is shown in Table~\ref{table:gpt_train_stats}.
 
 \paragraph{Contrast set}
-In \cite{gardner2020contrast}, authors of 10 existing NLP dataset manually each perturbed 100-1,000 test instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance.
+In \cite{gardner2020contrast}, authors of 10 existing NLP dataset each manually perturbed 100-1,000 test instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance.
 \wts{Make sure NLP is expanded somewhere in intro}
 The perturbation pattern varies based on the tasks and the annotators, allowing us to learn diverse perturbation methods.
 To make sure we can use the contrast set to evaluate the sentiment analysis model, we excluded the IMDB movie review from the training.
@@ -58,3 +58,9 @@ As a result, the dataset demonstrates the \ctrltag{shuffle} and \ctrltag{restruc
 
 \paragraph{HANS} is a controlled evaluation dataset designed for testing decision boundaries of NLI models~\cite{mccoy2019right}. 
 The dataset contains 10k pairs of premises and hypotheses created based on 10 heavily on fallible syntactic heuristic rules, and therefore compensates rarer structural changes that may be missed by PAWS.
+
+
+\paragraph{Crawled} 
+\wts{Explain why we included the crawled and why only some columns.}
+
+

@@ -18,6 +18,7 @@
 \usepackage{latexsym}
 
 \renewcommand{\UrlFont}{\ttfamily\small}
+\usepackage{amsmath,amsthm,amssymb}
 
 % This is not strictly necessary, and may be commented out,
 % but it will improve the layout of the manuscript,
@@ -35,7 +36,8 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage[T1]{fontenc}
-
+\usepackage{bbold}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
 
 
 \aclfinalcopy % Uncomment this line for the final submission
@@ -93,6 +95,17 @@
 \newcommand{\tagstrs}{control codes\xspace}
 
 
+\newcommand{\cmark}{{\ding{51}}}%
+\newcommand{\xmark}{{\ding{55}}}%
+\newcommand{\qmark}{{\textsf{?}}}%
+
+\newcommand{\perturbtoken}{\texttt{<|perturb|>}}%
+
+
+
+\newcommand{\eg}{\emph{e.g.,}\xspace}%
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+
 % tasks
 \newcommand{\nli}{NLI\xspace}
 \newcommand{\sst}{Sentiment\xspace}
@@ -142,10 +155,7 @@ $^{2}$Microsoft Research\hspace{5mm} \\
 \begin{document}
 \maketitle
 \begin{abstract}
-This document contains the instructions for preparing a manuscript for the proceedings of ACL 2020.
-The document itself conforms to its own specifications, and is therefore an example of what your manuscript should look like.
-These instructions should be used for both papers submitted for review and for final versions of accepted papers.
-Authors are asked to conform to all the directions reported in this document.
+
 \end{abstract}
 
 \input{sections/intro}
@@ -155,7 +165,7 @@ Authors are asked to conform to all the directions reported in this document.
 \input{sections/relate}
 \input{sections/conclusion}
 
-\bibliography{anthology,ref}
+\bibliography{ref}
 \bibliographystyle{acl_natbib}
 
 \clearpage
@@ -165,5 +175,6 @@ Authors are asked to conform to all the directions reported in this document.
 \input{sections/app_train_datasets}
 \input{sections/app_label_instruction}
 \input{sections/app_examples}
+\input{sections/app_perturb_applications}
 
 \end{document}
