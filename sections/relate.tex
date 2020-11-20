@@ -22,3 +22,8 @@ Discuss in detail:
 
 \cite{li2020linguistically}
 
+Dan's email:
+This survey by Amit Chaudhary provides a nice visual overview of most existing data augmentation methods for NLP, including lexical substitution, text-surface transformation, random noise injection, and many others. But why is that such techniques are not used much in NLP? Longpre et al. (2020) test two popular data augmentation methods with recent pre-trained Transformer models. They find that they generally don’t improve results. They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input (Ettinger et al., 2019; Rogers et al., 2020).
+Another source for data augmentation are adversarial examples. A great way to get started is to use the TextAttack library, the CleverHans for NLP. The library provides implementations of a numerous adversarial attacks and tools to train models with data augmentation—with built-in support for transformers models. A recent paper in this area that I particularly enjoyed is by Tan et al. (2020) who create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
+
+%https://www.aclweb.org/anthology/2020.acl-main.263.pdf?utm_campaign=NLP%20News&utm_medium=email&utm_source=Revue%20newsletter

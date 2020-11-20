@@ -58,6 +58,7 @@ We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question p
 \subsection{Annotation Procedure}
 
 
+
 \paragraph{Selecting Perturbations to Label.}
 
 
@@ -77,6 +78,23 @@ For augmentation,
 \end{figure}
 
 \subsection{Contrast Set Evaluation}
+
+\begin{table}
+\small
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{c c c c c}
+\toprule
+\textbf{Task} & \textbf{\#Example} & \textbf{Orig.} & \textbf{Con.} & \textbf{Consist.} \\ 
+\midrule
+\qqp & 450 & 87.4 & 78.4 (-9.0) & 62.6 \\
+\sst & 88 & 93.2 & 84.1 (-9.1) & 78.4 \\
+\bottomrule
+\end{tabular}
+\caption{The datasets used for finetuning the GPT-2 perturbation model, and the \tagstr distributions.}
+\label{table:gpt_train_stats}
+\end{table}
+%\end{comment}
 
 
 \subsection{Counterfactual Data Augmentation}
