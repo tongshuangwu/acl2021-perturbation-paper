@@ -60,10 +60,15 @@ We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question p
 
 
 \paragraph{Selecting Perturbations to Label.}
+First, we generate a large number of perturbations.
+For each original example, we randomly generate up to 10 blanked sentences. Each sentence contains up two three \BLANK token, and blanks different parsing tree structures.
+We iterate through all the combinations of \tagstrs and blanked sentences using a beam search
+
+
+\textbf{The perturbation patterns should be diverse, }to cover more variations around local decision boundaries.
 
 
 \paragraph{Filtering based on labeling results.}
-For 
 For augmentation, 
 
 
@@ -112,7 +117,23 @@ For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 fo
 For each given $(m,n)$, we create three different samples of training data, and report the average and the variance of the samples. 
 \wts{Fix the naming later: should I say perturbations, counterfactuals, or something else?}
 
-
+\begin{table*}
+\small
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{rrlllllllllll}
+\toprule
+ ORIG\_SIZE &  AUG\_SIZE &    MODEL & DATA\_MARKER &      snli\_test & mnli\_dev\_mismatched & mnli\_dev\_matched &      snli\_iclr &      break\_nli &            dnc &         stress &     diagnostic &           hans \\
+\midrule
+     20000 &      1574 &     comp &  dnc\_target &  $86.8\pm 0.2$ &       $86.7\pm 0.0$ &    $86.5\pm 0.1$ &  $72.8\pm 0.5$ &  $86.6\pm 0.7$ &  $55.1\pm 0.1$ &  $65.5\pm 0.3$ &  $56.7\pm 0.8$ &  $51.5\pm 1.1$ \\
+     20000 &      1574 &  aug\_gpt &  dnc\_target &  $86.1\pm 0.7$ &       $86.2\pm 0.1$ &    $86.2\pm 0.0$ &  $73.5\pm 0.0$ &  $90.9\pm 0.2$ &  $58.1\pm 0.2$ &  $66.0\pm 0.1$ &  $57.5\pm 0.8$ &  $50.9\pm 0.4$ \\
+     10000 &      1574 &     comp &  dnc\_target &  $85.4\pm 0.4$ &       $85.7\pm 0.3$ &    $85.2\pm 0.1$ &  $72.5\pm 0.1$ &  $86.1\pm 2.9$ &  $54.0\pm 1.5$ &  $65.4\pm 0.5$ &  $55.9\pm 0.3$ &  $50.2\pm 0.4$ \\
+     10000 &      1574 &  aug\_gpt &  dnc\_target &  $85.5\pm 0.0$ &       $85.5\pm 0.2$ &    $85.4\pm 0.4$ &  $73.6\pm 0.4$ &  $90.7\pm 1.1$ &  $56.1\pm 1.0$ &  $65.1\pm 0.9$ &  $57.2\pm 0.5$ &  $51.1\pm 0.9$ \\
+\bottomrule
+\end{tabular}
+\caption{The \nli results.}
+\label{table:gpt_train_stats}
+\end{table*}
 %\textbf{Results.}
 \subsubsection{Augmentation Results}
 \wts{This can also be at the end.}
@@ -135,6 +156,7 @@ As shown in Table~\ref{table:aug_sst},
 \wts{Add result}
 
 \paragraph{\nli.}
+% m=20k, n=1574
 Unlike the gain in \sst, when we added random perturbations, we did not observe any improvement on any datasets.
 We suspect a large number of perturbations are teaching the model patterns that it has already learned (\eg perturbations contrasting subjects ``man'' and ``woman'' may be unnecessary.) 
 %For example, While flipping the from ``man'' to ``woman'' is a perfectly valid lexical change, the existing \dnli dataset already cover data points contrasting the subject of two sentences.

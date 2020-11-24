@@ -18,9 +18,47 @@
 
 \end{comment}
 
-Discuss in detail:
 
-\cite{li2020linguistically}
+
+\begin{comment}
+
+*** errudite 
+
+Counterfactual attacks to models have taken various forms, e.g., by adding distracting sentences to the context in MC~\cite{jia2017adversarial}, or feeding partial questions or wrong images into models~\cite{agrawal2016analyzing, mudrakarta2018did, feng2018pathologies}. 
+Slightly closer to our work is SEARs~\cite{ribeiro2018semantically} (also incorporated into QADiver), which also takes the form of rewrite rules: it generates semantic-preserving rules that cause models to change predictions.
+However, these focus on robustness, i.e., counterfactual perturbations are mainly for the purpose of detecting over-stability or over-sensitivity.
+In contrast, our counterfactual analysis is for the purpose of understanding \emph{why} models fail in certain groups. Furthermore, our DSL allows for more complex counterfactual rules and for applying rules only to certain groups, such as ``delete the predicted distractor for instances in the \texttt{is\_distracted} group.''
+As far as we know, such analysis is novel, and a promising direction for more in-depth error analysis.
+
+\end{comment}
+
+General discussion on data augmentation
+~\citet{longpre2020effective}
+- They find that they generally don’t improve results. 
+- They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. 
+- In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input~\cite{rogers2020primer, ettinger2020bert}
+
+Discuss in detail:
+\citet{gardner2020contrast}
+\citet{kaushik2019learning}
+- Use pure manual collection to get data
+- Show improvement on training/augmentation
+(Already mentioned a lot in the other parts of the paper, maybe no need to make it too detailed.)
+
+\citet{kaushik2020explaining}
+- formalize the concept of counterfactual data augmentation
+- "Interestingly our analysis suggests that data corrupted by adding noise to causal features will degrade out-of-domain performance, while noise added to non-causal features may make models more robust out-of-domain."
+
+\citet{tan2020s}
+create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
+
+\citet{li2020linguistically}
+- automated contrast set 
+- "The idea of contrast sets is to modify a test instance to a minimum degree while preserving the original instance’s syntactic/semantic artifacts and changing the label. Typically, the authors of the dataset create the contrast set manually"
+
+----- challenge set
+- the augmentation usually 
+
 
 Dan's email:
 This survey by Amit Chaudhary provides a nice visual overview of most existing data augmentation methods for NLP, including lexical substitution, text-surface transformation, random noise injection, and many others. But why is that such techniques are not used much in NLP? Longpre et al. (2020) test two popular data augmentation methods with recent pre-trained Transformer models. They find that they generally don’t improve results. They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input (Ettinger et al., 2019; Rogers et al., 2020).
