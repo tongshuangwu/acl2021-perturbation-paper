@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 344.4 304.9" style="enable-background:new 0 0 344.4 304.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#DDDDDD;stroke-miterlimit:10;}
+	.st1{fill:none;}
+	.st2{display:none;fill:none;stroke:#DDDDDD;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#888888;stroke-miterlimit:10;}
+	.st4{font-family:'Helvetica-Light';}
+	.st5{font-size:10px;}
+	.st6{opacity:0;enable-background:new    ;}
+	.st7{font-family:'Helvetica-Bold';}
+	.st8{font-size:11px;}
+	.st9{display:none;}
+	.st10{fill:none;stroke:#4C78A8;stroke-miterlimit:10;}
+	.st11{fill:none;stroke:#F58518;stroke-miterlimit:10;}
+	.st12{fill:#4C78A8;}
+	.st13{fill:#F58518;}
+	.st14{fill:none;stroke:#4C78A8;stroke-width:2;stroke-miterlimit:10;}
+	.st15{display:none;fill:none;stroke:#4C78A8;stroke-width:2;stroke-miterlimit:10;}
+	.st16{fill:none;stroke:#F58518;stroke-width:2;stroke-miterlimit:10;}
+	.st17{display:none;fill:none;stroke:#F58518;stroke-width:2;stroke-miterlimit:10;}
+	.st18{fill:#4C78A8;stroke:#4C78A8;stroke-width:1.5;stroke-miterlimit:10;}
+	.st19{fill:#F58518;stroke:#F58518;stroke-width:1.5;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M35,47.4h120v80H35V47.4z"/>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M34.5,46.9L34.5,46.9L34.5,46.9L34.5,46.9z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="34.5" y1="-33.1" x2="34.5" y2="46.9"/>
+				<line class="st0" x1="64.5" y1="-33.1" x2="64.5" y2="46.9"/>
+				<line class="st0" x1="94.5" y1="-33.1" x2="94.5" y2="46.9"/>
+				<line class="st0" x1="124.5" y1="-33.1" x2="124.5" y2="46.9"/>
+				<line class="st0" x1="154.5" y1="-33.1" x2="154.5" y2="46.9"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M34.5,46.9"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M34.5,46.9L34.5,46.9L34.5,46.9L34.5,46.9z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="34.5" y1="103.9" x2="154.5" y2="103.9"/>
+				<line class="st0" x1="34.5" y1="46.9" x2="154.5" y2="46.9"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M34.5,46.9"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M34.5,46.9L34.5,46.9L34.5,46.9L34.5,46.9z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.5" y1="46.9" x2="34.5" y2="51.9"/>
+				<line class="st3" x1="64.5" y1="46.9" x2="64.5" y2="51.9"/>
+				<line class="st3" x1="94.5" y1="46.9" x2="94.5" y2="51.9"/>
+				<line class="st3" x1="124.5" y1="46.9" x2="124.5" y2="51.9"/>
+				<line class="st3" x1="154.5" y1="46.9" x2="154.5" y2="51.9"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 34.4819 61.9304)" class="st4 st5">4,000</text>
+				<text transform="matrix(1 0 0 1 51.9719 61.9304)" class="st6 st4 st5">4,500</text>
+				<text transform="matrix(1 0 0 1 81.9719 61.9304)" class="st4 st5">5,000</text>
+				<text transform="matrix(1 0 0 1 111.9719 61.9304)" class="st6 st4 st5">5,500</text>
+				<text transform="matrix(1 0 0 1 129.4619 61.9304)" class="st4 st5">6,000</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.5" y1="46.9" x2="154.5" y2="46.9"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 48.1321 76.9304)" class="st7 st8">Total training size</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M34.5,46.9"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M34.5,46.9L34.5,46.9L34.5,46.9L34.5,46.9z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.5" y1="103.9" x2="29.5" y2="103.9"/>
+				<line class="st3" x1="34.5" y1="46.9" x2="29.5" y2="46.9"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 16.3619 107.0732)" class="st4 st5">90</text>
+				<text transform="matrix(1 0 0 1 16.3619 49.9304)" class="st4 st5">95</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.5" y1="126.9" x2="34.5" y2="46.9"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 10.3589 111.6965)" class="st7 st8">Accuracy</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M34.5,46.9"/>
+	</g>
+</g>
+<g>
+	<line class="st10" x1="34.5" y1="86.7" x2="34.5" y2="78.6"/>
+	<line class="st10" x1="64.5" y1="84.6" x2="64.5" y2="74.4"/>
+	<line class="st10" x1="94.5" y1="75.8" x2="94.5" y2="73"/>
+	<line class="st10" x1="124.5" y1="78.6" x2="124.5" y2="69.8"/>
+	<line class="st10" x1="154.5" y1="76.2" x2="154.5" y2="70"/>
+	<line class="st11" x1="34.5" y1="77.1" x2="34.5" y2="74.4"/>
+	<line class="st11" x1="64.5" y1="73.2" x2="64.5" y2="70.2"/>
+	<line class="st11" x1="94.5" y1="74.7" x2="94.5" y2="66.9"/>
+	<line class="st11" x1="124.5" y1="75.6" x2="124.5" y2="65.9"/>
+	<line class="st11" x1="154.5" y1="72.7" x2="154.5" y2="68.5"/>
+</g>
+<g>
+	<path class="st12" d="M38,82.6c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S38,80.7,38,82.6
+		C38,82.6,38,82.6,38,82.6"/>
+	<path class="st12" d="M68,79.5c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C66.4,75.9,68,77.5,68,79.5C68,79.5,68,79.5,68,79.5"/>
+	<path class="st12" d="M98,74.4c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S98,72.5,98,74.4
+		C98,74.4,98,74.4,98,74.4"/>
+	<path class="st12" d="M128,74.2c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C126.4,70.7,128,72.3,128,74.2C128,74.2,128,74.2,128,74.2"/>
+	<path class="st12" d="M158,73.1c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S158,71.1,158,73.1
+		C158,73.1,158,73.1,158,73.1"/>
+	<path class="st13" d="M38,75.7c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S38,73.8,38,75.7
+		C38,75.7,38,75.7,38,75.7"/>
+	<path class="st13" d="M68,71.7c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C66.4,68.1,68,69.7,68,71.7C68,71.7,68,71.7,68,71.7"/>
+	<path class="st13" d="M98,70.8c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S98,68.8,98,70.8
+		C98,70.8,98,70.8,98,70.8"/>
+	<path class="st13" d="M128,70.7c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S128,68.8,128,70.7
+		C128,70.7,128,70.7,128,70.7"/>
+	<path class="st13" d="M158,70.6c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C156.4,67.1,158,68.7,158,70.6C158,70.6,158,70.6,158,70.6"/>
+</g>
+<g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M34.5,46.9h120v80h-120V46.9z"/>
+		<g>
+			<g>
+				<path class="st14" d="M34.5,82.6l30-3.2l30-5l30-0.2l30-1.1"/>
+			</g>
+		</g>
+		<path class="st15" d="M34.5,46.9"/>
+	</g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M34.5,46.9h120v80h-120V46.9z"/>
+		<g>
+			<g>
+				<path class="st16" d="M34.5,75.7l30-4.1l30-0.9l30-0.1l30-0.1"/>
+			</g>
+		</g>
+		<path class="st17" d="M34.5,46.9"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(60,-25)">
+		<path pointer-events="none" class="st1" d="M34.6,57.8L34.6,57.8L34.6,57.8L34.6,57.8z"/>
+		<g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 21.2808 65.8469)" class="st4 st5">SST-2</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M34.6,57.8"/>
+	</g>
+</g>
+<path class="st9" d="M34.5,46.9"/>
+<path class="st0" d="M214.9,47.5h120v80h-120V47.5z"/>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M214.4,47L214.4,47L214.4,47L214.4,47z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="214.4" y1="-33" x2="214.4" y2="47"/>
+				<line class="st0" x1="244.4" y1="-33" x2="244.4" y2="47"/>
+				<line class="st0" x1="274.4" y1="-33" x2="274.4" y2="47"/>
+				<line class="st0" x1="304.4" y1="-33" x2="304.4" y2="47"/>
+				<line class="st0" x1="334.4" y1="-33" x2="334.4" y2="47"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M214.4,47"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M214.4,47L214.4,47L214.4,47L214.4,47z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="214.4" y1="104" x2="334.4" y2="104"/>
+				<line class="st0" x1="214.4" y1="47" x2="334.4" y2="47"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M214.4,47"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M214.4,47L214.4,47L214.4,47L214.4,47z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="47" x2="214.4" y2="52"/>
+				<line class="st3" x1="244.4" y1="47" x2="244.4" y2="52"/>
+				<line class="st3" x1="274.4" y1="47" x2="274.4" y2="52"/>
+				<line class="st3" x1="304.4" y1="47" x2="304.4" y2="52"/>
+				<line class="st3" x1="334.4" y1="47" x2="334.4" y2="52"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 214.4483 62.0227)" class="st4 st5">4,000</text>
+				<text transform="matrix(1 0 0 1 231.9382 62.0227)" class="st6 st4 st5">4,500</text>
+				<text transform="matrix(1 0 0 1 261.9383 62.0227)" class="st4 st5">5,000</text>
+				<text transform="matrix(1 0 0 1 291.9383 62.0227)" class="st6 st4 st5">5,500</text>
+				<text transform="matrix(1 0 0 1 309.4283 62.0227)" class="st4 st5">6,000</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="47" x2="334.4" y2="47"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 228.0984 77.0227)" class="st7 st8">Total training size</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M214.4,47"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M214.4,47L214.4,47L214.4,47L214.4,47z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="104" x2="209.4" y2="104"/>
+				<line class="st3" x1="214.4" y1="47" x2="209.4" y2="47"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 196.3283 107.1655)" class="st4 st5">85</text>
+				<text transform="matrix(1 0 0 1 196.3283 50.0227)" class="st4 st5">90</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="127" x2="214.4" y2="47"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 190.3252 111.7893)" class="st7 st8">Accuracy</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M214.4,47"/>
+	</g>
+</g>
+<g>
+	<line class="st10" x1="214.4" y1="93.6" x2="214.4" y2="78.4"/>
+	<line class="st10" x1="244.4" y1="83.4" x2="244.4" y2="73.6"/>
+	<line class="st10" x1="274.4" y1="89.2" x2="274.4" y2="74.5"/>
+	<line class="st10" x1="304.4" y1="84.9" x2="304.4" y2="80.5"/>
+	<line class="st10" x1="334.4" y1="90.2" x2="334.4" y2="86.9"/>
+	<line class="st11" x1="214.4" y1="119.3" x2="214.4" y2="102.4"/>
+	<line class="st11" x1="244.4" y1="101.6" x2="244.4" y2="91.9"/>
+	<line class="st11" x1="274.4" y1="113.7" x2="274.4" y2="101.3"/>
+	<line class="st11" x1="304.4" y1="99.6" x2="304.4" y2="96.7"/>
+	<line class="st11" x1="334.4" y1="113.7" x2="334.4" y2="98.7"/>
+</g>
+<g>
+	<path class="st12" d="M218,86c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S218,84.1,218,86
+		C218,86,218,86,218,86"/>
+	<path class="st12" d="M248,78.5c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S248,76.6,248,78.5
+		C248,78.5,248,78.5,248,78.5"/>
+	<path class="st12" d="M278,81.8c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C276.4,78.3,278,79.9,278,81.8C278,81.8,278,81.8,278,81.8"/>
+	<path class="st12" d="M308,82.7c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C306.4,79.2,308,80.8,308,82.7C308,82.7,308,82.7,308,82.7"/>
+	<path class="st12" d="M338,88.6c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C336.4,85,338,86.6,338,88.6C338,88.6,338,88.6,338,88.6"/>
+	<path class="st13" d="M218,110.8c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C216.4,107.3,218,108.9,218,110.8C218,110.8,218,110.8,218,110.8"/>
+	<path class="st13" d="M248,96.8c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C246.4,93.2,248,94.8,248,96.8C248,96.8,248,96.8,248,96.8"/>
+	<path class="st13" d="M278,107.5c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C276.4,104,278,105.6,278,107.5C278,107.5,278,107.5,278,107.5"/>
+	<path class="st13" d="M308,98.1c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C306.4,94.6,308,96.2,308,98.1C308,98.1,308,98.1,308,98.1"/>
+	<path class="st13" d="M338,106.2c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C336.4,102.7,338,104.3,338,106.2C338,106.2,338,106.2,338,106.2"/>
+</g>
+<g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M214.4,47h120v80h-120V47z"/>
+		<g>
+			<g>
+				<path class="st14" d="M214.4,86l30-7.5l30,3.3l30,0.9l30,5.8"/>
+			</g>
+		</g>
+		<path class="st15" d="M214.4,47"/>
+	</g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M214.4,47h120v80h-120V47z"/>
+		<g>
+			<g>
+				<path class="st16" d="M214.4,110.8l30-14.1l30,10.8l30-9.4l30,8.1"/>
+			</g>
+		</g>
+		<path class="st17" d="M214.4,47"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(60,-25)">
+		<path pointer-events="none" class="st1" d="M214.4,57.8L214.4,57.8L214.4,57.8L214.4,57.8z"/>
+		<g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 195.003 65.8469)" class="st4 st5">SemEval</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M214.4,57.8"/>
+	</g>
+</g>
+<path class="st9" d="M214.4,47"/>
+<path class="st0" d="M214.9,186.1h120v80h-120V186.1z"/>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M214.4,185.6L214.4,185.6L214.4,185.6L214.4,185.6z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="214.4" y1="105.6" x2="214.4" y2="185.6"/>
+				<line class="st0" x1="244.4" y1="105.6" x2="244.4" y2="185.6"/>
+				<line class="st0" x1="274.4" y1="105.6" x2="274.4" y2="185.6"/>
+				<line class="st0" x1="304.4" y1="105.6" x2="304.4" y2="185.6"/>
+				<line class="st0" x1="334.4" y1="105.6" x2="334.4" y2="185.6"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M214.4,185.6"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M214.4,185.6L214.4,185.6L214.4,185.6L214.4,185.6z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="214.4" y1="265.6" x2="334.4" y2="265.6"/>
+				<line class="st0" x1="214.4" y1="208.6" x2="334.4" y2="208.6"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M214.4,185.6"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M214.4,185.6L214.4,185.6L214.4,185.6L214.4,185.6z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="185.6" x2="214.4" y2="190.6"/>
+				<line class="st3" x1="244.4" y1="185.6" x2="244.4" y2="190.6"/>
+				<line class="st3" x1="274.4" y1="185.6" x2="274.4" y2="190.6"/>
+				<line class="st3" x1="304.4" y1="185.6" x2="304.4" y2="190.6"/>
+				<line class="st3" x1="334.4" y1="185.6" x2="334.4" y2="190.6"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 214.4481 200.597)" class="st4 st5">4,000</text>
+				<text transform="matrix(1 0 0 1 231.9381 200.597)" class="st6 st4 st5">4,500</text>
+				<text transform="matrix(1 0 0 1 261.9381 200.597)" class="st4 st5">5,000</text>
+				<text transform="matrix(1 0 0 1 291.9381 200.597)" class="st6 st4 st5">5,500</text>
+				<text transform="matrix(1 0 0 1 309.4281 200.597)" class="st4 st5">6,000</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="185.6" x2="334.4" y2="185.6"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 228.0982 215.597)" class="st7 st8">Total training size</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M214.4,185.6"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M214.4,185.6L214.4,185.6L214.4,185.6L214.4,185.6z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="265.6" x2="209.4" y2="265.6"/>
+				<line class="st3" x1="214.4" y1="208.6" x2="209.4" y2="208.6"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 196.3281 268.597)" class="st4 st5">85</text>
+				<text transform="matrix(1 0 0 1 196.3281 211.4542)" class="st4 st5">90</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="214.4" y1="265.6" x2="214.4" y2="185.6"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 190.325 250.3635)" class="st7 st8">Accuracy</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M214.4,185.6"/>
+	</g>
+</g>
+<g>
+	<line class="st10" x1="214.4" y1="208.5" x2="214.4" y2="195.6"/>
+	<line class="st10" x1="244.4" y1="205.7" x2="244.4" y2="192.2"/>
+	<line class="st10" x1="274.4" y1="202.5" x2="274.4" y2="199.2"/>
+	<line class="st10" x1="304.4" y1="210.9" x2="304.4" y2="199.3"/>
+	<line class="st10" x1="334.4" y1="218.9" x2="334.4" y2="204.5"/>
+	<line class="st11" x1="214.4" y1="251.9" x2="214.4" y2="243.1"/>
+	<line class="st11" x1="244.4" y1="249.3" x2="244.4" y2="239"/>
+	<line class="st11" x1="274.4" y1="256.3" x2="274.4" y2="246.4"/>
+	<line class="st11" x1="304.4" y1="253.8" x2="304.4" y2="245"/>
+	<line class="st11" x1="334.4" y1="245.6" x2="334.4" y2="239.9"/>
+</g>
+<g>
+	<path class="st12" d="M218,202.1c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S218,200.1,218,202.1
+		C218,202.1,218,202.1,218,202.1"/>
+	<path class="st12" d="M248,198.9c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S248,197,248,198.9
+		C248,198.9,248,198.9,248,198.9"/>
+	<path class="st12" d="M278,200.8c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C276.4,197.3,278,198.9,278,200.8C278,200.8,278,200.8,278,200.8"/>
+	<path class="st12" d="M308,205.1c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C306.4,201.6,308,203.2,308,205.1C308,205.1,308,205.1,308,205.1"/>
+	<path class="st12" d="M338,211.7c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C336.4,208.2,338,209.7,338,211.7C338,211.7,338,211.7,338,211.7"/>
+	<path class="st13" d="M218,247.5c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C216.4,244,218,245.5,218,247.5C218,247.5,218,247.5,218,247.5"/>
+	<path class="st13" d="M248,244.2c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S248,242.2,248,244.2
+		C248,244.2,248,244.2,248,244.2"/>
+	<path class="st13" d="M278,251.3c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C276.4,247.8,278,249.4,278,251.3C278,251.3,278,251.3,278,251.3"/>
+	<path class="st13" d="M308,249.4c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C306.4,245.9,308,247.5,308,249.4C308,249.4,308,249.4,308,249.4"/>
+	<path class="st13" d="M338,242.7c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C336.4,239.2,338,240.8,338,242.7C338,242.7,338,242.7,338,242.7"/>
+</g>
+<g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M214.4,185.6h120v80h-120V185.6z"/>
+		<g>
+			<g>
+				<path class="st14" d="M214.4,202.1l30-3.1l30,1.9l30,4.3l30,6.6"/>
+			</g>
+		</g>
+		<path class="st15" d="M214.4,185.6"/>
+	</g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M214.4,185.6h120v80h-120V185.6z"/>
+		<g>
+			<g>
+				<path class="st16" d="M214.4,247.5l30-3.3l30,7.1l30-1.9l30-6.7"/>
+			</g>
+		</g>
+		<path class="st17" d="M214.4,185.6"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(60,-20)">
+		<path pointer-events="none" class="st1" d="M214.4,191.6L214.4,191.6L214.4,191.6L214.4,191.6z"/>
+		<g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 181.3884 199.597)" class="st4 st5">IMDB-Contrast</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M214.4,191.6"/>
+	</g>
+</g>
+<path class="st9" d="M214.4,200.6"/>
+<path class="st0" d="M35.1,186.8h120v80h-120V186.8z"/>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M34.6,186.3L34.6,186.3L34.6,186.3L34.6,186.3z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="34.6" y1="106.3" x2="34.6" y2="186.3"/>
+				<line class="st0" x1="64.6" y1="106.3" x2="64.6" y2="186.3"/>
+				<line class="st0" x1="94.6" y1="106.3" x2="94.6" y2="186.3"/>
+				<line class="st0" x1="124.6" y1="106.3" x2="124.6" y2="186.3"/>
+				<line class="st0" x1="154.6" y1="106.3" x2="154.6" y2="186.3"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M34.6,186.3"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M34.6,186.3L34.6,186.3L34.6,186.3L34.6,186.3z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st0" x1="34.6" y1="266.3" x2="154.6" y2="266.3"/>
+				<line class="st0" x1="34.6" y1="209.3" x2="154.6" y2="209.3"/>
+			</g>
+		</g>
+		<path pointer-events="none" class="st2" d="M34.6,186.3"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,80.5)">
+		<path pointer-events="none" class="st1" d="M34.6,186.3L34.6,186.3L34.6,186.3L34.6,186.3z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.6" y1="186.3" x2="34.6" y2="191.3"/>
+				<line class="st3" x1="64.6" y1="186.3" x2="64.6" y2="191.3"/>
+				<line class="st3" x1="94.6" y1="186.3" x2="94.6" y2="191.3"/>
+				<line class="st3" x1="124.6" y1="186.3" x2="124.6" y2="191.3"/>
+				<line class="st3" x1="154.6" y1="186.3" x2="154.6" y2="191.3"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 34.6394 201.2937)" class="st4 st5">4,000</text>
+				<text transform="matrix(1 0 0 1 52.1294 201.2937)" class="st6 st4 st5">4,500</text>
+				<text transform="matrix(1 0 0 1 82.1294 201.2937)" class="st4 st5">5,000</text>
+				<text transform="matrix(1 0 0 1 112.1294 201.2937)" class="st6 st4 st5">5,500</text>
+				<text transform="matrix(1 0 0 1 129.6194 201.2937)" class="st4 st5">6,000</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.6" y1="186.3" x2="154.6" y2="186.3"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 48.2896 216.2937)" class="st7 st8">Total training size</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M34.6,186.3"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(0.5,0.5)">
+		<path pointer-events="none" class="st1" d="M34.6,186.3L34.6,186.3L34.6,186.3L34.6,186.3z"/>
+		<g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.6" y1="266.3" x2="29.6" y2="266.3"/>
+				<line class="st3" x1="34.6" y1="209.3" x2="29.6" y2="209.3"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 16.5194 269.2937)" class="st4 st5">80</text>
+				<text transform="matrix(1 0 0 1 16.5194 212.1508)" class="st4 st5">85</text>
+			</g>
+			<g pointer-events="none">
+				<line class="st3" x1="34.6" y1="266.3" x2="34.6" y2="186.3"/>
+			</g>
+			<g pointer-events="none">
+				<text transform="matrix(6.123234e-17 -1 1 6.123234e-17 10.5164 251.0608)" class="st7 st8">Accuracy</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M34.6,186.3"/>
+	</g>
+</g>
+<g>
+	<line class="st10" x1="34.6" y1="248.6" x2="34.6" y2="232.8"/>
+	<line class="st10" x1="64.6" y1="240.5" x2="64.6" y2="227"/>
+	<line class="st10" x1="94.6" y1="235" x2="94.6" y2="194"/>
+	<line class="st10" x1="124.6" y1="220" x2="124.6" y2="201.8"/>
+	<line class="st10" x1="154.6" y1="213.1" x2="154.6" y2="191.2"/>
+	<line class="st11" x1="34.6" y1="225.8" x2="34.6" y2="205.2"/>
+	<line class="st11" x1="64.6" y1="211.7" x2="64.6" y2="207"/>
+	<line class="st11" x1="94.6" y1="218.1" x2="94.6" y2="204.2"/>
+	<line class="st11" x1="124.6" y1="209.4" x2="124.6" y2="204"/>
+	<line class="st11" x1="154.6" y1="214" x2="154.6" y2="202.5"/>
+</g>
+<g>
+	<path class="st12" d="M38.2,240.7c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S38.2,238.8,38.2,240.7
+		C38.2,240.7,38.2,240.7,38.2,240.7"/>
+	<path class="st12" d="M68.2,233.8c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		S68.2,231.8,68.2,233.8C68.2,233.8,68.2,233.8,68.2,233.8"/>
+	<path class="st12" d="M98.2,214.5c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S98.2,212.6,98.2,214.5
+		C98.2,214.5,98.2,214.5,98.2,214.5"/>
+	<path class="st12" d="M128.2,210.9c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S128.2,208.9,128.2,210.9
+		C128.2,210.9,128.2,210.9,128.2,210.9"/>
+	<path class="st12" d="M158.2,202.1c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S158.2,200.2,158.2,202.1
+		C158.2,202.1,158.2,202.1,158.2,202.1"/>
+	<path class="st13" d="M38.2,215.5c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C36.6,211.9,38.2,213.5,38.2,215.5C38.2,215.5,38.2,215.5,38.2,215.5"/>
+	<path class="st13" d="M68.2,209.4c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		S68.2,207.4,68.2,209.4C68.2,209.4,68.2,209.4,68.2,209.4"/>
+	<path class="st13" d="M98.2,211.2c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C96.6,207.6,98.2,209.2,98.2,211.2C98.2,211.2,98.2,211.2,98.2,211.2"/>
+	<path class="st13" d="M128.2,206.7c0,2-1.6,3.5-3.5,3.5s-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5S128.2,204.7,128.2,206.7
+		C128.2,206.7,128.2,206.7,128.2,206.7"/>
+	<path class="st13" d="M158.2,208.2c0,2-1.6,3.5-3.5,3.5c-2,0-3.5-1.6-3.5-3.5c0,0,0,0,0,0c0-2,1.6-3.5,3.5-3.5
+		C156.6,204.7,158.2,206.3,158.2,208.2C158.2,208.2,158.2,208.2,158.2,208.2"/>
+</g>
+<g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M34.6,186.3h120v80h-120V186.3z"/>
+		<g>
+			<g>
+				<path class="st14" d="M34.6,240.7l30-7l30-19.2l30-3.6l30-8.8"/>
+			</g>
+		</g>
+		<path class="st15" d="M34.6,186.3"/>
+	</g>
+	<g transform="translate(0,0)">
+		<path class="st1" d="M34.6,186.3h120v80h-120V186.3z"/>
+		<g>
+			<g>
+				<path class="st16" d="M34.6,215.5l30-6.1l30,1.8l30-4.5l30,1.5"/>
+			</g>
+		</g>
+		<path class="st17" d="M34.6,186.3"/>
+	</g>
+</g>
+<g>
+	<g transform="translate(60,-20)">
+		<path pointer-events="none" class="st1" d="M34.6,192.6L34.6,192.6L34.6,192.6L34.6,192.6z"/>
+		<g>
+			<g pointer-events="none">
+				<text transform="matrix(1 0 0 1 13.5245 200.597)" class="st4 st5">Amzbook</text>
+			</g>
+		</g>
+		<path pointer-events="none" class="st9" d="M34.6,192.6"/>
+	</g>
+</g>
+<path class="st9" d="M34.6,201.3"/>
+<path class="st1" d="M34.4,46.8L34.4,46.8L34.4,46.8L34.4,46.8z"/>
+<g>
+	<g transform="translate(135,-26)">
+		<path class="st1" d="M34.4,61.5L34.4,61.5L34.4,61.5L34.4,61.5z"/>
+		<g>
+			<g>
+				<g transform="translate(0,-21)">
+					<path pointer-events="none" class="st1" d="M34.4,61.5L34.4,61.5L34.4,61.5L34.4,61.5z"/>
+					<g>
+						<g pointer-events="none">
+							<text transform="matrix(1 0 0 1 14.5778 70.5)" class="st7 st8">Dataset</text>
+						</g>
+					</g>
+					<path pointer-events="none" class="st9" d="M34.4,61.5"/>
+				</g>
+			</g>
+		</g>
+		<path class="st9" d="M34.4,61.5"/>
+	</g>
+</g>
+<path pointer-events="none" class="st1" d="M235.6-14.5h105v29h-105V-14.5z"/>
+<path pointer-events="none" class="st1" d="M235.6,1.5L235.6,1.5L235.6,1.5L235.6,1.5z"/>
+<g transform="translate(0,0.25)">
+	<path pointer-events="none" class="st1" d="M257.7,1.5h52.1V14h-52.1V1.5z"/>
+	<g>
+		<g pointer-events="none">
+			<path class="st18" d="M268.7,7.5c0,2.8-2.2,5-5,5c-2.8,0-5-2.2-5-5s2.2-5,5-5C266.4,2.5,268.7,4.7,268.7,7.5"/>
+		</g>
+		<g pointer-events="none">
+			<text transform="matrix(1 0 0 1 273.6778 10.5)" class="st4 st5">aug</text>
+		</g>
+	</g>
+	<path pointer-events="none" class="st9" d="M257.7,1.5"/>
+</g>
+<g transform="translate(64,0.25)">
+	<path pointer-events="none" class="st1" d="M235.6,1.5H276V14h-40.5V1.5z"/>
+	<g>
+		<g pointer-events="none">
+			<path class="st19" d="M246.6,7.5c0,2.8-2.2,5-5,5c-2.8,0-5-2.2-5-5s2.2-5,5-5C244.3,2.5,246.6,4.7,246.6,7.5"/>
+		</g>
+		<g pointer-events="none">
+			<text transform="matrix(1 0 0 1 251.5702 10.5)" class="st4 st5">comp</text>
+		</g>
+	</g>
+	<path pointer-events="none" class="st9" d="M235.6,1.5"/>
+</g>
+<path pointer-events="none" class="st9" d="M34.4-31.2"/>
+<g pointer-events="none">
+	<text transform="matrix(1 0 0 1 217.9839 10.75)" class="st7 st8">Model</text>
+</g>
+<path pointer-events="none" class="st9" d="M34.4-47.2"/>
+<path class="st9" d="M34.4,46.8"/>
+</svg>

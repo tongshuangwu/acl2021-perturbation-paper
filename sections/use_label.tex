@@ -139,14 +139,23 @@ Active learning might be a promising future direction.
 \toprule
     n &     m &    model &          SST-2 &       senti140 &        SemEval &        Amzbook &           Yelp &           IMDB &     IMDB-Cont. &       IMDB-CDA \\
 \midrule
- 4000 &  2000 &     comp &  $92.9\pm 0.2$ &  $88.9\pm 0.3$ &  $85.1\pm 0.5$ &  $85.1\pm 0.4$ &  $90.0\pm 0.3$ &  $90.8\pm 0.5$ &  $92.8\pm 0.6$ &  $87.5\pm 0.2$ \\
- 4000 &  2000 &  aug\_gpt &  $92.5\pm 0.2$ &  $90.7\pm 0.4$ &  $86.4\pm 0.1$ &  $85.1\pm 0.8$ &  $90.1\pm 0.0$ &  $90.6\pm 0.3$ &  $93.8\pm 0.3$ &  $89.4\pm 0.5$ \\
+ 4000 &  2000 &     comp &  $92.9\pm 0.2$ &  $88.9\pm 0.3$ &  $84.8\pm 0.5$ &  $85.1\pm 0.4$ &  $90.0\pm 0.3$ &  $90.8\pm 0.5$ &  $92.8\pm 0.6$ &  $87.0\pm 0.2$ \\
+ 4000 &  2000 &  aug	 &  $92.7\pm 0.2$ &  $90.7\pm 0.4$ &  $86.4\pm 0.1$ &  $85.6\pm 0.8$ &  $90.1\pm 0.0$ &  $90.6\pm 0.3$ &  $93.8\pm 0.3$ &  $89.7\pm 0.5$ \\
 \bottomrule
 \end{tabular}
 
 \caption{The \sst results. \wts{Do we report std??}}
 \label{table:sst_result}
 \end{table*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/sst_trend}
+\vspace{-15pt}
+\caption{Given a sentence, get 3 different versions.}
+\vspace{-10pt}
+\label{fig:sst_trend}
+\end{figure}
 
 
 \paragraph{\sst.}
@@ -165,8 +174,8 @@ As shown in Table~\ref{table:aug_sst},
 \toprule
      n &     m &    model &           SNLI &         MNLI\_m &        MNLI\_mm &       SNLI-CDA &          break &            DNC &         stress &     diagnostic \\
 \midrule
- 20,000 &  1574 &     comp &  $85.7\pm 0.4$&  $86.1\pm 0.2$&  $86.6\pm 0.2$&  $72.8\pm 0.3$&  $86.4\pm 2.5$&  $54.5\pm 0.6$&  $65.1\pm 0.6$&  $56.0\pm 0.8$\\
- 20,000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $86.0\pm 0.1$&  $86.4\pm 0.0$&  $73.6\pm 0.2$&  $89.1\pm 2.2$&  $57.7\pm 0.3$&  $65.1\pm 0.2$&  $57.5\pm 0.5$\\
+ 20,000 &  1574 &     comp 	&  $85.7\pm 0.4$&  $86.1\pm 0.2$&  $86.6\pm 0.2$&  $72.8\pm 0.3$&  $86.4\pm 2.5$&  $54.5\pm 0.6$&  $65.1\pm 0.6$&  $56.0\pm 0.8$\\
+ 20,000 &  1574 &  aug		&  $85.3\pm 0.3$&  $86.0\pm 0.1$&  $86.4\pm 0.0$&  $73.6\pm 0.2$&  $89.1\pm 2.2$&  $57.7\pm 0.3$&  $65.1\pm 0.2$&  $57.5\pm 0.5$\\
  %10000 &  1574 &     comp &  $85.3\pm 0.5$&  $85.2\pm 0.2$&  $85.4\pm 0.3$&  $72.4\pm 0.1$&  $86.1\pm 1.8$&  $54.2\pm 1.8$&  $64.0\pm 0.4$&  $56.0\pm 0.3$\\
  %10000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $85.0\pm 0.2$&  $85.1\pm 0.1$&  $73.4\pm 0.5$&  $90.5\pm 1.1$&  $56.5\pm 1.2$&  $64.6\pm 0.5$&  $57.0\pm 0.4$\\
 \bottomrule
