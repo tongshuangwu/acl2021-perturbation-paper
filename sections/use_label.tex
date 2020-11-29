@@ -56,28 +56,26 @@ We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question p
 
 
 \subsection{Annotation Procedure}
-
-
-
-\paragraph{Selecting Perturbations to Label.}
+\label{subsec:label_procedure}
 First, we generate a large number of perturbations.
-For each original example, we randomly generate up to 10 blanked sentences. Each sentence contains up two three \BLANK token, and blanks different parsing tree structures.
-We iterate through all the combinations of \tagstrs and blanked sentences using a beam search
-
-
-\textbf{The perturbation patterns should be diverse, }to cover more variations around local decision boundaries.
-
-
-\paragraph{Filtering based on labeling results.}
-For augmentation, 
-
+For each original example, we randomly generate up to 10 blanked sentences. Each sentence contains up two three \BLANK tokens that spread over different parsing tree structures.
+We generate prompts using all the combinations of \tagstrs and blanked sentences, and collect perturbations with a beam search (for each prompt, we used 10 beams and kept top three generations.)
+Then, we sample perturbations \emph{with diverse patterns} to cover more variations around local decision boundaries.
+Specifically, we measure the similarity between perturbations based on weighted overlaps between their \tagstrs, the text deleted and added, and the affected parsing tree structure. 
+For example, \ctrltag{[lexical]} \swap{man}{woman} is more similar to \ctrltag{[lexical]} \swap{man}{person} than \ctrltag{[quantifier]} \swap{man}{two men}.
+The similarity computation is in \S\ref{appendix:perturb_similarity}. 
+\wts{Need to write this part.} 
+We crowdsourced the labels for the perturbations on Amazon Mechanical Turk, as demonstrated in Figure~\ref{fig:mturk_instruction}. 
+For each round of labeling, the annotator is given the original instance (and its label) as a reference, and they are tasked to label three variations of the instance by (1) grammatically validity and (2) classification task label. 
+We carefully removed noisy workers using hidden ``gold rounds'' and filters on label distributions and completion time, and removed noisy labels through majority votes.
+More detailed descriptions on instructions and filtering are in \S\ref{appendix:label_instruct}. 
 
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/mturk_label}
 \vspace{-15pt}
-\caption{A sample labeling task. For each round of labeling, the annotator is given the original instance (and its label) as a reference, and they are tasked to label three variations of the instance by (1) grammatically validity and (2) classification task label. A more detailed instruction is in \S\ref{appendix:label_instruct}. \wts{This is placeholder screenshot. Change width/height ratio, choose a better example}}
+\caption{A sample labeling task. \wts{This is placeholder screenshot. Change width/height ratio, choose a better example}}
 \vspace{-10pt}
 \label{fig:mturk_instruction}
 \end{figure}
@@ -117,23 +115,7 @@ For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 fo
 For each given $(m,n)$, we create three different samples of training data, and report the average and the variance of the samples. 
 \wts{Fix the naming later: should I say perturbations, counterfactuals, or something else?}
 
-\begin{table*}
-\small
-\centering
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{rrlllllllllll}
-\toprule
- ORIG\_SIZE &  AUG\_SIZE &    MODEL & DATA\_MARKER &      snli\_test & mnli\_dev\_mismatched & mnli\_dev\_matched &      snli\_iclr &      break\_nli &            dnc &         stress &     diagnostic &           hans \\
-\midrule
-     20000 &      1574 &     comp &  dnc\_target &  $86.8\pm 0.2$ &       $86.7\pm 0.0$ &    $86.5\pm 0.1$ &  $72.8\pm 0.5$ &  $86.6\pm 0.7$ &  $55.1\pm 0.1$ &  $65.5\pm 0.3$ &  $56.7\pm 0.8$ &  $51.5\pm 1.1$ \\
-     20000 &      1574 &  aug\_gpt &  dnc\_target &  $86.1\pm 0.7$ &       $86.2\pm 0.1$ &    $86.2\pm 0.0$ &  $73.5\pm 0.0$ &  $90.9\pm 0.2$ &  $58.1\pm 0.2$ &  $66.0\pm 0.1$ &  $57.5\pm 0.8$ &  $50.9\pm 0.4$ \\
-     10000 &      1574 &     comp &  dnc\_target &  $85.4\pm 0.4$ &       $85.7\pm 0.3$ &    $85.2\pm 0.1$ &  $72.5\pm 0.1$ &  $86.1\pm 2.9$ &  $54.0\pm 1.5$ &  $65.4\pm 0.5$ &  $55.9\pm 0.3$ &  $50.2\pm 0.4$ \\
-     10000 &      1574 &  aug\_gpt &  dnc\_target &  $85.5\pm 0.0$ &       $85.5\pm 0.2$ &    $85.4\pm 0.4$ &  $73.6\pm 0.4$ &  $90.7\pm 1.1$ &  $56.1\pm 1.0$ &  $65.1\pm 0.9$ &  $57.2\pm 0.5$ &  $51.1\pm 0.9$ \\
-\bottomrule
-\end{tabular}
-\caption{The \nli results.}
-\label{table:gpt_train_stats}
-\end{table*}
+
 %\textbf{Results.}
 \subsubsection{Augmentation Results}
 \wts{This can also be at the end.}
@@ -148,12 +130,51 @@ Active learning might be a promising future direction.
 (4) The ratio of the original data and the new data is also important. Flipping out too much original data may decrease the diversity of vocabulary and syntactic structures, and therefore hurting the model performance.
 \wts{See from the results if we want this takeaway.}
 
+
+\begin{table*}
+\small
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{rrlllllllll}
+\toprule
+    n &     m &    model &          SST-2 &       senti140 &        SemEval &        Amzbook &           Yelp &           IMDB &     IMDB-Cont. &       IMDB-CDA \\
+\midrule
+ 4000 &  2000 &     comp &  $92.9\pm 0.2$ &  $88.9\pm 0.3$ &  $85.1\pm 0.5$ &  $85.1\pm 0.4$ &  $90.0\pm 0.3$ &  $90.8\pm 0.5$ &  $92.8\pm 0.6$ &  $87.5\pm 0.2$ \\
+ 4000 &  2000 &  aug\_gpt &  $92.5\pm 0.2$ &  $90.7\pm 0.4$ &  $86.4\pm 0.1$ &  $85.1\pm 0.8$ &  $90.1\pm 0.0$ &  $90.6\pm 0.3$ &  $93.8\pm 0.3$ &  $89.4\pm 0.5$ \\
+\bottomrule
+\end{tabular}
+
+\caption{The \sst results. \wts{Do we report std??}}
+\label{table:sst_result}
+\end{table*}
+
+
 \paragraph{\sst.}
  Similar to \citet{kaushik2019learning}, we evaluate \sst model's generalization accuracy on out of domain datasets, including review datasets (IMDb movie review Yelp~\cite{} and Amazon~\cite{}), Twitter dataset (Senti140~\cite{} and SemEval 2017~\cite{}), and contrast sets on IMDB movie review (IMDB Contrast~\cite{} and IMDb Contrast-CAD~\cite{})  \wts{citation.}
 For each dataset, we randomly selected up to 2,000 examples.
 \wts{check number.}
 As shown in Table~\ref{table:aug_sst}, 
 \wts{Add result}
+
+
+\begin{table*}
+\small
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{rrlllllllll}
+\toprule
+     n &     m &    model &           SNLI &         MNLI\_m &        MNLI\_mm &       SNLI-CDA &          break &            DNC &         stress &     diagnostic \\
+\midrule
+ 20,000 &  1574 &     comp &  $85.7\pm 0.4$&  $86.1\pm 0.2$&  $86.6\pm 0.2$&  $72.8\pm 0.3$&  $86.4\pm 2.5$&  $54.5\pm 0.6$&  $65.1\pm 0.6$&  $56.0\pm 0.8$\\
+ 20,000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $86.0\pm 0.1$&  $86.4\pm 0.0$&  $73.6\pm 0.2$&  $89.1\pm 2.2$&  $57.7\pm 0.3$&  $65.1\pm 0.2$&  $57.5\pm 0.5$\\
+ %10000 &  1574 &     comp &  $85.3\pm 0.5$&  $85.2\pm 0.2$&  $85.4\pm 0.3$&  $72.4\pm 0.1$&  $86.1\pm 1.8$&  $54.2\pm 1.8$&  $64.0\pm 0.4$&  $56.0\pm 0.3$\\
+ %10000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $85.0\pm 0.2$&  $85.1\pm 0.1$&  $73.4\pm 0.5$&  $90.5\pm 1.1$&  $56.5\pm 1.2$&  $64.6\pm 0.5$&  $57.0\pm 0.4$\\
+\bottomrule
+\end{tabular}
+\caption{The \nli results. \wts{Do we report std??}}
+\label{table:nli_result}
+\end{table*}
+
 
 \paragraph{\nli.}
 % m=20k, n=1574
@@ -167,8 +188,9 @@ For example, to hopefully get an augmentation focused on prepositions like \exin
 \footnote{All examples shown are actual generations of the model. \wts{Move this footnote to where it first occurs.}}
 
 As a result, \maug was able to perform better on DNC (Table~\ref{table:aug_nli}), while maintaining in-domain (on SNLI test set) and out-of-domain accuracies (on MNLI matched and mismatched~\cite{}).
-As shown in Figure~\ref{}, higher ratios of augmentation data is more useful. 
-That said, just adding $N\%$ data is sufficient to boost the performance to some extent.
+%As shown in Figure~\ref{}, higher ratios of augmentation data is more useful. 
+%That said, 
+Just adding $N\%$ data is sufficient to boost the performance.% to some extent.
 Because DNC includes pairs of probing examples (one from the original MNLI~\cite{} and one manually probed for a given linguistic pattern), we can safely conclude that the model did not overfit to a new pattern (i.e., it does not improve on \exinline{lying on} by sacrificing performances on \exinline{beneath.})
 The model also performs better on some other challenge sets that are not our initial improvement targets.
 

@@ -2,3 +2,14 @@
 \label{sec:discuss} 
 
 \textbf{Labeling functions.}
+
+\textbf{Counterfactual explanation.}
+Arguably, perturbations can also be summarized into SHAP-like feature attributions.
+However, it is unclear if the perturbations induce appropriate amount of information for feature attribution.
+In a simple \exinline{this is a good movie}, changing \swap{good}{great} does not affect the prediction, yet it should not be interpreted as ``good'' being trivial.
+Moreover, because our perturbations are not exhaustive, the summarized explanation may be biases by the changed-to words.
+To effectively support feature attribution, future work can explore more nuanced, semantic ``expectation'' of certain changes, \ie changing words to antonyms may not affect the label, but changing it to synonyms may not.
+
+\textbf{Other applications.}
+Beyond our demonstrated applications, \sysname can potentially support other use cases. 
+For example, grouping generated sentences based on their perturbations types or template patterns, one can potentially 

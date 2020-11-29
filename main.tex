@@ -35,6 +35,8 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{color,soul}
+
 \usepackage[T1]{fontenc}
 \usepackage{bbold}
 \usepackage{pifont}% http://ctan.org/pkg/pifont
@@ -52,12 +54,16 @@
 \newcommand\BibTeX{B\textsc{ib}\TeX}
 %\newcommand*{\emailfont}{\fontfamily{pcr}\selectfont}
 
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
 \newcommand{\colbox}[2]{
 \begingroup
   \setlength{\fboxsep}{0pt}%  
   \colorbox{#1}{#2\/}%\reducedstrut
 \endgroup}
-  
+
  
 \newcommand{\veryshortarrow}[1][3pt]{\mathrel{%
    \hbox{\rule[\dimexpr\fontdimen22\textfont2-.2pt\relax]{#1}{.4pt}}%
@@ -80,6 +86,47 @@
 \newcommand{\exinline}[1]{ {\color{cexample}``#1''\xspace}}
 \newcommand{\fillin}[1]{ {\color{cexample}#1\xspace}}
 
+\newcommand{\fontsmall}{\fontsize{9pt}{11pt}\selectfont}
+\newcommand{\fontnormal}{\fontsize{10pt}{12pt}\selectfont}
+\fboxrule=0.1pt
+\newcommand{\ebox}[1]{%
+	\medskip
+	\noindent\fcolorbox{gray}{white}{
+		\begin{minipage}{0.95\linewidth}
+			\fontsmall
+			%\begin{internallinenumbers}
+			%\resetlinenumber
+			{#1}
+			%\end{internallinenumbers}
+		\end{minipage}
+	}
+	\medskip
+}
+
+% [(0.166, 'opposing '), (0.099, 'team '), (0.027, 'by '), (0.026, 'quarterback '), (0.024, 'The '), (0.024, 'is '), (0.024, '. '), (0.023, ' '), (0.023, 'about '), (0.023, 'to '), (0.023, 'be '), (0.023, 'tackled '), (0.019, 'the '), (-0.0, ' ')]
+%#eef5fa
+%#daeaf5
+%#c6deef
+%#b2d2e9
+%#9ec7e4
+%#8abbde
+
+\definecolor{cfwone}{HTML}{eef5fa}
+\definecolor{cfwtwo}{HTML}{daeaf5}
+\definecolor{cfwthree}{HTML}{b2d2e9}
+\definecolor{cfwfour}{HTML}{8abbde}
+
+\newcommand{\fwone}[1]{\colbox{cfwone}{#1}\xspace}
+\newcommand{\fwtwo}[1]{\colbox{cfwtwo}{#1}\xspace}
+\newcommand{\fwthree}[1]{\colbox{cfwthree}{#1}\xspace}
+\newcommand{\fwfour}[1]{\colbox{cfwfour}{#1}\xspace}
+
+\newcommand{\fexp}[2]{\texttt{{\color{darkgray}{#1:#2}}}\xspace}
+\newcommand{\fexptag}[1]{\fexp{TAG}{#1}}
+\newcommand{\fexpfrom}[1]{\fexp{FROM}{#1}}
+\newcommand{\fexpto}[1]{\fexp{TO}{#1}}
+
+
 \definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 %\definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 \definecolor{cword}{rgb}{0, 0, 0.7}
@@ -89,6 +136,8 @@
 \newcommand{\clabel}[1]{\emph{#1}\xspace}
 
 % constants
+\newcommand{\sysname}{Aditor\xspace}
+
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
 \newcommand{\tagstr}{control code\xspace}
 \newcommand{\Tagstr}{Control code\xspace}
@@ -99,7 +148,8 @@
 \newcommand{\xmark}{{\ding{55}}}%
 \newcommand{\qmark}{{\textsf{?}}}%
 
-\newcommand{\perturbtoken}{\texttt{<|perturb|>}}%
+\newcommand{\perturbtoken}{\texttt{<|perturb|>}\xspace}%
+\newcommand{\stoptoken}{\texttt{[SEP]}\xspace}%
 
 
 
@@ -119,20 +169,30 @@
 \newcommand{\note}[2]{\xspace{\color{#1}[ #2 ]}\xspace}
 %\newcommand{\note}[2]{}
 \newcommand{\wts}[1]{\note{violet}{Sherry: #1}}
+
+
+
+
+
+
+
+
+
 % teal, cyan
-\title{Augmentation}
+\title{\sysname: Towards Automated Perturbation Generation \\for Evaluation, Data Augmentation, and Explanation}
 \begin{comment}
 \author{
 Tongshuang Wu \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  \texttt{email@domain} \\\And
-  Second Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  \texttt{email@domain} \\}
+  University of Washington \\
+  \texttt{wtshuang@uw.edu} \\\And
+Marco Tulio Ribeiro \\
+  Microsoft Research \\
+  \texttt{marcotcr@gmail.com} \\\And
+Jeffrey Heer \\
+  \texttt{jheer@uw.edu} \\\And
+Jeffrey Heer \\
+  \texttt{jheer@uw.edu} \\
+}
 \end{comment}
 
 \author{
@@ -141,21 +201,30 @@ Tongshuang Wu$^{1}$ ~~~~~~~
 Marco Tulio Ribeiro$^{2}$ ~~~~~~~ 
 Jeffrey Heer$^{1}$ ~~~~~ 
 Daniel S. Weld$^{1}$}  \\ 
-$^{1}$University of Washington\hspace{5mm}
+$^{1}$Allen School, University of Washington\hspace{5mm}
 $^{2}$Microsoft Research\hspace{5mm} \\ 
-\href{mailto:wtshuang@cs.uw.edu}{\UrlFont {wtshuang@cs.uw.edu}}
+\href{mailto:wtshuang@cs.uw.edu}{\texttt {wtshuang@cs.uw.edu}}
 \hspace{2mm}
-\href{mailto:marcotcr@microsoft.com}{\UrlFont {marcotcr@gmail.com}}
+\href{mailto:marcotcr@microsoft.com}{\texttt {marcotcr@gmail.com}}
 \hspace{2mm}
-\href{mailto:dan@cs.washington.edu}{\UrlFont {\{jheer,weld\}@cs.uw.edu}}
+\href{mailto:dan@cs.washington.edu}{\texttt {\{jheer,weld\}@cs.uw.edu}}
 }
+
 
 \date{}
 
 \begin{document}
 \maketitle
 \begin{abstract}
-
+Minimal perturbations is effective for evaluating and calibrating model decision boundaries, but existing generation methods either cover limited linguistic patterns, or are hard to scale.
+We explore language-model based perturbation generation.
+We define the training prompts with two information:
+To enable targeted inspection, we use \emph{\tagstrs} to indicate \emph{how} to change a sentence with defined based on common linguistic capabilities, and \emph{where} to change by blanking certain linguistic features.
+We finetune GPT-2 on a combination of multiple existing datasets,  and verify its usefulness of the generations in three applications:
+(1) As contrast sets, the model performance decreases up to \wts{X\%} on them compared to on the original test set, revealing model inefficiencies.
+(2) As counterfactual data augmentation, they improve models on data slices, and models perform better on out-of-domain datasets, challenge sets, or pass more behavioral tests.
+\wts{Number?}
+(3) They also supply existing explanations and more effectively demonstrate the impact certain text.
 \end{abstract}
 
 \input{sections/intro}
@@ -173,8 +242,9 @@ $^{2}$Microsoft Research\hspace{5mm} \\
 
 \appendix
 \input{sections/app_train_datasets}
+\input{sections/app_perturb_applications}
 \input{sections/app_label_instruction}
 \input{sections/app_examples}
-\input{sections/app_perturb_applications}
+\input{sections/app_perturb_similarity}
 
 \end{document}
