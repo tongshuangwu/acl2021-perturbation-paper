@@ -85,7 +85,7 @@ Those that thrive in diversity are either too uncontrolled (\eg text generation~
 \begin{table*}
 \small
 \centering
-\begin{tabular}{p{0.11\linewidth} p{0.6\linewidth}  p{0.2\linewidth}}
+\begin{tabular}{p{0.11\linewidth} p{0.6\linewidth}  p{0.22\linewidth}}
 \toprule
 \textbf{\Tagstr} & \textbf{Definitions and Examples} & \textbf{Training datasets} \\ 
 \midrule
@@ -146,7 +146,7 @@ We concatenate the information with special tokens like \perturbtoken.
 \vspace{-10pt}
 \label{fig:blank}
 \end{figure}
- 
+
 \subsection{Perturbation as a NLG Task}
 
 \paragraph{LM \& its prompts.}
@@ -157,7 +157,13 @@ We further modify the prompt structure as the following:
 \emph{Enhance diversity with \tagstrs}.
 LMs are naturally cover more strategies than small collections of templates or rewrite rules, but to further extend their perturbation diversity, we condition the generation on special tokens that denote the perturbation strategies (similar to \citet{raffel2019exploring, Dathathri2020Plug}).
 We surveyed X papers related to text perturbations, and summarized 8 \tagstrs as in Table~\ref{table:ctrltag}.
-\wts{Add some more explanation on the design rationale. It is a more syntactic style change, and we try to minimize the overlaps between words; But we leave out the semantic ones because they overlap too much. arguably lexical and resemantic are similar, but we separate them because editing distance and because too many prior work do lexical change that it deserves a separate category.}
+
+We design these \tagstrs to cover commonly seen perturbations, and to maximize the syntactic differences between different groups, such that the controls are more explicit for the model to follow.
+While it is also possible to use semantic-oriented \tagstrs (synonyms, antonyms, hyponyms, paraphrases), we found WordNet~\cite{miller1998wordnet} or sentence similarity based tagging are inaccurate, and the pattern was tricky to learn for the LM model.
+Moreover, the \tagstrs distinguish the information change: the syntax-preserving ones add (\ctrltag{insert}), remove (\ctrltag{delete}), or change constraints, and the constraints vary from sparse (\ctrltag{resemantic} is more loose than \ctrltag{lexical}) to specific and finer-grained (\ctrltag{negation}, \ctrltag{quantifier}).
+Remaining \ctrltag{shuffle} and \ctrltag{restructure}, on the other hand, focuses on syntactic understanding when we have high lexical overlap.
+
+%\wts{Add some more explanation on the design rationale. It is a more syntactic style change, and we try to minimize the overlaps between words; But we leave out the semantic ones because they overlap too much. arguably lexical and resemantic are similar, but we separate them because editing distance and because too many prior work do lexical change that it deserves a separate category.}
 
 \emph{Enable control with \BLANK}.
 Besides boosting diversity, the \tagstrs also enable controls on \emph{how} to edit a sentence.
@@ -168,7 +174,7 @@ Later in this paper, we mostly demonstrate applications related to manually labe
 
 
 \paragraph{Training data formation.}
-
+\wts{This part is probably too long.}
 While we do not have a single NLP dataset designed for strategy-driven perturbation, multiple existing datasets can each express a subset of the perturbation strategy patterns.
 We survey multiple datasets with paired sentences, and combined six of them into a training set that cover all \tagstrs.
 We additionally crawled some sentence pairs from non-paired datasets like SQuAD~\cite{rajpurkar-etal-2016-squad} to boost some specific patterns and increase lexical diversity. 
@@ -202,8 +208,8 @@ Inspired by the language model constraints in \citet{morris2020textattack}, we s
 %pr["pr_sent"]<=10 and pr["pr_phrase"] <=10
 %Perplexity is instantiating; Language modeling as an approximation because it measures real world distribution.
 
-
-\subsection{Intrinsic Evaluations \& Ablation Studies}
+%\& Ablation Studies
+\subsection{Intrinsic Evaluations}
 % random no-pair models. 1142508
 We verify the impact of the filtering and the \tagstrs through human evaluations.
 \paragraph{Validity.}
@@ -215,14 +221,21 @@ As part of the data labeling task in \S\ref{sec:app_label}, we also asked crowdw
 
 
 \paragraph{Controllability.}
-One of the coauthors manually labeled ...\wts{this is TODO.}
-the validity of 600 augmentations generated on 120 instances from three datasets.
-Note that we only labeled instances generated with $\xp$ fully \BLANK-ed or being empty, so the model has the potential of fully follow the \tagstrs.
-Further restricting the blank placements will lower the control rate, as it may be impossible to follow the strategy at the given blanked place (\eg \ctrltag{shuffle} is absolutely impossible when we only blank out a single token in the sentence.)
+We observed that model does not always follow it for three reasons:
+(1) The dual manipulation from \tagstrs and \BLANK sometimes conflict, \eg \exinline{a dog is embraced by a [BLANK]} would not respond to \ctrltag{negation}.
+(2) $x$ does not have the corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence does not have more than one adjective or NOUN (\eg \exinline{the movie is good}).
+(3) The pattern-to-perturb is very prominent that it dominates the generation probability. 
+For example, the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the tag.
 
+That said, we still verify that \tagstrs successfully impact the generation.
+We selected X sentences that can potentially allow all the defined changes, and generated perturbations with all \tagstr inputs through beam search, and re-compute the \tagstr on each output.
+We deem the control successful if at least one of the output \tagstr matches the input in the top 3 returns.
+The succesful rate was X, ranging from X (tag1) to X (tag2.)
+\wts{TODO}
+With an ablation study training models without \tagstr or without \BLANK, we ...
+\wts{tag diversity, bleu}
 
-
-\paragraph{Diversity.}
+%\paragraph{Diversity.}
 
 
 

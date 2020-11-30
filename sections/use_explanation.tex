@@ -1,3 +1,21 @@
+\definecolor{cfwone}{HTML}{eef5fa}
+\definecolor{cfwtwo}{HTML}{daeaf5}
+\definecolor{cfwthree}{HTML}{b2d2e9}
+\definecolor{cfwfour}{HTML}{8abbde}
+
+\newcommand{\fwone}[1]{\colbox{cfwone}{#1}\xspace}
+\newcommand{\fwtwo}[1]{\colbox{cfwtwo}{#1}\xspace}
+\newcommand{\fwthree}[1]{\colbox{cfwthree}{#1}\xspace}
+\newcommand{\fwfour}[1]{\colbox{cfwfour}{#1}\xspace}
+
+\newcommand{\fexp}[2]{\texttt{{\color{darkgray}{#1:#2}}}\xspace}
+\newcommand{\fexptag}[1]{\fexp{TAG}{#1}}
+\newcommand{\fexpfrom}[1]{\fexp{FROM}{#1}}
+\newcommand{\fexpto}[1]{\fexp{TO}{#1}}
+\newcommand{\fexptemp}[1]{\fexp{TEMP}{#1}}
+
+
+
 \section{Perturbation Explanations}
 
 %Both counterfactual explanations and semi-counterfactual explanations.
@@ -24,7 +42,7 @@ The model~\cite{} predicts it correctly and SHAP deems the.
 
 %%%
 We define two kinds of surprises.
-First, \emph{invariance surprises} (\emph{ivs}) refers to $\xp$-s that maintains model predictions, even though the perturbed features/tokens are deemed important by the model.
+First, \emph{invariance surprises} refers to $\xp$-s that maintains model predictions, even though the perturbed features/tokens are deemed important by the model.
 For example, the following changes three important tokens, ``quarterback,'' ``opposing'' and ``team,'' yet the predict remains intact. This contrasting example suggests that the model may not handle the subjects and objects of verbs appropriately.
 
 \ebox{
@@ -108,18 +126,21 @@ unflip_important_feature 0.149 {opposing}
 
 
 \subsection{Extend ``Suprise'': Global, Interaction}
+\label{subsec:global_exp}
+
 \paragraph{Global patterns.}
 Going beyond surprises for each individual data points, we can use the \emph{surprise} to find perturbation patterns that systematically affect (preserve) model predictions.
 Similar to challenge sets, the grouped perturbations then become useful for revealing model's capabilities on specific linguistic patterns.
 
 To enable the grouping, we first featurize each perturbation $\xp$ with respect to its original instance $x$, using 
 (1) its \tagstr \fexptag{\emph{s}}, 
-(2) its remove phrases \fexpfrom{$r(\xp)$}, and 
-(3) its added phrases \fexpto{$a(\xp)$}.
+(2) its remove phrases \fexpfrom{$r(\xp)$}, 
+(3) its added phrases \fexpto{$a(\xp)$}, and 
+(4) the combined template \fexpto{\swap{$r(\xp)$}{$a(\xp)$}}.
 For tokens involving multiple changes, we featurize both the primary change, and the combined changes, and so the example in Figure~\ref{fig:blank} have the following features:
 
 For each $x \in \xset$, we compute the surprise score for all its perturbations $\xp$-s, and denote an example as ``surprising'' based on thresholds, \ie $S_i(\xp) > \gamma_i$ or$S_v(\xp) > \gamma_i$ (empirically picked as $\gamma_i=0.3$ and $\gamma_v=0.7$).
-We count the (in-)variance surprising rate $r_i$ and $r_v$ for each feature, \ie the ratio of surprising cases out of all perturbations who has the corresponding feature, and whose predictions are (not) changed.
+We count the (in-)variance surprising rate $R_i$ and $R_v$ for each feature, \ie the ratio of surprising cases out of all perturbations who has the corresponding feature, and whose predictions are (not) changed.
 We go through features with the surprise ratio $> 0.8$ to inspect global patterns.
 
 Analyzing the \nli model mentioned above, we note some interesting observations that suggest model deficiencies:
@@ -127,18 +148,76 @@ Analyzing the \nli model mentioned above, we note some interesting observations 
 (1) The model does not handle the shuffled phrases, echoing the results from \citet{mccoy2019right}.
 
 \ebox{
-\fexptag{shuffle}, $r_i=0.87$ (144 surprises / 164 invariance)\\
-\textbf{Hypothesis}: The quarterback is about to be \swap{tackled}{thrown} by the opposing team.\\
-\textbf{Hypothesis}: The quarterback is about to be \swap{tackled}{thrown} by the opposing team.\\
-\textbf{Prediction}: \swap{entailment}{}
+\fexptag{shuffle}, \\$R_i=0.87$ (144 surprises / 164 invariance)\\
+\textbf{P}: The bride in the white dress is surrounded by the groomsmen and bridesmaids, all in black.\\
+\textbf{H}: \add{white} woman \remove{in white} is surrounded by others.\\
+\textbf{Pr}: \swap{entailment}{entailment}\\
+
+%\textbf{Premise}: Man juggling apples while sitting on a couch with another man on one side and a woman on the other.\\
+%\textbf{Hypothesis}: Two \swap{men}{women} sitting near a \swap{woman}{man}.
+%\textbf{Prediction}: \swap{entailment}{entailment}\\
+
+\textbf{P}: A man in a wheelchair is being pushed towards a monk.\\
+\textbf{H}: The \swap{person is disabled and}{holy person} is being moved towards a \swap{holy}{disabled} person. \\
+\textbf{Pr}: \swap{entailment}{entailment}
 }
 
-(2) 
+(2) Several quantifier patterns are picked as invariance surprises, which suggests that the model has a hard time processing numbers.
 
-We also note some valid model behaviors that are denoted ``surprising'', suggesting patterns that are frequently missed by SHAP: 
+\ebox{
+\fexptemp{\swap{two}{three}}, \\$R_i=0.87$ (81 surprises / 93 invariance)\\
+\textbf{P}: Two people embrace on the end of a dock.\\
+\textbf{H}: \swap{Two}{Three} people are near the water.\\
+\textbf{Pr}: \swap{entailment}{entailment}\\
+
+\fexptemp{\swap{three}{four}}, \\$R_i=0.87$ (12 surprises / 14 invariance)\\
+\textbf{P}: Two little girls and one little boy are running on the grass.\\
+\textbf{H}: \swap{Three}{Four} kids are running.\\
+\textbf{Pr}: \swap{entailment}{entailment}
+}
 
 
+There was also cultural dependent patterns, with ``football'' and ``soccer'' referring to different sports only in the US:
+
+\ebox{
+\fexptemp{\swap{football}{soccer}}, \\$R_r=0.78$ (11 surprises / 14 variance)\\
+\textbf{P}: A football coach is walking on a football field.\\
+\textbf{H}: a \swap{football}{soccer} coach walks on the field.\\
+\textbf{Pr}: \swap{entailment}{contradiction}
+}
+
+We also note some valid model behaviors that are denoted ``surprising'', suggesting patterns that are frequently missed by SHAP:
+
+\ebox{
+\fexptemp{\swap{down}{up}}, \\$R_i=0.82$ (18 surprises / 22 invariance)\\
+\textbf{P}: Two men look down at another man standing on an unfinished walkway.\\
+\textbf{H}: Two people look \swap{down}{up} at a man working.\\
+\textbf{Pr}: \swap{entailment}{contradiction}
+}
 
 \paragraph{Interactive explanation.}
-Besides pre-selected \emph{surprise} cases, perturbations can also support interactive explanation. 
+Besides pre-selected \emph{surprise} cases, perturbations can also support interactive explanation (ideally in a visual interface), and multi-step drill downs.
+In the example: 
+
+\ebox{
+\textbf{P}: Some dogs are running on a deserted beach.\\
+\textbf{H}: There is only one dog at the beach.\\
+\textbf{Pr}: contradiction
+}
+
+To understand whether the model responses to quantifiers, an analyst can select to \BLANK ``only one'', which would reveal that the model predicts entailment correct for both perturbed hypotheses:
+
+\ebox{
+\textbf{H}: There \swap{is only one dog}{are multiple dogs} at the beach.\\
+\textbf{H}: There is \swap{only}{more than} one dog at the beach.
+}
+
+Then, the analyst can keep ``more than one dog'' to inspect how the model react to other changes. 
+With the model maintaining entailment on the following examples, the analyst would conclude that there may be a strong correlation between NNS and ``more than one,'' that it overwrites many of the prep constraints.
+
+\ebox{
+\textbf{H}: There is \emph{more than} one dog at the beach \add{lying down}.\\
+\textbf{H}: There is \emph{more than} one dog at the beach \add{inside a cup}.\\
+\textbf{H}: There is \emph{more than} one dog at the beach \add{standing}.
+}
 
