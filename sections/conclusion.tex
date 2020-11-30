@@ -1,7 +1,18 @@
 \section{Discussion and Conclusion}
 \label{sec:discuss} 
 
-\textbf{Labeling functions.}
+
+\textbf{Context-dependent perturbation.}
+While the LM-based perturbation is more effective to generate, it has limited support for more complex tasks.
+For example, \citet{gardner2020contrast} created contrast sets for multi-hop question answerin (DROP~\cite{}) by adding compositional reasoning steps \emph{related to} the corresponding paragraph.
+Such context-aware perturbation is not achievable when the input to the LM model is just the question sentence.
+Rather, one should consider training models that take additional contexts as part of the input.
+
+\textbf{Grouped labeling and active learning.}
+While we labeled perturbations individually, it is also possible to make it more efficient through grouped labeling. 
+If we categorize generated sentences based on their perturbations types or template patterns (similar to the featurization in \S\ref{subsec:global_exp}), we can create labeling functions~\cite{ratner2017snorkel} for weak supervision based on different combinations of perturbation metadata.
+
+%{Or, a more sophisticated way to compute P is to create snorkel labeling functions based on different combinations of perturbation metadata.}
 
 \textbf{Counterfactual explanation.}
 Arguably, perturbations can also be summarized into SHAP-like feature attributions.
@@ -10,6 +21,8 @@ In a simple \exinline{this is a good movie}, changing \swap{good}{great} does no
 Moreover, because our perturbations are not exhaustive, the summarized explanation may be biases by the changed-to words.
 To effectively support feature attribution, future work can explore more nuanced, semantic ``expectation'' of certain changes, \ie changing words to antonyms may not affect the label, but changing it to synonyms may not.
 
-\textbf{Other applications.}
-Beyond our demonstrated applications, \sysname can potentially support other use cases. 
-For example, grouping generated sentences based on their perturbations types or template patterns, one can potentially 
+
+
+%\textbf{Other applications.}
+%Beyond our demonstrated applications, \sysname can potentially support other use cases. 
+%For example, grouping generated sentences based on their perturbations types or template patterns, one can potentially 

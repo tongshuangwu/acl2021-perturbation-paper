@@ -34,8 +34,9 @@
 \usepackage{xspace}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage{xcolor}
+\usepackage{xcolor,colortbl}
 \usepackage{color,soul}
+\usepackage{multirow}
 
 \usepackage[T1]{fontenc}
 \usepackage{bbold}
@@ -110,22 +111,6 @@
 %#b2d2e9
 %#9ec7e4
 %#8abbde
-
-\definecolor{cfwone}{HTML}{eef5fa}
-\definecolor{cfwtwo}{HTML}{daeaf5}
-\definecolor{cfwthree}{HTML}{b2d2e9}
-\definecolor{cfwfour}{HTML}{8abbde}
-
-\newcommand{\fwone}[1]{\colbox{cfwone}{#1}\xspace}
-\newcommand{\fwtwo}[1]{\colbox{cfwtwo}{#1}\xspace}
-\newcommand{\fwthree}[1]{\colbox{cfwthree}{#1}\xspace}
-\newcommand{\fwfour}[1]{\colbox{cfwfour}{#1}\xspace}
-
-\newcommand{\fexp}[2]{\texttt{{\color{darkgray}{#1:#2}}}\xspace}
-\newcommand{\fexptag}[1]{\fexp{TAG}{#1}}
-\newcommand{\fexpfrom}[1]{\fexp{FROM}{#1}}
-\newcommand{\fexpto}[1]{\fexp{TO}{#1}}
-
 
 \definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 %\definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
@@ -221,7 +206,7 @@ We explore language-model based perturbation generation.
 We define the training prompts with two information:
 To enable targeted inspection, we use \emph{\tagstrs} to indicate \emph{how} to change a sentence with defined based on common linguistic capabilities, and \emph{where} to change by blanking certain linguistic features.
 We finetune GPT-2 on a combination of multiple existing datasets,  and verify its usefulness of the generations in three applications:
-(1) As contrast sets, the model performance decreases up to \wts{X\%} on them compared to on the original test set, revealing model inefficiencies.
+(1) As contrast sets, the model performance decreases up to 19.3 points on them compared to on the original test set, revealing model inefficiencies.
 (2) As counterfactual data augmentation, they improve models on data slices, and models perform better on out-of-domain datasets, challenge sets, or pass more behavioral tests.
 \wts{Number?}
 (3) They also supply existing explanations and more effectively demonstrate the impact certain text.
