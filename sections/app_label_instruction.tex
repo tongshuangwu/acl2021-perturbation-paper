@@ -33,20 +33,4 @@ We collected two annotations per perturbation, and only kept data points that at
 As such, when set out to collect augmentations on 1,000 original examples (thus 3,000 perturbations), we typically collect perturbations for 1,000 perturbations on 600 original examples.
 One of the authors labeled a subset of 100 perturbations on 100 original examples in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, the raw labeling agreement $88\%$).
 
-\paragraph{Validity}
-
-
-\paragraph{Labeling efficiency}
-Labeling three variations of a given example is reasonably easy for two reasons. 
-First, instead of manually \emph{generating} the perturbations, the annotators merely need to \emph{verify} the machine-generated ones.
-Second, instead of having to parse the full sentence, they annotate based on the reference example and the corresponding perturbed phrases, a boost of efficiency also observed in~\cite{Khashabi2020MoreBF}.
-As a result, the median time for labeling one round (three perturbations) is 30 seconds, which is considerably shorter compared to existing manual perturbation methods:
-\citet{kaushik2019learning}reported that workers spent roughly 5 minutes per revised IMDB movie review, and 4 minutes per revised sentence (for \nli).
-Similarly, \citet{gardner2020contrast} mentioned that three expert annotators spent 70 hours to create 588 counterfactual examples for IMDB movie review.
-Even for shorter image captions in NLVR2 visual reasoning dataset~\cite{suhr2018corpus}, annotations would take approximately 30 seconds for one textual perturbation.
-
-
-That said, manual annotations are undoubtedly more targeted. 
-For example, the model is much less likely to flip an \nli instance from \clabel{contradiction} to \clabel{entailment}, if it is changing the hypothesis sentence regardless of the premise.
-We discuss the opportunity for interactive and more in-context perturbation in \S\ref{sec:discuss}.
 
