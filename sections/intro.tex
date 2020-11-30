@@ -65,7 +65,7 @@ Using the collected data as contrast sets~\cite{}, \ie evaluation dataset with m
 Using the data for augmentation, we observed that the perturbation helps improve models' generalization accuracies on out-of-domain datasets, challenge sets and contrast sets, as well as CheckList testing results~\cite{checklist:acl20}, while maintaining the in-domain accuracy.
 
 Second, we also use the perturbations to supply existing explanations methods.
-We ``critisize'' existing feature attribution methods like SHAP~\cite{} or LIME~\cite{} by selecting perturbations whose model prediction conflict with the corresponding token importance (\eg the model prediction changes when a supposedly insignificant feature is replaced.)
+We ``criticize'' existing feature attribution methods like SHAP~\cite{} or LIME~\cite{} by selecting perturbations whose model prediction conflict with the corresponding token importance (\eg the model prediction changes when a supposedly insignificant feature is replaced.)
 In a user study, we verify the surprise...
 
 In summary, we contribute: 
@@ -75,7 +75,7 @@ In summary, we contribute:
 
 
 
-Automated approahces using templates or word substitutions usually cover limited capabilities, whereas manual perturbations are usually expensive and hard to scale. 
+%Automated approahces using templates or word substitutions usually cover limited capabilities, whereas manual perturbations are usually expensive and hard to scale. 
 
 
 %Another approach is to employ counterfactual reasoning: what would have happened if X was different? Many analysis and evaluation approaches rely on counterfactual reasoning, e.g. anchors, Errudite, SEARs, contrast sets, 'learning the difference that makes a difference', and counterfactual explanations in general. Some data augmentation approaches also rely on counterfactual reasoning, and focus on perturbing existing inputs rather than on getting new data. Intuitively, perturbations of inputs would allow us to highlight what really matters more efficiently than getting different examples (again, language is high dimensional).
