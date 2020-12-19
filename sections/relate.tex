@@ -1,80 +1,114 @@
 \section{Related Work}
 \label{sec:relate}
 
+\wts{Add papers in this commented doc}
+%https://onedrive.live.com/view.aspx?resid=197CF4A37DDF0B15%213586&id=documents&wd=target%28related%20work%20related.one%7CE69A0F7B-54B3-0A45-9CE4-F7C5D1A8E868%2FThe%20objective%20of%20counterfactual%20explanations%7C07B79881-D499-3346-BB2F-85EE39F1AE72%2F%29onenote:https://d.docs.live.net/197cf4a37ddf0b15/Documents/Tongshuang/related%20work%20related.one#The%20objective%20of%20counterfactual%20explanations&section-id={E69A0F7B-54B3-0A45-9CE4-F7C5D1A8E868}&page-id={07B79881-D499-3346-BB2F-85EE39F1AE72}&end
 \begin{comment}
-* Applications of perturbations
-** As augmentation
-- ICLR paper
-- contrast set
-- other two papers
 
-** As explanation
-- Perturbation
+** Perturbation methods
 
-* Text generation
+- Despite the wide application, they usually require minimal perturbation, and have shared methods. In N papers we read, the distribution are:
+- Word substitution
+- Manual, which involves like negation blah
+- Templates to do linguistic
+- Paraphrasing
+
+We take a different approach and make it a generative problem. In this region, related work are: 
 - Controlled style transfer
-- Special tokens, finetuning gpt-2
-- blank
 
+
+- Perturbations in NLP are broadly used for...
+    data augmentation
+        data augmentation functions in Snorkel
+    model evaluation
+        adversarial attack
+        contrast set
+        perturbations in dev
+    explanation
+        LIME/SHAP can also be considered perturbations, though exclusively focusing on masking words
+
+To be applied to different application, perturbations are usually distinguished by whether it changes the label (groundtruth, prediction). The changes are usually controlled by filters: groundtruth - semantic similarity, prediction - model prediction.
+Also need to control where to change, which is what blank would do.
+
+Among the applications, the three that we focus on:
+- Evaluation
+    challenge sets: sophisticated creation
+    ~\cite{gardner2020contrast} human effort to create - creators follow some general strategies which are broader than templates, but the evaluation also becomes scattered because we don't have access to the change types.
+    ~\citet{li2020linguistically} template
+    checklist has the similar structure
+    
+- Data augmentation
+    ~\citet{longpre2020effective}
+    - They find that they generally don’t improve results. 
+    - They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. 
+    - In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input~\cite{rogers2020primer, ettinger2020bert}
+    
+    \citet{tan2020s} create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
+    
+    ~\citet{kaushik2019learning}
+    - Use pure manual collection to get data
+    - Show improvement on training/augmentation in the sentiment case, but not the NLI case. In fact, a different paper ~\cite{huang2020counterfactually} showed it doesn't work and may even hurt generalization; We suspect it's due to wrong original/augmentation ratio or non-slice
+    
+    \citet{kaushik2020explaining}
+    - formalize the concept of counterfactual data augmentation
+    - "Interestingly our analysis suggests that data corrupted by adding noise to causal features will degrade out-of-domain performance, while noise added to non-causal features may make models more robust out-of-domain."
+    
+    ~\cite{teney2020learning}
+    While we set our experiments on transformer models, our data can also be used in their method.
+    
+- Explanation
+    while counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
 \end{comment}
 
 
+\paragraph{The use of perturbations.}
+Perturbations in NLP are most broadly used for data augmentation, model evaluation, and explanation.
+When the augmentation does not affect the groundtruth label, data augmentation improves model stability~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU}.
+Otherwise, it has the potential to help model identify spurious features.
+\citet{kaushik2019learning} showed that linear sentiment analysis models trained with the data learned more reasonable feature weights, and the model generalizes better to out-of-domain datasets.
+However, they did not observe improved generalization on NLI (further replicated in \citet{huang2020counterfactually}), possibly because the augmentation was extensive compared to the original instances (1.7k original instances augmented to 8.3k.)
+While most data augmentation methods treat the added instances as individual data points, \citet{teney2020learning} proposed to treat instances in pairs to emphasize the difference, and they got more gains on LSTM model accuracy. 
+Our data can also support such experiments.
+Evaluation share similar setup with augmentations, with contrasts sets~\cite{kaushik2019learning} and challenge sets~\cite{Geiger2019PosingFG, kaushik2019learning, nie2019analyzing} affecting the groundtruth, while adversarial maintaining the groundtruth but affecting the prediction.
+Perturbations also support explanations. 
+Though focusing on feature important attribution, SHAP~\cite{NIPS2017_7062}, LIME~\cite{Ribeiro2016WhySI} and Anchors~\cite{ribeiro2018anchors} all rely on masking or deletion to retrieve token importance, which can be viewed as a simple form of perturbation.
+Some work also explores directly using perturbations as textual counterfactual explanations~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual}, though the ranking of perturbations and the presentation has yet to be studied.
+We identify issues of directly using perturbations as local explanations, and highlight their advantages in discovering global patterns.
+%Perturbation is also used for explanations, but the use is much less prominent compared to structured data.
+%While counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
 
-\begin{comment}
-
-*** errudite 
-
-Counterfactual attacks to models have taken various forms, e.g., by adding distracting sentences to the context in MC~\cite{jia2017adversarial}, or feeding partial questions or wrong images into models~\cite{agrawal2016analyzing, mudrakarta2018did, feng2018pathologies}. 
-Slightly closer to our work is SEARs~\cite{ribeiro2018semantically} (also incorporated into QADiver), which also takes the form of rewrite rules: it generates semantic-preserving rules that cause models to change predictions.
-However, these focus on robustness, i.e., counterfactual perturbations are mainly for the purpose of detecting over-stability or over-sensitivity.
-In contrast, our counterfactual analysis is for the purpose of understanding \emph{why} models fail in certain groups. Furthermore, our DSL allows for more complex counterfactual rules and for applying rules only to certain groups, such as ``delete the predicted distractor for instances in the \texttt{is\_distracted} group.''
-As far as we know, such analysis is novel, and a promising direction for more in-depth error analysis.
-
-\end{comment}
-
-General discussion on data augmentation
-~\citet{longpre2020effective}
-- They find that they generally don’t improve results. 
-- They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. 
-- In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input~\cite{rogers2020primer, ettinger2020bert}
-
-Discuss in detail:
-\citet{gardner2020contrast}
-\citet{kaushik2019learning}
-- Use pure manual collection to get data
-- Show improvement on training/augmentation
-(Already mentioned a lot in the other parts of the paper, maybe no need to make it too detailed.)
-
-\citet{kaushik2020explaining}
-- formalize the concept of counterfactual data augmentation
-- "Interestingly our analysis suggests that data corrupted by adding noise to causal features will degrade out-of-domain performance, while noise added to non-causal features may make models more robust out-of-domain."
-
-\citet{tan2020s}
-create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
-
-\citet{li2020linguistically}
-- automated contrast set 
-- "The idea of contrast sets is to modify a test instance to a minimum degree while preserving the original instance’s syntactic/semantic artifacts and changing the label. Typically, the authors of the dataset create the contrast set manually"
-
------- augmentation
-data augmentation has been shown to hurt performance blah
-but counterfactual augmentation seem to have the ability to finetune decision boundaries. However, as shown in our paper and prior work, one might want to be careful on the augmentation ratio and do some active learning
-
------- explanation
-while counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. 
-Some papers tried generation, but didn't articulate the use.
-We follow the structure of X to have both counter-factual and semi-factual. 
-
------- generation
-except for the papers we mentioned doing manual generation, the work is also related to 
+\paragraph{Perturbation generation.}
+As shown above, perturbations to different applications are usually distinguished by whether it changes the label (groundtruth, prediction), and --- in the case of adversarial attack and explanation --- which tokens to perturb.
+Such distinctions are usually maintained with constraints~\cite{morris2020textattack}.
+For example, filters on sentence similarities main groundtruths.
+That said, existing work share common perturbation strategies.
+Out of the N papers we surveyed, X focus on word substitution~\cite{alzantot2018generating, garg2020bae, hase2020evaluating, naik2018stress}, which only cover limited changes and may not be effective.
+For example, \citet{longpre2020effective} found that typical, lexical-substitution based augmentations do not improve model performance, and hypothesized that the methods bring redundant benefits as pre-training.
+Furthermore, they suggested that the augmentation may be most useful for settings where current models fail or that currently represent blind spots (\eg negation or malformed input~\cite{rogers2020primer, ettinger2020bert}), which inspires our \nli and \qqp experiments.
+Similarly, template-based transformation~\cite{Geiger2019PosingFG, li2020linguistically, jiang2019avoiding} (X\%) have limited coverage on linguistic patterns, and may only effectively improve or evaluate from certain aspects.
+On the other hand, manually perturbing individual instances is diverse but costly, even though they are cheaper than generating complete new instances~\cite{Khashabi2020MoreBF}.
+What's more, though human annotators also have shared strategies like negation, changing quantifiers~\cite{kaushik2019learning, gardner2020contrast}, the strategies are not well captured, making it hard to do structured model analysis.
+Snorkel~\cite{ratner2017snorkel}, Errudite~\cite{ratner2017snorkel} and CheckList~\cite{checklist:acl20} all allow systematic perturbation through rewrite rules or functions, yet it requires high domain expertise that general annotators do not have.
+To extend beyond simple template or lexical transformation, we take a different approach and make it a generative problem.
+Prior work also has model-based methods like paraphrasing~\cite{iyyer2018adversarial} (X\%), but it focus on perturbations that do not affect groundtruth, and focuses on whole-sentence rewriting.
+In contrast, our method applies the fill-in-the-blank structure to control where to change~\cite{donahue2020enabling}.
 
 
------ challenge set
-- the augmentation usually 
 
 
-Dan's email:
-This survey by Amit Chaudhary provides a nice visual overview of most existing data augmentation methods for NLP, including lexical substitution, text-surface transformation, random noise injection, and many others. But why is that such techniques are not used much in NLP? Longpre et al. (2020) test two popular data augmentation methods with recent pre-trained Transformer models. They find that they generally don’t improve results. They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input (Ettinger et al., 2019; Rogers et al., 2020).
-Another source for data augmentation are adversarial examples. A great way to get started is to use the TextAttack library, the CleverHans for NLP. The library provides implementations of a numerous adversarial attacks and tools to train models with data augmentation—with built-in support for transformers models. A recent paper in this area that I particularly enjoyed is by Tan et al. (2020) who create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
+
+
+
+
+
+
+
+
+
+
+
+%Dan's email:
+%This survey by Amit Chaudhary provides a nice visual overview of most existing data augmentation methods for NLP, including lexical substitution, text-surface transformation, random noise injection, and many others. But why is that such techniques are not used much in NLP? Longpre et al. (2020) test two popular data augmentation methods with recent pre-trained Transformer models. They find that they generally don’t improve results. They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input (Ettinger et al., 2019; Rogers et al., 2020).
+%Another source for data augmentation are adversarial examples. A great way to get started is to use the TextAttack library, the CleverHans for NLP. The library provides implementations of a numerous adversarial attacks and tools to train models with data augmentation—with built-in support for transformers models. A recent paper in this area that I particularly enjoyed is by Tan et al. (2020) who create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
 
 %https://www.aclweb.org/anthology/2020.acl-main.263.pdf?utm_campaign=NLP%20News&utm_medium=email&utm_source=Revue%20newsletter

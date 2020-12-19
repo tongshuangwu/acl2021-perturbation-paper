@@ -8,12 +8,11 @@
 \newcommand{\fwthree}[1]{\colbox{cfwthree}{#1}\xspace}
 \newcommand{\fwfour}[1]{\colbox{cfwfour}{#1}\xspace}
 
-\newcommand{\fexp}[2]{\texttt{{\color{darkgray}{#1:#2}}}\xspace}
+\newcommand{\fexp}[2]{\texttt{[{\color{darkgray}{#1:#2}}]}\xspace}
 \newcommand{\fexptag}[1]{\fexp{TAG}{#1}}
 \newcommand{\fexpfrom}[1]{\fexp{FROM}{#1}}
 \newcommand{\fexpto}[1]{\fexp{TO}{#1}}
 \newcommand{\fexptemp}[1]{\fexp{TEMP}{#1}}
-
 
 
 \section{Perturbation Explanations}
@@ -21,66 +20,76 @@
 %Both counterfactual explanations and semi-counterfactual explanations.
 %As defined in \cite{}
 
-\subsection{Local explanation: ``surprises'' to SHAP}
+\subsection{Local explanations: turning points}
 
 Perturbations as counterfactual explanations are valuable, as they offer more information that goes beyond the mere input.
 However, too many counterfactual explanations can be perceptually overwhelming.
-As a result, existing methods on text are limited to showing a single decision boundary, which in turn losses easier overviews provided by feature attribution methods like SHAP or LIME.
-Here, instead of displaying perturbations independently, we use them as supplemental \emph{surprise cases} to SHAP.
+Rather, we define \emph{turning points} that most effectively approximate model decision boundaries. 
+Suppose we measure the degree of change with a distance function between $x$ and $\xp$, $d(x,\xp)$. 
+Given a prediction model $f$, its predictions $f(\cdot)$ and confidence $p(\cdot)$, we prioritize: 
 
-As a walkthrough example, consider the following \dnli instance.
-The model~\cite{} predicts it correctly and SHAP deems the.
+(1) $\xp$ that maintain the model prediction even when it is extensively changed from $x$ (\emph{large-invariance})\footnote{By ``maintain'', we require unchanged model prediction, and prioritize minimal change on the model prediction probability.}, 
+%
+$$\xp_l = \argmax_{\xp} \mathbb{1}[f(x) = f(\xp)] \cdot \frac{d(x,\xp)}{|p(x) - p(\xp)|} $$
+\noindent and (2) $\xp$ that inverts model prediction, even if the perturbation is relatively minimal (\emph{small-variance}).
+$$\xp_l = \argmax_{\xp} \mathbb{1}[f(x) = f(\xp)] \cdot {d(x,\xp)} \cdot {|p(x) - p(\xp)|} $$
 
-\wts{decide if we want to change the example...There are a lot of examples flying around in this paper.}
+The most intuitive distance would be on the model's embedding space (``embed'').
+For finetuned transformer models, it means the distance can be on the last hidden state of $x$ and $\xp$.
+However, showing only $\xp_l$ and $\xp_s$ as local explanations can be insufficient. 
+Because they only highlight two points on the decision boundary, we lose easier overviews provided by feature attribution methods like SHAP or LIME.
+Instead, we combine perturbation selection with SHAP, such that the $\xp$-s can surve as supplemental \emph{compensations} to SHAP (``SHAP-sp'').
+For example, consider the following \dnli instance. 
+The RoBERTa model finetuned on NLI (the same as in \S\ref{subsec:contrast_set}) predicts it correctly.
 
 \ebox{
-\textbf{Premise}: The quarterback of the UTEP football team is about to be tackled by a member of the Wisconsin defensive team.\\
+\textbf{Premise}: The quarterback of the football team is about to be tackled by a member of the Wisconsin defensive team.\\
 \textbf{Hypothesis}: The \fwtwo{quarterback} is about to be \fwone{tackled} \fwtwo{by} the \fwthree{opposing team}.\\
 %\textbf{Label}: entailment\\
-\textbf{Prediction} $f(x)$: entailment
-}
+\textbf{Prediction} $f(x)$: entailment}
 
-%%%
-We define two kinds of surprises.
-First, \emph{invariance surprises} refers to $\xp$-s that maintains model predictions, even though the perturbed features/tokens are deemed important by the model.
-For example, the following changes three important tokens, ``quarterback,'' ``opposing'' and ``team,'' yet the predict remains intact. This contrasting example suggests that the model may not handle the subjects and objects of verbs appropriately.
+\emph{Large-invariance} $\xp_l$ then compensate SHAP by noting that changing important features do not necessarily affect the model.
+Even if we change three important tokens as below, \ie, ``quarterback,'' ``opposing'' and ``team,'' the predict remains intact. 
+This contrasting example suggests that the model may not handle the subjects and objects of verbs appropriately.
 
 \ebox{
 \textbf{Hypothesis}: The \swap{quarterback}{opposing team} is about to be tackled \remove{by the opposing team}.\\
-\textbf{Prediction} $f(\xp)$: entailment
-}
+\textbf{Prediction} $f(\xp)$: entailment}
 
-Formally, if we denote the SHAP feature weight of a token $t$ as $w(t)$, then the degree of invariance surprise $S_i$ for $\xp$ is: 
-$$S_i(\xp) = \mathbb{1}(f(x) = f(\xp)) \cdot \sum_{t \in r(\xp)} w(t) $$
-And we can select the most surprising invariance $\xp$ by taking $\argmax_{\xp} S_i(\xp)$
-
-%%%%
-On the other hand, \emph{variance surprises} refers to $\xp$-s with changed model predictions when only unimportant features are perturbed.
-Though ``tackled'' is not highlighted by SHAP, some replacements (\eg ``thrown'') does affect the prediction:
+Meanwhile, \emph{small-variance} $\xp_s$ notes that changing seemingly unimportant features may still change the prediction.
+Though ``tackled'' is not highlighted by SHAP, some replacements (\eg ``thrown'') does affect the model:
 
 \ebox{
 \textbf{Hypothesis}: The quarterback is about to be \swap{tackled}{thrown} by the opposing team.\\
-\textbf{Prediction} $f(\xp)$: contradiction
-}
+\textbf{Prediction} $f(\xp)$: contradiction}
 
-Similar to above, variance surprise score $S_v$ can be computed by:
-$$S_v(\xp) = \mathbb{1}(f(x) \not\eq f(\xp)) \cdot (1-\sum_{t \in r(\xp)} w(t)) $$
+Formally, if we denote the SHAP feature weight of a token $t$ as $w(t)$, the distance function is $d(x, \xp) = \sum_{t \in r(\xp)} w(t)$.
+
 These surprises act as \emph{critics} to the original SHAP.
-Note that they reveal abnormality of the \emph{explainer}, but not necessarily the abnormality of the model.
-In the example above, we may suspect the model to miss verbs if we merely rely on SHAP explanations. However, the variance surprise shows otherwise --- the low importance results from SHAP only \emph{masking/deleting} the said verb.
+They reveal abnormality of the \emph{explainer}, but not necessarily the abnormality of the model.
+In the example above, we may suspect the model to miss verbs if we merely rely on SHAP explanations. However, the small-variance shows otherwise --- the low importance results from SHAP only \emph{masking/deleting} the said verb.
 
 
+\subsection{Evaluate local explanations?}
+We conduct a user study to verify whether our selected counterfactual explanations help people identify model's problematic behavior.
 
-\paragraph{Evaluate the ``surprise.''}
-We validate the effect of the surprises through a user study with X MTurk crowdworkers.
-Each worker was asked to finish N rounds of labeling.
-In each round, they are given an original example from \dnli, the model prediction on it, and the SHAP importance (displayed as inline highlights.)
-The are asked to simulate the model's prediction on 4 perturbations, which are the top two invariance surprises and two variance surprises.
-We measure the accuracy of their simulation~\cite{hase2020evaluating}. 
-The lower the accuracy, the more 
-Similar to the labeling task in \S\ref{subsec:label_procedure}, we filter workers based on their label distribution and completion time.
+We recruited N graduate students who have experience using model explanations before, and tasked them with a two phase experiment, where they assess the correctness of a \qqp model.
+To begin, participants were given 20 \qqp examples from the validation set with labels and model predictions, but no explanations.
+They were asked to assess whether they think the model would behave reasonably on variations of the example and, if not, create one perturbation where they think the model would predict incorrectly.
+Then, in the second phase, they repeat the tasks as before, this time with explanations.
+We evaluate on two dimensions:
 
-\wts{baseline and results. See the comment for examples generated by BERT.}
+%\noindent
+\textbf{Q1}: 
+Can the explanation effectively indicate model's abnormal behaviors around an example? 
+We measured it by the number of times participants' assessment change after seeing the explanation (\eg from model reasonable to model unreasonable).
+
+%\noindent
+\textbf{Q2}: 
+When they believe the model is incorrect, can the participants create perturbations that reveal the incorrectness, and is it more effective than our generated ones?
+We ran the models on the collections, and count the times that the model were indeed incorrect.
+
+\wts{The whole user study is still TODO; baseline and results; See the comment for examples generated by BERT.}
 
 
 \begin{comment}
@@ -125,30 +134,50 @@ unflip_important_feature 0.149 {opposing}
 \end{comment}
 
 
-\subsection{Extend ``Suprise'': Global, Interaction}
+\subsection{Global / Interactive Explanations}
 \label{subsec:global_exp}
+Here, we explore more extensive use of perturbation explanations via examples, but defer more sophisticated designs and evalautions to future work.
 
-\paragraph{Global patterns.}
-Going beyond surprises for each individual data points, we can use the \emph{surprise} to find perturbation patterns that systematically affect (preserve) model predictions.
+\paragraph{Global explanations: impacts of same changes.}
+Going beyond turning points for each individual data points, we can find perturbation patterns that systematically affect (preserve) model predictions.
 Similar to challenge sets, the grouped perturbations then become useful for revealing model's capabilities on specific linguistic patterns.
 
 To enable the grouping, we first featurize each perturbation $\xp$ with respect to its original instance $x$, using 
-(1) its \tagstr \fexptag{\emph{s}}, 
-(2) its remove phrases \fexpfrom{$r(\xp)$}, 
-(3) its added phrases \fexpto{$a(\xp)$}, and 
-(4) the combined template \fexpto{\swap{$r(\xp)$}{$a(\xp)$}}.
-For tokens involving multiple changes, we featurize both the primary change, and the combined changes, and so the example in Figure~\ref{fig:blank} have the following features:
+(1) its \tagstr (\fexptag{negation} for the example in Figure~\ref{fig:blank}), 
+(2) its remove phrases \fexpfrom{kids}, 
+(3) its added phrases \fexpto{not}, \fexpto{children}, and 
+(4) the combined template \fexptemp{\swap{kids}{children}}.
+For tokens involving multiple changes, we featurize both the primary and the combined changes, and so the example in Figure~\ref{fig:blank} also have additional features like \texttt{\fexptag{negation} \& \fexptag{lexical}}.
 
-For each $x \in \xset$, we compute the surprise score for all its perturbations $\xp$-s, and denote an example as ``surprising'' based on thresholds, \ie $S_i(\xp) > \gamma_i$ or$S_v(\xp) > \gamma_i$ (empirically picked as $\gamma_i=0.3$ and $\gamma_v=0.7$).
-We count the (in-)variance surprising rate $R_i$ and $R_v$ for each feature, \ie the ratio of surprising cases out of all perturbations who has the corresponding feature, and whose predictions are (not) changed.
-We go through features with the surprise ratio $> 0.8$ to inspect global patterns.
+For each feature $h$ we compute the its prediction change rate over all the perturbations $\xp \in \xset_{h}$ that have the said feature: 
+$R_h = \sum {\mathbb{1}[f(x) \not\eq f(\xp)]} / |\xset_h|$.
 
-Analyzing the \nli model mentioned above, we note some interesting observations that suggest model deficiencies:
+Filters on the change rate then reveal different model prediction patterns.\footnote{Because different \nli labels follow very flip patterns, we only include $f(x)=entailment$ examples here}
 
-(1) The model does not handle the shuffled phrases, echoing the results from \citet{mccoy2019right}.
+\noindent\textbf{Mastered patterns.}
+Patterns with very high or low change rates (\eg $|R_h-0.5| > \gamma=0.3$) reveal patterns that the model has firmly learned.
+In \nli, it includes \fexptemp{\swap{men}{women}} ($R_h=97\%$), \fexptemp{\swap{outdoor}{outside}} ($R_h=0\%$).
+
+\noindent\textbf{Outliers.}
+Inspecting the abnormal cases in \emph{mastered patterns}, we find harder to notice examples.
+\fexptemp{\swap{three}{four}} changes the 80\% prediction(on 56 changed examples), but all the cases with affected predictions have the explicit pattern ``three'' in the premise, whereas the prediction intact ones show that the model has a hard time processing the actual counting.
 
 \ebox{
-\fexptag{shuffle}, \\$R_i=0.87$ (144 surprises / 164 invariance)\\
+\textbf{P}: Three girls fell on top of one another and are laughing.\\
+\textbf{H}: \swap{Three}{Four} girls falling and laughing.\\
+\textbf{Pr}: \swap{entailment}{contradiction}\\
+
+\textbf{P}: Two little girls and one little boy are running.\\
+\textbf{H}: \swap{Three}{Four} kids are running. \\
+\textbf{Pr}: \swap{entailment}{entailment}
+}
+
+\noindent\textbf{Missed patterns.}
+In contrast of the mastered cases, patterns with mild change rates (\eg $|R_h-0.5| < \gamma=0.2$) reveal patterns that the model handles unstably.
+For example, the model does not handle the shuffled phrases, echoing the results from \citet{mccoy2019right}.
+
+\ebox{
+\fexptag{shuffle}, $R=0.63$ (164 cases)\\
 \textbf{P}: The bride in the white dress is surrounded by the groomsmen and bridesmaids, all in black.\\
 \textbf{H}: \add{white} woman \remove{in white} is surrounded by others.\\
 \textbf{Pr}: \swap{entailment}{entailment}\\
@@ -162,38 +191,6 @@ Analyzing the \nli model mentioned above, we note some interesting observations 
 \textbf{Pr}: \swap{entailment}{entailment}
 }
 
-(2) Several quantifier patterns are picked as invariance surprises, which suggests that the model has a hard time processing numbers.
-
-\ebox{
-\fexptemp{\swap{two}{three}}, \\$R_i=0.87$ (81 surprises / 93 invariance)\\
-\textbf{P}: Two people embrace on the end of a dock.\\
-\textbf{H}: \swap{Two}{Three} people are near the water.\\
-\textbf{Pr}: \swap{entailment}{entailment}\\
-
-\fexptemp{\swap{three}{four}}, \\$R_i=0.87$ (12 surprises / 14 invariance)\\
-\textbf{P}: Two little girls and one little boy are running on the grass.\\
-\textbf{H}: \swap{Three}{Four} kids are running.\\
-\textbf{Pr}: \swap{entailment}{entailment}
-}
-
-
-There was also cultural dependent patterns, with ``football'' and ``soccer'' referring to different sports only in the US:
-
-\ebox{
-\fexptemp{\swap{football}{soccer}}, \\$R_r=0.78$ (11 surprises / 14 variance)\\
-\textbf{P}: A football coach is walking on a football field.\\
-\textbf{H}: a \swap{football}{soccer} coach walks on the field.\\
-\textbf{Pr}: \swap{entailment}{contradiction}
-}
-
-We also note some valid model behaviors that are denoted ``surprising'', suggesting patterns that are frequently missed by SHAP:
-
-\ebox{
-\fexptemp{\swap{down}{up}}, \\$R_i=0.82$ (18 surprises / 22 invariance)\\
-\textbf{P}: Two men look down at another man standing on an unfinished walkway.\\
-\textbf{H}: Two people look \swap{down}{up} at a man working.\\
-\textbf{Pr}: \swap{entailment}{contradiction}
-}
 
 \paragraph{Interactive explanation.}
 Besides pre-selected \emph{surprise} cases, perturbations can also support interactive explanation (ideally in a visual interface), and multi-step drill downs.
@@ -205,7 +202,7 @@ In the example:
 \textbf{Pr}: contradiction
 }
 
-To understand whether the model responses to quantifiers, an analyst can select to \BLANK ``only one'', which would reveal that the model predicts entailment correct for both perturbed hypotheses:
+To understand whether the model responses to quantifiers, an analyst can \BLANK ``only one'', which would reveal that the model predicts entailment correct for both perturbed hypotheses:
 
 \ebox{
 \textbf{H}: There \swap{is only one dog}{are multiple dogs} at the beach.\\

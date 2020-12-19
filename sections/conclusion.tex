@@ -11,6 +11,11 @@ Rather, one should consider training models that take additional contexts as par
 \textbf{Grouped labeling and active learning.}
 While we labeled perturbations individually, it is also possible to make it more efficient through grouped labeling. 
 If we categorize generated sentences based on their perturbations types or template patterns (similar to the featurization in \S\ref{subsec:global_exp}), we can create labeling functions~\cite{ratner2017snorkel} for weak supervision based on different combinations of perturbation metadata.
+\wts{Certain perturbations have a high likelihood of preserving (or inverting) the label.
+For example, in natural language inference, deleting a clause in an entailed hypothesis will almost always still lead to entailment.
+In such cases, we can assume, e.g., in the training scenario, the model will be able to capture the pattern rather quickly (or, we can create probability ``labeling functions'' that generalize the labeling to a larger group.)
+Therefore, we should avoid re-labeling perturbations that (almost always) have the same impact.
+We estimate such impact based on the already collected perturbation labels, using a weighted voting strategy, with the weight being the perturbation similarity $d_p$ with previously labeled instances.}
 
 %{Or, a more sophisticated way to compute P is to create snorkel labeling functions based on different combinations of perturbation metadata.}
 
