@@ -40,6 +40,10 @@
 \midrule
  4,000 &  2,000 &     \mcomp &  $92.9\pm 0.2$ &  $88.9\pm 0.3$ &  $84.8\pm 0.5$ &  $85.1\pm 0.4$ &  $90.0\pm 0.3$ &  $90.8\pm 0.5$ &  $92.2\pm 0.6$ &  $86.5\pm 0.2$ \\
  4,000 &  2,000 &  \maug	 &  $92.7\pm 0.2$ &  $\mathbf{90.7\pm 0.4}$ &  $\mathbf{86.4\pm 0.1}$ &  $85.6\pm 0.8$ &  $90.1\pm 0.0$ &  $90.6\pm 0.3$ &  $\mathbf{94.0\pm 0.3}$ &  $\mathbf{89.7\pm 0.5}$ \\
+ % imdb_contrast_test: 91.1 (9.4) / 92.8 (0.4)
+ % imdb_contrast_test: 87.4 (0.0) / 89.6 (0.5)
+ % imdb_iclr_test 93.0 (0.3) / 93.9 (0.4)
+ % imdb_iclr_dev 92.0 (0.2) / 92.7 (0.2)
 \bottomrule
 \end{tabular}
 \caption{\sst model Accuracies on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets and contrast sets, while maintaining the others.}
@@ -57,6 +61,7 @@
      $n$ &     $m$ &    model & \cellcolor{cid}SNLI & \cellcolor{cood}MNLI-m & \cellcolor{cood}MNLI-mm & \cellcolor{ccon}SNLI-CDA & \cellcolor{ccon}break & \cellcolor{ccon}DNC & \cellcolor{ccon}stress & \cellcolor{ccon}diagnostic \\
 \midrule
  20,000 &  1,574 &     \mcomp 	&  $85.7\pm 0.4$&  $86.1\pm 0.2$&  $86.6\pm 0.2$&  $72.8\pm 0.3$&  $86.4\pm 1.5$&  $54.5\pm 0.6$&  $65.1\pm 0.6$&  $56.0\pm 0.8$\\
+ 20,000 &  1,574 &  \texttt{aug-r} &  $85.7\pm 0.4$ &  $86.1\pm 0.1$ &  $86.2\pm 0.1$ &  $73.4\pm 0.5$ &  $87.2\pm 0.6$ &  $54.7\pm 0.3$ &  $64.6\pm 0.6$ &  $56.9\pm 0.8$ \\
  20,000 &  1,574 &  \maug		&  $85.3\pm 0.3$&  $86.0\pm 0.1$&  $86.4\pm 0.0$&  $\mathbf{73.6\pm 0.2}$&  $\mathbf{89.1\pm 1.2}$&  $\mathbf{57.7\pm 0.3}$&  $65.1\pm 0.2$&  $\mathbf{57.5\pm 0.5}$\\
  %10000 &  1574 &     comp &  $85.3\pm 0.5$&  $85.2\pm 0.2$&  $85.4\pm 0.3$&  $72.4\pm 0.1$&  $86.1\pm 1.8$&  $54.2\pm 1.8$&  $64.0\pm 0.4$&  $56.0\pm 0.3$\\
  %10000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $85.0\pm 0.2$&  $85.1\pm 0.1$&  $73.4\pm 0.5$&  $90.5\pm 1.1$&  $56.5\pm 1.2$&  $64.6\pm 0.5$&  $57.0\pm 0.4$\\
@@ -65,7 +70,6 @@
 \caption{\nli model Accuracies on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast or challenge sets}. \maug performs better than \mcomp on DNC, our targeted contrast set for data-slice-based augmentation. It also improves on other challenge sets.}
 \label{table:aug_nli}
 \end{table*}
-
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,10 +119,11 @@ However, while the model gets significantly better on  \texttt{more X $\not\eq$ 
 
 
 
-
-Prior work has shown that manually generated perturbations are helpful for evaluating models' decision boundaries (\eg collecting contrast sets~\cite{gardner2020contrast}), and for data augmentation~\cite{kaushik2019learning, kaushik2020explaining, teney2020learning}.
+%(\eg collecting contrast sets~\cite{gardner2020contrast})
+%~\cite{kaushik2019learning, kaushik2020explaining, teney2020learning}
+Prior work has shown that manually generated perturbations are helpful for evaluating models' decision boundaries, and for data augmentation.
 We label our perturbations in crowdsourcing tasks, and verify that the automatically generated ones can serve similar purposes at a lower labeling cost~\cite{Khashabi2020MoreBF}.
-\wts{Make sure to mention that prior work said even hand generation is already cheaper than hand generating new examples.}
+%\wts{Make sure to mention that prior work said even hand generation is already cheaper than hand generating new examples.}
 
 \subsection{Tasks \& Data}
 
@@ -218,9 +223,18 @@ Table~\ref{table:contrast_set_result} shows that all the models perform worse on
 \sst & 91.1 & 93.2 & 84.0 (-9.2) & 75.0 \\
 \qqp & 90.9 & 88.1 & 75.7 (-12.4) & 60.5 \\
 \nli & 86.5 & 91.6 & 72.3 (-19.3) & 56.4 \\
+\midrule
+% the baseline
+% \nli & 86.5 & 80.6 & 78.6 (-19.3) & 30.4 \\
+% using a imdb model
+% imdb_contrast_test 96.7 / 89.1 / 86.1
+% imdb_iclr_test 96.7 / 91.0 / 87.9
+% using a sst-2 model
+% imdb_iclr_test 91.3 / 89.5 / 81.4
+% imdb_iclr_test 89.5 / 87.3 / 77.3
 \bottomrule
 \end{tabular}
-\caption{Perturbations as contrasts sets, with accuries on the original development set, the examples used for perturbations (\emph{Orig.}), the perturbed-to contrast sets (\emph{Con.}), and the consistency between \emph{Orig.} and \emph{Con.}}
+\caption{Perturbations as contrasts sets, with accuries on the original development set, the examples used for perturbations (\emph{Orig.}), the perturbed-to contrast sets (\emph{Con.}), and the consistency between \emph{Orig.} and \emph{Con.} \wts{Add baseline -- How do the model perform on existing contrast sets? }}
 \label{table:contrast_set_result}
 \end{table}
 %\end{comment}
@@ -281,9 +295,9 @@ Though the perturbation remains useful on SemEval across all $m+n$, it appears t
 \label{fig:sst_trend}
 \end{figure}
 
-
+\wts{Is it better to organize this part as in the general exam, i.e. just by the observations?}
 \paragraph{\sst.}
- Similar to \citet{kaushik2019learning}, we evaluate \sst model's generalization accuracy on out of domain datasets, including review datasets (IMDb movie review Yelp~\cite{} and Amazon~\cite{}), Twitter dataset (Senti140~\cite{} and SemEval 2017~\cite{}), and contrast sets on IMDB movie review (IMDB Contrast~\cite{} and IMDb Contrast-CAD~\cite{})  \wts{citation.}
+ Similar to \citet{kaushik2019learning}, we evaluate \sst model's generalization accuracy on out of domain datasets, including review datasets (IMDb movie review~\cite{maas2011learning}, Yelp~\cite{asghar2016yelp} and Amazon~\cite{ni2019justifying}), Twitter dataset (Senti140~\cite{go2009twitter} and SemEval 2017~\cite{rosenthal2017semeval}), and contrast sets on IMDB movie review (IMDB Contrast~\cite{kaushik2019learning} and IMDb Contrast-CAD~\cite{gardner2020contrast}).
 For each dataset, we randomly selected up to 2,000 examples.
 \wts{check number.}
 As shown in Table~\ref{table:aug_sst}, compared to the same amount of original data, by adding $m=2k$ perturbations to $n=4k$ originals, we were able to maintain the  in-domain accuracy on SST-2, as well as the out-of-domain accuracies on reviews (Amzbook, Yelp, IMDB.)
@@ -304,21 +318,23 @@ We suspect that flipping out too much original data may decrease the diversity o
 
 \paragraph{\nli.}
 % m=20k, n=1574
-Unlike the gain in \sst, when we added random perturbations, we did not observe any improvement on any datasets.
+Unlike the gain in \sst, when we added random perturbations, we did not observe any improvement on any datasets (denoted as \texttt{aug-r} in Table~\ref{table:aug_nli}).
 We suspect a large number of perturbations are teaching the model patterns that it has already learned (\eg perturbations contrasting subjects ``man'' and ``woman'' may be unnecessary.) 
 %For example, While flipping the from ``man'' to ``woman'' is a perfectly valid lexical change, the existing \dnli dataset already cover data points contrasting the subject of two sentences.
 Instead, we prioritize perturbations that can improve error cases identified by \citet{kim2019probing} (we refer to the dataset as DNC).
+\wts{Instances that are different from both the existing data and the already labeled perturbation will be more likely to contain patterns that are rarely seen by the model. 
+In other words, these instances should better compensate the training space or the testing space.}
 We follow \citet{chen2019slice}'s data slicing strategies, and gathered data points with prepositions, comparative adjectives, negations, quantifiers, and antonyms\footnote{We extended their Appendix A.1 to include more cases of \eg comparative adjectives or negations using POS tags and parsing structures.}.
 We further enforce changes on the corresponding patterns by blanking out the identified patterns, so to enforce changes on the corresponding patterns.
-For example, to hopefully get an augmentation focused on prepositions like \exinline{His surfboard is \swap{beneath}{lying on} him}, we first filter examples with prepositions like ``beneath'', and generate blanked sentences like \exinline{\ctrltag{[resemantic/lexical]} His surfboard is \BLANK him.}
+For example, to hopefully get an augmentation focused on prepositions like \exinline{His surfboard isB \swap{beneath}{lying on} him}, we first filter examples with prepositions like ``beneath'', and generate blanked sentences like \exinline{\ctrltag{[resemantic/lexical]} His surfboard is \BLANK him.}
 \footnote{All examples shown are actual generations of the model. \wts{Move this footnote to where it first occurs.}}
 
-As a result, \maug was able to perform better on DNC (Table~\ref{table:aug_nli}), while maintaining in-domain (on SNLI test set) and out-of-domain accuracies (on MNLI matched and mismatched~\cite{}).
+As a result, \maug was able to perform better on DNC (Table~\ref{table:aug_nli}), while maintaining in-domain (on SNLI test set) and out-of-domain accuracies (on MNLI matched and mismatched~\cite{williams-etal-2018-broad}).
 %As shown in Figure~\ref{}, higher ratios of augmentation data is more useful. 
 %That said, 
 Just adding $N\%$ data is sufficient to boost the performance.% to some extent.
-Because DNC includes pairs of probing examples (one from the original MNLI~\cite{} and one manually probed for a given linguistic pattern), we can safely conclude that the model did not overfit to a new pattern (i.e., it does not improve on \exinline{lying on} by sacrificing performances on \exinline{beneath.})
-The model also performs better on some other challenge sets that are not our initial improvement targets.
+Because DNC includes pairs of probing examples (one from the original MNLI and one manually probed for a given linguistic pattern), we can safely conclude that the model did not overfit to a new pattern (i.e., it does not improve on \exinline{lying on} by sacrificing performances on \exinline{beneath.})
+The model also performs better on some other challenge sets that are not our initial improvement targets~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue}.
 
 \TableAugQQP
 
@@ -327,7 +343,7 @@ We validate the models using tests defined in CheckList.
 As a behavioral testing framework, CheckList defines multiple tests, and measures models' linguistic capabilities using the failure rates of each test.
 Because failure rates are more sensitive than accuracy, we say a model capability is affected, if the failure rate of a test changes (increases or decreases) more then 5\% (\eg failure rates going from 20\% to 21\% is insignificant), and the delta accounts for 10\% (\eg failure rates decreasing 8\% from 100\% to 92\% does not count.)
 
-Similar to \nli, we focus on data slices whose perturbations may be more helpful on failed tests identified in CheckList, \eg the entity orders (slicing on examples with multiple entities, and \ctrltag{shuffle} them)).
+Similar to \nli, we focus on data slices whose perturbations may be more helpful on failed tests identified in CheckList, \eg the entity orders (slicing on examples with multiple entities, and \ctrltag{shuffle} them).
 %, temporal information (\eg find examples with \exinline{before} and \BLANK it to hopefully get \exinline{after}
 
 Augmenting $n=20,000$ original examples with $m=1,911$ perturbations, we reduced model failure rates on 11 tests (out of the 28 failed ones, with the failure rate of \mcomp $>20\%$), and increased that for 2 tests.
