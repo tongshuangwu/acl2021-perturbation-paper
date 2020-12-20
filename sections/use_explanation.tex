@@ -15,17 +15,19 @@
 \newcommand{\fexptemp}[1]{\fexp{TEMP}{#1}}
 
 
-\section{Perturbation Explanations}
+\section{Counterfactual Explanations}
 
 %Both counterfactual explanations and semi-counterfactual explanations.
 %As defined in \cite{}
 
-\subsection{Local explanations: turning points}
+\subsection{Local explanations: Abnormality}
+
+\wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
 
 \paragraph{Selection by abnormality.}
 The cognitive burden of complete explanations is too great.
 As a result, \citet{miller} concluded that people usually \emph{select} a small subset of (counterfactual) explanations on contrastive cases (``foils'') that they find unexpected. 
-He further proposed that, as such, ``abnormality could be used to infer likely foils.''
+As such, he further proposed that ``abnormality could be used to infer likely foils.''
 Here, we operationalize the concept of abnormality based on \emph{the discrepancy between the expected and the actual changes in the prediction}, and use it as our selection method.
 
 Given a prediction model $f$, we define the actual change in prediction as $d_f(\xp, x)$, and the expected prediction change as $\hat{d}_f(\xp, x)$.
@@ -37,63 +39,41 @@ Whereas actual prediction change is always $d_f(\xp, x)=|f(\xp)-f(x)|$ where $f(
 For example, as a standalone explanation method, $\hat{d}_f$ can be the cosine distance in the \emph{Embedding space}.
 The embedding can be either model-agnostic (\eg with~sentence transformers~\cite{reimers-2019-sentence-bert}), or the last layer of the hidden state of the finetuned predictor.
 
-On the other hand, as a \emph{Compensation} to existing feature attribution methods, $\hat{d}_f$ can be the importance (weights) of the perturbed tokens in $x$, estimated by feature attribution methods.
+On the other hand, as a \emph{compensation} to existing feature attribution methods, $\hat{d}_f$ can be the importance (weights) of the perturbed tokens in $x$, estimated by feature attribution methods.
 As mentioned in \wts{\S\ref{}}, methods like SHAP~\cite{} or LIME~\cite{} only estimate feature weights by \emph{masking} the words, which do not represent how model would react in non-deletion counterfactuals (replacing words or inserting negations).
 Therefore, abnormalities selected in this way can  compensate or criticize the missed information, and therefore better calibrate users' trust on the predictor.
+We primarily test the compensation selection below, as it nicely combines the overview provided by SHAP/LIME, and the decision boundaries omitted by the feature attribution. 
+\wts{Add the detail to appendix?}
 
-
-For example, consider the following \dnli instance. 
-The RoBERTa model finetuned on NLI (the same as in \S\ref{subsec:contrast_set}) predicts it correctly.
-
-\ebox{
-\textbf{Premise}: The quarterback of the football team is about to be tackled by a member of the Wisconsin defensive team.\\
-\textbf{Hypothesis}: The \fwtwo{quarterback} is about to be \fwone{tackled} \fwtwo{by} the \fwthree{opposing team}.\\
-%\textbf{Label}: entailment\\
-\textbf{Prediction} $f(x)$: entailment}
-
-\emph{Large-invariance} $\xp_l$ then compensate SHAP by noting that changing important features do not necessarily affect the model.
-Even if we change three important tokens as below, \ie, ``quarterback,'' ``opposing'' and ``team,'' the predict remains intact. 
-This contrasting example suggests that the model may not handle the subjects and objects of verbs appropriately.
-
-\ebox{
-\textbf{Hypothesis}: The \swap{quarterback}{opposing team} is about to be tackled \remove{by the opposing team}.\\
-\textbf{Prediction} $f(\xp)$: entailment}
-
-Meanwhile, \emph{small-variance} $\xp_s$ notes that changing seemingly unimportant features may still change the prediction.
-Though ``tackled'' is not highlighted by SHAP, some replacements (\eg ``thrown'') does affect the model:
-
-\ebox{
-\textbf{Hypothesis}: The quarterback is about to be \swap{tackled}{thrown} by the opposing team.\\
-\textbf{Prediction} $f(\xp)$: contradiction}
-
-Formally, if we denote the SHAP feature weight of a token $t$ as $w(t)$, the distance function is $d(x, \xp) = \sum_{t \in r(\xp)} w(t)$.
-
-These surprises act as \emph{critics} to the original SHAP.
-They reveal abnormality of the \emph{explainer}, but not necessarily the abnormality of the model.
-In the example above, we may suspect the model to miss verbs if we merely rely on SHAP explanations. However, the small-variance shows otherwise --- the low importance results from SHAP only \emph{masking/deleting} the said verb.
-
-
+%%%%%%%
 \subsection{Evaluate local explanations?}
-We conduct a user study to verify whether our selected counterfactual explanations help people identify model's problematic behavior.
+We conduct a user study to verify whether our selected counterfactual explanations can compensate SHAP in helping people interpret the model, \ie if the selected counterfactual spot points that people would mis-interpret after viewing SHAP.
+We form it as a model behavior simulation study, where participants are asked to predict model's behavior on the given counterfactuals.
+Intuitively, the more counterfactuals they simulate incorrectly, the more information they grasp if we show the counterfactuals to them.
 
-We recruited N graduate students who have experience using model explanations before, and tasked them with a two phase experiment, where they assess the correctness of a \qqp model.
-To begin, participants were given 20 \qqp examples from the validation set with labels and model predictions, but no explanations.
-They were asked to assess whether they think the model would behave reasonably on variations of the example and, if not, create one perturbation where they think the model would predict incorrectly.
-Then, in the second phase, they repeat the tasks as before, this time with explanations.
-We evaluate on two dimensions:
+\paragraph{Procedure.}
+We recruited \wts{N} graduate students who have experience using model explanations before, and asked them to simulate the behavior of a \qqp model for 20 rounds (the same as in \S\ref{subsec:contrast_set}).
+In each round, the participants were given a reference example, with the model's prediction on it, its confidence score, as well as the feature attributions estimated by SHAP (\wts{Figure~\ref{}}).
+To help them better understand the model around the reference example, the participants were allowed to ``query the model'' for up to 10 times, by making small changes to one question, and see the resulting model predictions.
+It was equivalent to unlimited model access --- In the result, most participants submitted \wts{M} queries.
+They were then asked to simulate the model's prediction on six counterfactuals, two from each condition.
+After the 20 rounds, we concluded the study with open-ended questions on their model query and simulation strategies.
 
-%\noindent
-\textbf{Q1}: 
-Can the explanation effectively indicate model's abnormal behaviors around an example? 
-We measured it by the number of times participants' assessment change after seeing the explanation (\eg from model reasonable to model unreasonable).
+\paragraph{Conditions.} 
+We compare three types of selected counterfactuals:
+(1) \emph{SHAP-c}, the machine-generated counterfactuals selected to compensate SHAP; 
+(2) \emph{random}, the randomly selected machine-generated counterfactuals; 
+(3) \emph{human}, 
+the human generated counterfactuals that they deemed abnormal.
+We allowed three graduate students to play with the model for up to 10 times, and asked them to submit one final counterfactual with a surprising model prediction.
+We then randomly selected two of their submissions per reference example.
+As a within-subject study, we compared the error rate of human simulations across the three conditions.
 
-%\noindent
-\textbf{Q2}: 
-When they believe the model is incorrect, can the participants create perturbations that reveal the incorrectness, and is it more effective than our generated ones?
-We ran the models on the collections, and count the times that the model were indeed incorrect.
 
-\wts{The whole user study is still TODO; baseline and results; See the comment for examples generated by BERT.}
-
+\paragraph{Results.}
+More interactions with the model usually results in better mental models about the predictor, and users wold become less surprised by most counterfactuals~\cite{miller}.
+We are interested in learning whether our selected ones \emph{still add information}
+Less surprised by abnormal phenomena, so an explanation alongside every decision runs the risk of providing explanations that become less needed and more distracting over time.
 
 \begin{comment}
 ****
