@@ -1,0 +1,26 @@
+\section{Additional Details for Data Collection}
+
+\subsection{Tasks \& Data}
+
+We examine both evaluation and augmentation with three classification tasks: 
+\wts{Depending on the space, probably no need to be so detailed.}
+
+\textbf{Sentiment Analysis (\sst)} aims to determine the sentiment polarity of a given sentence (\emph{positive} or \emph{negative}). 
+We select Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive} as the base dataset for augmentation.
+It contains sentences extracted from full movie reviews on Rotten Tomatoes, which is relatively more aligned with the training data for the perturbation model. 
+While the dataset also contains finer-grained labels on subphrases, we only use full sentences.
+As a result, the full training data contains 6,920 sentences.
+
+\textbf{Natural Language Inference (\nli)} is a 3-way classification task, with inputs consisting of two sentences, a premise and a hypothesis and the three possible labels being \emph{entailment}, \emph{contradiction}, and \emph{neutral}.
+ We augment the data based on \dnli~\cite{bowman-etal-2015-large}. 
+ 
+\textbf{Duplicate Question Detection (\qqp)} analyzes whether two questions are duplicate of each other (i.e., if you have the answer to one question, whether you can infer the answer for the other one.) 
+We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question pairs from the community question-answering website Quora.
+
+
+\subsection{Training details for Counterfactual Data Augmentation}
+\paragraph{Model.}
+For each data sample, we train the models with four random seeds, and report the averaged metrics. 
+For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs, and selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and perturbation examples.)
+\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
+For each given $(m,n)$, we create three different samples of training data, and report the average and the variance of the samples. 

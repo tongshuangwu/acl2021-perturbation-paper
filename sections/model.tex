@@ -195,7 +195,7 @@ Inspired by the language model constraints used by \citet{morris2020textattack},
 
 \paragraph{Ranking \& Selection.}
 As a general-purpose and task-agnostic model, our finetuned GPT-2 generator does not distinguish counterfactual applications at the generation time.
-Rather, it (targetedly) generates a large amount of counterfactuals that should be further selected or ranked.
+Rather, it (targetedly) generates a large amount of counterfactuals with different combinations of \tagstrs and multiple blanks, that should be further selected or ranked.
 For example, we can find adversarial examples using some common filtering constraints (\eg sentence semantic similarity~\cite{morris2020textattack}).
 We demonstrate different filtering strategies for data augmentation and counterfactual explanation in the following sections.
 
