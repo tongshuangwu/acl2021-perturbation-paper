@@ -60,6 +60,12 @@ Among the applications, the three that we focus on:
     while counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
 \end{comment}
 
+\wts{
+\textbf{Applications.}
+Perturbed examples have been used for training, evaluating, and explaining models decision boundaries.
+Depending on whether they affect the model's groundtruth label, they can be categorized into \emph{adversarials} (\eg \citet{wu2019conditional} for training and \citet{jin2020bert} for evaluation) and \emph{counterfactuals} (\eg \citet{kaushik2019learning} for training and \citet{gardner2020contrast} for evaluation).
+In the adversarial cases, the groundtruth label for $\xp$ are usually automatically determined and maintained, \ie $\yp = y$, whereas counterfactual ones require manual labeling~\cite{Khashabi2020MoreBF}, or a mapping between the perturbation templates and the resulting labels~\cite{li2020linguistically}.
+}
 
 \paragraph{The use of perturbations.}
 Perturbations in NLP are most broadly used for data augmentation, model evaluation, and explanation.

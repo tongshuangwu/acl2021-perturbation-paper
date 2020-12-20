@@ -22,23 +22,26 @@
 
 \subsection{Local explanations: turning points}
 
-Perturbations as counterfactual explanations are valuable, as they offer more information that goes beyond the mere input.
-However, too many counterfactual explanations can be perceptually overwhelming.
-Rather, we define \emph{turning points} that most effectively approximate model decision boundaries. 
-Suppose we measure the degree of change with a distance function between $x$ and $\xp$, $d(x,\xp)$. 
-Given a prediction model $f$, its predictions $f(\cdot)$ and confidence $p(\cdot)$, we prioritize: 
+\paragraph{Selection by abnormality.}
+The cognitive burden of complete explanations is too great.
+As a result, \citet{miller} concluded that people usually \emph{select} a small subset of (counterfactual) explanations on contrastive cases (``foils'') that they find unexpected. 
+He further proposed that, as such, ``abnormality could be used to infer likely foils.''
+Here, we operationalize the concept of abnormality based on \emph{the discrepancy between the expected and the actual changes in the prediction}, and use it as our selection method.
 
-(1) $\xp$ that maintain the model prediction even when it is extensively changed from $x$ (\emph{large-invariance})\footnote{By ``maintain'', we require unchanged model prediction, and prioritize minimal change on the model prediction probability.}, 
-%
-$$\xp_l = \argmax_{\xp} \mathbb{1}[f(x) = f(\xp)] \cdot \frac{d(x,\xp)}{|p(x) - p(\xp)|} $$
-\noindent and (2) $\xp$ that inverts model prediction, even if the perturbation is relatively minimal (\emph{small-variance}).
-$$\xp_l = \argmax_{\xp} \mathbb{1}[f(x) = f(\xp)] \cdot {d(x,\xp)} \cdot {|p(x) - p(\xp)|} $$
+Given a prediction model $f$, we define the actual change in prediction as $d_f(\xp, x)$, and the expected prediction change as $\hat{d}_f(\xp, x)$.
+The distance between the expectation and reality then becomes:
+$$\Delta d_f(\xp, x) = |\hat{d}_f(\xp, x)-d_f(\xp, x)|$$
+We select two abnormal, ``turning point'' counterfactuals, \ie unexpected large changes in prediction when small (large) change is expected:
+$$ \xp_l = \argmax_{\xp} \Delta d_f(\xp, x), \xp_s = \argmin_{\xp} \Delta d_f(\xp, x)$$
+Whereas actual prediction change is always $d_f(\xp, x)=|f(\xp)-f(x)|$ where $f(x)$ denotes the prediction probability of $f$ on $x$, $d_f(\xp, x)$ can take various forms. 
+For example, as a standalone explanation method, $\hat{d}_f$ can be the cosine distance in the \emph{Embedding space}.
+The embedding can be either model-agnostic (\eg with~sentence transformers~\cite{reimers-2019-sentence-bert}), or the last layer of the hidden state of the finetuned predictor.
 
-The most intuitive distance would be on the model's embedding space (``embed'').
-For finetuned transformer models, it means the distance can be on the last hidden state of $x$ and $\xp$.
-However, showing only $\xp_l$ and $\xp_s$ as local explanations can be insufficient. 
-Because they only highlight two points on the decision boundary, we lose easier overviews provided by feature attribution methods like SHAP or LIME.
-Instead, we combine perturbation selection with SHAP, such that the $\xp$-s can surve as supplemental \emph{compensations} to SHAP (``SHAP-sp'').
+On the other hand, as a \emph{Compensation} to existing feature attribution methods, $\hat{d}_f$ can be the importance (weights) of the perturbed tokens in $x$, estimated by feature attribution methods.
+As mentioned in \wts{\S\ref{}}, methods like SHAP~\cite{} or LIME~\cite{} only estimate feature weights by \emph{masking} the words, which do not represent how model would react in non-deletion counterfactuals (replacing words or inserting negations).
+Therefore, abnormalities selected in this way can  compensate or criticize the missed information, and therefore better calibrate users' trust on the predictor.
+
+
 For example, consider the following \dnli instance. 
 The RoBERTa model finetuned on NLI (the same as in \S\ref{subsec:contrast_set}) predicts it correctly.
 
