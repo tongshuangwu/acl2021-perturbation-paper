@@ -46,7 +46,9 @@
  % imdb_iclr_dev 92.0 (0.2) / 92.7 (0.2)
 \bottomrule
 \end{tabular}
+\vspace{-5pt}
 \caption{\sst model Accuracies on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets and contrast sets, while maintaining the others.}
+\vspace{-5pt}
 \label{table:aug_sst}
 \end{table*}}
 
@@ -67,7 +69,9 @@
  %10000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $85.0\pm 0.2$&  $85.1\pm 0.1$&  $73.4\pm 0.5$&  $90.5\pm 1.1$&  $56.5\pm 1.2$&  $64.6\pm 0.5$&  $57.0\pm 0.4$\\
 \bottomrule
 \end{tabular}
+\vspace{-5pt}
 \caption{\nli model accuracies on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast/challenge sets}. \texttt{aug-s} performs better than \mcomp on DNC, our target for data-slice-based augmentation. It also improves on other challenge sets.}
+\vspace{-5pt}
 \label{table:aug_nli}
 \end{table*}
 }
@@ -194,7 +198,9 @@ Table~\ref{table:contrast_set_result} shows that all the models perform worse on
 % imdb_iclr_test 89.5 / 87.3 / 77.3
 \bottomrule
 \end{tabular}
+\vspace{-5pt}
 \caption{Perturbations as contrasts sets, with accuries on the original development set, the examples used for perturbations (\emph{Orig.}), the perturbed-to contrast sets (\emph{Con.}), and the consistency between \emph{Orig.} and \emph{Con.}}
+\vspace{-5pt}
 \label{table:contrast_set_result}
 \end{table}
 %\end{comment}
@@ -235,9 +241,9 @@ Active learning might be a promising future direction.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1\columnwidth]{figures/sst_trend}
+\includegraphics[width=1\columnwidth]{figures/sst_trend_2}
 \vspace{-15pt}
-\caption{The accuracy trend on four representative datasets, as the total training datasize ($m+n$) changes. The orange line shows an augmentation of $m=2k$ perturbations (\eg when $m+n=4k$, we have $m=n=2k$ on the orange line), and the blue one represents the corresponding \mcomp.
+\caption{The accuracy trend on four representative datasets, as the total training datasize ($m+n$) changes. The orange line shows an augmentation of $m=2k$ perturbations (when $m+n=4k$, we have $m=n=2k$ on the orange line), and the blue one represents the corresponding \mcomp.
 Though the counterfactuals remains useful on SemEval across all $m+n$, it appears too many counterfactuals may be harmful (Amzbook).
 }
 \vspace{-10pt}
@@ -260,7 +266,7 @@ We suspect that flipping out too much original data may decrease the diversity o
 
 \paragraph{\nli.}
 % m=20k, n=1574
-Unlike in \sst, random counterfactuals did not bring improvements on any datasets, possibly because certain augmentations were repetitive for the model (See \S\ref{subsec:gen_counterfactual_for_labeling}).
+Unlike in \sst, random counterfactuals did not bring improvements on any datasets (\maug in Table~\ref{table:aug_nli}), possibly because certain augmentations were repetitive for the model (See \S\ref{subsec:gen_counterfactual_for_labeling}).
 %We suspect a large number of perturbations are teaching the model patterns that it has already learned (\eg perturbations contrasting subjects ``man'' and ``woman'' may be unnecessary.) 
 %For example, While flipping the from ``man'' to ``woman'' is a perfectly valid lexical change, the existing \dnli dataset already cover data points contrasting the subject of two sentences.
 Instead, we follow (but adjust) \citet{chen2019slice}'s data slicing strategies, and prioritized counterfactuals that can improve error cases identified by \citet{kim2019probing} (referred to as DNC).
