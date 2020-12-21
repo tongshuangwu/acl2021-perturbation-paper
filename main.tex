@@ -91,7 +91,8 @@
 \newcommand{\fontnormal}{\fontsize{10pt}{12pt}\selectfont}
 \fboxrule=0.1pt
 \newcommand{\ebox}[1]{%
-	\medskip
+	%\smallskip
+	\vspace{2pt}
 	\noindent\fcolorbox{gray}{white}{
 		\begin{minipage}{0.95\linewidth}
 			\fontsmall
@@ -101,7 +102,7 @@
 			%\end{internallinenumbers}
 		\end{minipage}
 	}
-	\medskip
+	\vspace{-2pt}
 }
 
 % [(0.166, 'opposing '), (0.099, 'team '), (0.027, 'by '), (0.026, 'quarterback '), (0.024, 'The '), (0.024, 'is '), (0.024, '. '), (0.023, ' '), (0.023, 'about '), (0.023, 'to '), (0.023, 'be '), (0.023, 'tackled '), (0.019, 'the '), (-0.0, ' ')]
@@ -214,10 +215,10 @@ We finetune GPT-2 on a combination of multiple existing datasets,  and verify it
 \end{abstract}
 
 \input{sections/intro}
+\input{sections/relate}
 \input{sections/model}
 \input{sections/use_label}
 \input{sections/use_explanation}
-\input{sections/relate}
 \input{sections/conclusion}
 
 \bibliography{ref}

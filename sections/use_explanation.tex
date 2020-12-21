@@ -39,7 +39,6 @@
 
 \wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
 
-\paragraph{Selection by abnormality.}
 The cognitive burden of complete explanations is too great.
 As a result, \citet{miller} concluded that people usually \emph{select} a small subset of (counterfactual) explanations on contrastive cases (``foils'') that they find unexpected. 
 As such, he further proposed that ``abnormality could be used to infer likely foils.''
@@ -49,9 +48,9 @@ Given a prediction model $f$, we define the actual change in prediction as $d_f(
 The distance between the expectation and reality then becomes:
 $$\Delta d_f(\xp, x) = |\hat{d}_f(\xp, x)-d_f(\xp, x)|$$
 We select two abnormal, ``turning point'' counterfactuals, \ie unexpected large changes in prediction when small (large) change is expected:
-$$ \xp_l = \argmax_{\xp} \Delta d_f(\xp, x), \xp_s = \argmin_{\xp} \Delta d_f(\xp, x)$$
-Whereas actual prediction change is always $d_f(\xp, x)=|f(\xp)-f(x)|$ where $f(x)$ denotes the prediction probability of $f$ on $x$, $d_f(\xp, x)$ can take various forms. 
-For example, as a standalone explanation method, $\hat{d}_f$ can be the cosine distance in the \emph{Embedding space}.
+$$ \xp_a^1 = \argmax_{\xp} \Delta d_f(\xp, x), \xp_a^2 = \argmin_{\xp} \Delta d_f(\xp, x)$$
+Whereas $d_f(\xp, x)=|f_p(\xp)-f_p(x)|$ where $f(x)$ denotes the prediction probability of $f$ on $x$, $d_f(\xp, x)$ can take various forms. 
+As a standalone explanation method, it can be the cosine distance in the \emph{Embedding space}.
 The embedding can be either model-agnostic (\eg with~sentence transformers~\cite{reimers-2019-sentence-bert}), or the last layer of the hidden state of the finetuned predictor.
 
 On the other hand, as a \emph{compensation} to existing feature attribution methods, $\hat{d}_f$ can be the importance (weights) of the perturbed tokens in $x$, estimated by feature attribution methods.
@@ -65,7 +64,7 @@ We primarily test the compensation selection below, as it nicely combines the ov
 %%%%%%%
 \subsection{Evaluate local explanations?}
 We conduct a user study to verify whether our selected counterfactual explanations can compensate SHAP in helping people interpret the model, \ie if the selected counterfactual spot points that people would mis-interpret after viewing SHAP.
-We form it as a model behavior simulation study, where participants are asked to predict model's behavior on the given counterfactuals.
+We form the study as a counterfactual simulation on the model's behavior~\cite{hase2020evaluating}, where participants are asked to predict model's behavior on the given variations of a reference example.
 Intuitively, the more counterfactuals they simulate incorrectly, the more information they grasp if we show the counterfactuals to them.
 
 \paragraph{Procedure.}
@@ -88,6 +87,15 @@ As a within-subject study, we compared the error rate of human simulations acros
 
 
 \paragraph{Results.}
+As expected, 
+
+As shown in \wts{Figure~\ref{}}, 
+
+They self-reported 
+``I tried to make single modifications to the original question. I tried to vary the question by replacing nouns, switching noun ordering, changing numbers, and removing phrases.''
+
+``For other questions, I looked at the sample question Q2 and its weight distribution over words in the sentence, to see what parts of the sentence the model was attending to (though I did realize those weights were only for that one example).''
+
 More interactions with the model usually results in better mental models about the predictor, and users wold become less surprised by most counterfactuals~\cite{miller}.
 We are interested in learning whether our selected ones \emph{still add information}
 Less surprised by abnormal phenomena, so an explanation alongside every decision runs the risk of providing explanations that become less needed and more distracting over time.
@@ -136,18 +144,44 @@ unflip_important_feature 0.149 {opposing}
 
 \subsection{Global / Interactive Explanations}
 \label{subsec:global_exp}
-Here, we explore more extensive use of perturbation explanations via examples, but defer more sophisticated designs and evalautions to future work.
+
+Here, we explore more extensive use of perturbation explanations via examples, but defer more sophisticated designs and evaluations to future work.
 
 \paragraph{Global explanations: impacts of same changes.}
-Going beyond turning points for each individual data points, we can find perturbation patterns that systematically affect (preserve) model predictions.
-Similar to challenge sets, the grouped perturbations then become useful for revealing model's capabilities on specific linguistic patterns.
+Besides finding abnormal counterfactuals around an individual data point, \emph{global} abnormality provides more systematic observations, and therefore more generalizable model understandings --- yet another important aspect of model explanations~\cite{miller}.
+We find \emph{abnormal groups} of counterfactual through two steps: 
 
-To enable the grouping, we first featurize each perturbation $\xp$ with respect to its original instance $x$, using 
+First, we group counterfactuals by featurizing them into templates. 
+The templates featurization uses the edits between $\xp$ and $x$: 
 (1) its \tagstr (\fexptag{negation} for the example in Figure~\ref{fig:blank}), 
 (2) its remove phrases \fexpfrom{kids}, 
 (3) its added phrases \fexpto{not}, \fexpto{children}, and 
 (4) the combined template \fexptemp{\swap{kids}{children}}.
-For tokens involving multiple changes, we featurize both the primary and the combined changes, and so the example in Figure~\ref{fig:blank} also have additional features like \texttt{\fexptag{negation} \& \fexptag{lexical}}.
+
+Then, we rank the groups $G = \{ \xp_1, \xp_2, ...\}$ using the entropy of the prediction changes for all counterfactuals in a group, \ie the entropy of the prediction tuple $(f(x), f(\xp))$.
+Intuitively larger entropies indicate that the perturbation has unstable impact on the predicted label.
+
+For example, when evaluating the \nli RoBERTa model, one abnormal global perturbation is \swap{two}{three} in the hypothesis.
+Out of the 253 counterfactuals whose original prediction $f(x)=$ \emph{entailment}, $138$ flipped to \emph{contradiction}, $22$ to \emph{neutral}, yet $93$ remained \emph{entailment}, resulting in entropy $I=0.91$.
+We observe that most cases flipped to \emph{contradiction} have the explicit word ``two'' in the premise, whereas the prediction-intact ones suggest that the model cannot process actual counting.
+
+\ebox{
+\textbf{P}: Two women having drinks at the bar.\\
+\textbf{H}: \swap{Two}{Three} women are at a bar.\\
+\textbf{Pr}: \swap{entailment}{contradiction}\\
+--
+\textbf{P}: A boy and a girl gaze in a clothing store window.\\
+\textbf{H}: \swap{Two}{Three} kids are looking in a store window.
+\textbf{Pr}: \swap{entailment}{entailment}
+}
+
+\begin{comment}
+The featurization uses the edits between $\xp$ and $x$: 
+(1) its \tagstr (\fexptag{negation} for the example in Figure~\ref{fig:blank}), 
+(2) its remove phrases \fexpfrom{kids}, 
+(3) its added phrases \fexpto{not}, \fexpto{children}, and 
+(4) the combined template \fexptemp{\swap{kids}{children}}.
+%For tokens involving multiple changes, we featurize both the primary and the combined changes, and so the example in Figure~\ref{fig:blank} also have additional features like \texttt{\fexptag{negation} \& \fexptag{lexical}}.
 
 For each feature $h$ we compute the its prediction change rate over all the perturbations $\xp \in \xset_{h}$ that have the said feature: 
 $R_h = \sum {\mathbb{1}[f(x) \not\eq f(\xp)]} / |\xset_h|$.
@@ -191,9 +225,12 @@ For example, the model does not handle the shuffled phrases, echoing the results
 \textbf{Pr}: \swap{entailment}{entailment}
 }
 
+\end{comment}
 
 \paragraph{Interactive explanation.}
-Besides pre-selected \emph{surprise} cases, perturbations can also support interactive explanation (ideally in a visual interface), and multi-step drill downs.
+Besides automatically selected explanations, users should be allowed to specify a foil, in which case they are implicitly pointing towards the part of the model they do not understand~\cite{miller}.
+%Furthermore, the method should allow explanations as a dialog. 
+The targeted generation seamlessly support such interactive explanation (ideally in a visual interface), and multi-step drill downs.
 In the example: 
 
 \ebox{

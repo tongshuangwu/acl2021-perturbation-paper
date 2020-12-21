@@ -501,24 +501,30 @@ url={https://openreview.net/forum?id=H1edEyBKDS}
 }
 
 
+@inproceedings{alzantot-etal-2018-generating,
+    title = "Generating Natural Language Adversarial Examples",
+    author = "Alzantot, Moustafa  and
+      Sharma, Yash  and
+      Elgohary, Ahmed  and
+      Ho, Bo-Jhang  and
+      Srivastava, Mani  and
+      Chang, Kai-Wei",
+    booktitle = "Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing",
+    month = oct # "-" # nov,
+    year = "2018",
+    address = "Brussels, Belgium",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D18-1316",
+    doi = "10.18653/v1/D18-1316",
+    pages = "2890--2896",
+}
+
 @article{hase2020evaluating,
   title={Evaluating Explainable AI: Which Algorithmic Explanations Help Users Predict Model Behavior?},
   author={Hase, Peter and Bansal, Mohit},
   journal={arXiv preprint arXiv:2005.01831},
   year={2020}
 }
-
-@inproceedings{reimers-2019-sentence-bert,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/1908.10084",
-}
-
-
 
 @inproceedings{nie2019analyzing,
   title={Analyzing compositionality-sensitivity of NLI models},
@@ -566,6 +572,48 @@ url={https://openreview.net/forum?id=H1edEyBKDS}
   journal={ArXiv},
   year={2020},
   volume={abs/2005.00174}
+}
+
+@article{andreas2019good,
+  title={Good-enough compositional data augmentation},
+  author={Andreas, Jacob},
+  journal={arXiv preprint arXiv:1904.09545},
+  year={2019}
+}
+
+@inproceedings{liu-etal-2019-inoculation,
+    title = "Inoculation by Fine-Tuning: A Method for Analyzing Challenge Datasets",
+    author = "Liu, Nelson F.  and
+      Schwartz, Roy  and
+      Smith, Noah A.",
+    booktitle = "Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)",
+    month = jun,
+    year = "2019",
+    address = "Minneapolis, Minnesota",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/N19-1225",
+    doi = "10.18653/v1/N19-1225",
+    pages = "2171--2179",
+    abstract = "Several datasets have recently been constructed to expose brittleness in models trained on existing benchmarks. While model performance on these challenge datasets is significantly lower compared to the original benchmark, it is unclear what particular weaknesses they reveal. For example, a challenge dataset may be difficult because it targets phenomena that current models cannot capture, or because it simply exploits blind spots in a model{'}s specific training set. We introduce inoculation by fine-tuning, a new analysis method for studying challenge datasets by exposing models (the metaphorical patient) to a small amount of data from the challenge dataset (a metaphorical pathogen) and assessing how well they can adapt. We apply our method to analyze the NLI {``}stress tests{''} (Naik et al., 2018) and the Adversarial SQuAD dataset (Jia and Liang, 2017). We show that after slight exposure, some of these datasets are no longer challenging, while others remain difficult. Our results indicate that failures on challenge datasets may lead to very different conclusions about models, training datasets, and the challenge datasets themselves.",
+}
+
+@inproceedings{malandrakis-etal-2019-controlled,
+    title = "Controlled Text Generation for Data Augmentation in Intelligent Artificial Agents",
+    author = "Malandrakis, Nikolaos  and
+      Shen, Minmin  and
+      Goyal, Anuj  and
+      Gao, Shuyang  and
+      Sethi, Abhishek  and
+      Metallinou, Angeliki",
+    booktitle = "Proceedings of the 3rd Workshop on Neural Generation and Translation",
+    month = nov,
+    year = "2019",
+    address = "Hong Kong",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D19-5609",
+    doi = "10.18653/v1/D19-5609",
+    pages = "90--98",
+    abstract = "Data availability is a bottleneck during early stages of development of new capabilities for intelligent artificial agents. We investigate the use of text generation techniques to augment the training data of a popular commercial artificial agent across categories of functionality, with the goal of faster development of new functionality. We explore a variety of encoder-decoder generative models for synthetic training data generation and propose using conditional variational auto-encoders. Our approach requires only direct optimization, works well with limited data and significantly outperforms the previous controlled text generation techniques. Further, the generated data are used as additional training samples in an extrinsic intent classification task, leading to improved performance by up to 5{\%} absolute f-score in low-resource cases, validating the usefulness of our approach.",
 }
 
 @article{Jia2019CertifiedRT,

@@ -262,7 +262,7 @@ The model also improves on the contrast sets on IMDB (IMDB Contrast~\cite{gardne
 Interestingly, different datasets react differently to the $m/n$ ratio.
 As shown in Figure~\ref{fig:sst_trend}, while the counterfactual remains effective on some datasets (\eg SemEval, Senti140 and contrast sets), when the proportion of perturbations is large, it may hurt model performance on some datasets (Amzbook; Yelp followed a similar but less observable trend).
 We suspect that flipping out too much original data may decrease the diversity of vocabulary and syntactic structures, which results in the decreased model performance.
-
+Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.
 
 \paragraph{\nli.}
 % m=20k, n=1574
