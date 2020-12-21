@@ -28,13 +28,18 @@
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1\columnwidth]{figures/explanation}
+\includegraphics[trim={0 15cm 31cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2}
 \vspace{-15pt}
-\caption{}
+\caption{
+Counterfactual explanations on a \qqp instance (A), which compensates the feature weights from SHAP visualized by the blue backgrounds and the bar chart.
+Counterfactuals can 
+(B) concretize the opaque weights using readable examples. so it is more noticeable that the model does not recognize ``reasons'';
+(C) alert errors missed by SHAP, so users are not misled to believe that the model will respond correctly to changed person names.
+}
 \vspace{-10pt}
-\label{fig:sst_trend}
+\label{fig:explanation}
 \end{figure}
-
+ 
 
 
 \wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
