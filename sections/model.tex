@@ -231,7 +231,7 @@ The success rate increases by \tofix{$48.7\% \pm 38.1\%$} across all \tagstrs.
 \tagstr{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert clues on its own.
 
 Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
-(1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a [BLANK]} would not respond to \ctrltag{negation}.
+(1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
 (2) $x$ does not have the corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence does not have more than one adjective or noun (\eg \exinline{the movie is good}).
 (3) The pattern-to-perturb is very prominent that it dominates the generation probability. 
 For example, the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
