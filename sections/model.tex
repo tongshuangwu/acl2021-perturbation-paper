@@ -54,7 +54,7 @@ Adversarial training 		& \cmark & \qmark \\
 % 
 Given an instance $x \in \xset$, we expect a counterfactual generator $g$ to generate a list of unique counterfactual $\xp$-s ($[\xp_1, \xp_2, ...]$).
 Each $\xp_i$ perturbs $x$ with certain strategies $s$ ($s(x, \xp_i)=$ negations, syntactic restructuring, etc.), and the edited spans are instantiations of the strategies.
-For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser} both instantiate for \ctrltag{negation}.\footnote{All examples shown are actual generations of the model. \wts{Move this footnote to where it first occurs.}}
+For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser} both instantiate for \ctrltag{negation}.\footnote{All examples shown are actual generations of the model.}
 $x\rightarrow \xp$ then forms certain relationships, which can include the perturbation strategy, the added and removed tokens, the impacts on groundtruth label, model prediction, etc.
 These relationships help distinguish counterfactuals for downstream tasks.
 %The perturbation follow certain \emph{strategies} $s$ (e.g., negations~\cite{kaushik2019learning}, word substitution~\cite{li-etal-2020-bert-attack}, syntactical restructing~\cite{iyyer2018adversarial}).
