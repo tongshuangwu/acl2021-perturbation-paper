@@ -1,33 +1,21 @@
 \section{Discussion and Conclusion}
-\label{sec:discuss} 
+\label{sec:discuss}
+
+We propose \sysname, an automated method for general-purpose counterfactual generation. 
+As a text generation task, \sysname takes in a natural sentence, as well as (optionally) \tagstrs and blanks as the prompt, and output corresponding counterfactuals, which can be further filtered for different downstream applications. 
+We demonstrate the usefulness of \sysname in three applications, and show that the it can support counterfactual data augmentation, contrast set generation, as well as counterfactual explanation.
+Below, we discuss promising future work:
+
+\textbf{Supporting existing counterfactual reasoning tools.}
+Besides independent use cases, \sysname can also support and extend existing tools for data programming, model testing and error analysis.
+For example, counterfactuals can be featurized (similar to \S\ref{subsec:global_exp}) into labeling functions in Snorkel~\cite{ratner2017snorkel}, such that we can learn whether certain perturbation types are more likely to preserve (or invert) the label, and generalize the patterns to unlabeled counterfactuals.
+Or domain experts can create perturbation tests more easily if \sysname serves as an additional building block for Errudite~\cite{wu2019errudite} or CheckList~\cite{checklist:acl20}.
 
 
-\textbf{Context-dependent perturbation.}
-While the LM-based perturbation is more effective to generate, it has limited support for more complex tasks.
-For example, \citet{gardner2020contrast} created contrast sets for multi-hop question answerin (DROP~\cite{}) by adding compositional reasoning steps \emph{related to} the corresponding paragraph.
-Such context-aware perturbation is not achievable when the input to the LM model is just the question sentence.
-Rather, one should consider training models that take additional contexts as part of the input.
+\textbf{Human-in-the-loop Counterfactual Generation.}
+Besides labeling (in data collection) and placing blanks (in interactive explanation), humans can add more values when they actively collaborate with \sysname.
+For example, human creators are more likely to help increase the diversity of the covered patterns, if they are asked to come up with more counterfactuals that are different from those covered automatically.
+In tasks that require context-dependent counterfactual generations, human annotators can also initiate seed counterfactuals for \sysname to extend.
+For example, \citet{gardner2020contrast} created contrast sets for multi-hop question answering (DROP~\cite{Dua2019DROP}) by adding compositional reasoning steps \emph{related to} the corresponding paragraph.
+Such context- and logic- aware perturbations is hard for the model alone; however, it can easily perturb the reasoning step \emph{once} the human adds it into the sentence-to-perturb.
 
-\textbf{Grouped labeling and active learning.}
-While we labeled perturbations individually, it is also possible to make it more efficient through grouped labeling. 
-If we categorize generated sentences based on their perturbations types or template patterns (similar to the featurization in \S\ref{subsec:global_exp}), we can create labeling functions~\cite{ratner2017snorkel} for weak supervision based on different combinations of perturbation metadata.
-\wts{Certain perturbations have a high likelihood of preserving (or inverting) the label.
-For example, in natural language inference, deleting a clause in an entailed hypothesis will almost always still lead to entailment.
-In such cases, we can assume, e.g., in the training scenario, the model will be able to capture the pattern rather quickly (or, we can create probability ``labeling functions'' that generalize the labeling to a larger group.)
-Therefore, we should avoid re-labeling perturbations that (almost always) have the same impact.
-We estimate such impact based on the already collected perturbation labels, using a weighted voting strategy, with the weight being the perturbation similarity $d_p$ with previously labeled instances.}
-
-%{Or, a more sophisticated way to compute P is to create snorkel labeling functions based on different combinations of perturbation metadata.}
-
-\textbf{Counterfactual explanation.}
-Arguably, perturbations can also be summarized into SHAP-like feature attributions.
-However, it is unclear if the perturbations induce appropriate amount of information for feature attribution.
-In a simple \exinline{this is a good movie}, changing \swap{good}{great} does not affect the prediction, yet it should not be interpreted as ``good'' being trivial.
-Moreover, because our perturbations are not exhaustive, the summarized explanation may be biases by the changed-to words.
-To effectively support feature attribution, future work can explore more nuanced, semantic ``expectation'' of certain changes, \ie changing words to antonyms may not affect the label, but changing it to synonyms may not.
-
-
-
-%\textbf{Other applications.}
-%Beyond our demonstrated applications, \sysname can potentially support other use cases. 
-%For example, grouping generated sentences based on their perturbations types or template patterns, one can potentially 

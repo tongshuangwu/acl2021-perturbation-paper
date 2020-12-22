@@ -1,4 +1,5 @@
 \section{Additional Details for Data Collection}
+\label{appendix:data_collection}
 
 \subsection{Tasks \& Data}
 
@@ -18,8 +19,8 @@ As a result, the full training data contains 6,920 sentences.
 We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question pairs from the community question-answering website Quora.
 
 
-\subsection{Training details for Counterfactual Data Augmentation}
-\paragraph{Model.}
+\subsection{Training details for Data Augmentation}
+%\paragraph{Model.}
 For each data sample, we train the models with four random seeds, and report the averaged metrics. 
 For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs, and selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and perturbation examples.)
 \wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}

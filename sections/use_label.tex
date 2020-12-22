@@ -119,7 +119,7 @@ However, the model gets significantly better on  \texttt{more X $\not\eq$ less X
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Application 1: Data Collection}
+\section{Application 1 \& 2: Training \& Evaluation Data Collection}
 \label{sec:app_label}
 
 Prior work has used manually created counterfactuals to evaluate models' decision boundaries~\cite{gardner2020contrast} or used for counterfactual data augmentation~\cite{kaushik2019learning} .
@@ -140,8 +140,7 @@ Not all counterfactuals have the same labeling utility, and we use the following
 \paragraph{Targeted counterfactuals.}
 \citet{longpre2020effective} found that typical data augmentations are likely to bring redundant benefits as pre-training, and suggested that the augmentation may be most useful for settings where current models fail (\eg negation or malformed input~\cite{rogers2020primer,ettinger2020bert}).
 Inspired by their findings, in our data augmentation experiment (\S\ref{subsec:augmentation}), we prioritize counterfactuals that can fulfill the model's known blind spots, by slicing the original dataset and blanking specific subphrases.  
-For example, to highlgiht the impact of prepositions (\eg \exinline{His surfboard is \swap{beneath}{lying on} him}), we first filter examples with prepositions, and generate blanked sentences like \exinline{\ctrltag{[resemantic/lexical]} His surfboard is \BLANK him.}
-\footnote{All examples shown are actual generations of the model. \wts{Move this footnote to where it first occurs.}}
+For example, to highlgiht the impact of prepositions (\eg \exinline{His surfboard is \swap{beneath}{lying on} him}), we first filter examples with prepositions, and generate blanked sentences like \exinline{\ctrltag{[resemantic/lexical]} His surfboard is \texttt{[BLANK]} him.}
 
 \paragraph{Diversity}
 To cover more variations around local decision boundaries, we select counterfactuals with \emph{diverse counterfactual patterns} for each original instance.
@@ -221,6 +220,7 @@ Because counterfactuals that do not change the groundtruth label can also improv
 
 For each augmented model (\maug) in this section, we include $m$ perturbations, as well as $n$ examples sampled from the original dataset (the base examples of the perturbations will always be included).
 We also train compensation models as baselines (\mcomp), which have $n+m$ original examples (the $n$ part stays the same as their corresponding augmented counterpart.)
+We report the average performance across 3 data samples, each with 4 random seeds. More details in \S\ref{appendix:data_collection}.
 %Comparing with these models help highlight the effectiveness of perturbations with respect to adding the same amount of original data. 
 
 \begin{comment}
@@ -312,8 +312,9 @@ Future work should further strategize the sampling, such that the counterfactual
 
 Labeling three variations of a given example is reasonably easy, as (1) annotators are better at \emph{verifying} the machine-generated counterfactuals than manually \emph{generating} them~\cite{ribeiro2018sear}, and (2) annotators only need to focus on the reference example and the corresponding perturbed phrases, rather than re-parsing the full instance for each labeling task~\cite{Khashabi2020MoreBF}.
 As a result, the median time for labeling one round (three counterfactuals) is 30 seconds.
-Even after extensive filtering as in creating contrast sets, the method is still more efficient than existing manual methods:
-\citet{kaushik2019learning} reported that workers spent roughly 5 minutes per revised IMDB movie review, and 4 minutes per revised sentence (for \nli), and \citet{gardner2020contrast} mentioned that three expert annotators spent 70 hours to create 588 counterfactual examples for IMDB movie review.
+Even in the most extreme (and very rare) case where we only keep 100 contrast set examples after 500 rounds of validation, the average ``creation'' time per counterfactual is 2.5 minutes, which is still 40\% more efficient than existing manual methods:
+\citet{kaushik2019learning} reported that workers spent roughly 5 minutes per revised IMDB movie review and 4 minutes per revised sentence (for \nli), and the data had to be filtered for validity.
+Similarly, \citet{gardner2020contrast} mentioned that three expert annotators spent 70 hours to create 588 counterfactual examples for IMDB movie review.
 
 %Even for shorter image captions in NLVR2 visual reasoning dataset~\cite{suhr2018corpus}, annotations would take approximately 30 seconds for one textual perturbation.
 

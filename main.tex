@@ -116,18 +116,20 @@
 \definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 %\definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 \definecolor{cword}{rgb}{0, 0, 0.7}
-\newcommand{\BLANK}{\texttt{ {\color{cword}[BLANK]} }}
+%\newcommand{\BLANK}{BLANK}
 
 % format
 \newcommand{\clabel}[1]{\emph{#1}\xspace}
 
 % constants
-\newcommand{\sysname}{Aditor\xspace}
+\newcommand{\sysname}{{\color{red}Aditor}\xspace}
 
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
 \newcommand{\tagstr}{control code\xspace}
 \newcommand{\Tagstr}{Control code\xspace}
 \newcommand{\tagstrs}{control codes\xspace}
+\newcommand{\tagstrshorts}{codes\xspace}
+\newcommand{\tagstrshort}{code\xspace}
 
 
 \newcommand{\cmark}{{\ding{51}}}%
@@ -158,6 +160,7 @@
 \newcommand{\xp}{\hat{x}}
 \newcommand{\yp}{\hat{y}}
 \newcommand{\xset}{\mathbf{X}}
+\newcommand{\tofix}[1]{{\color{red}#1}\xspace}
 
 
 
@@ -166,7 +169,7 @@
 
 
 % teal, cyan
-\title{\sysname: Towards Automated Perturbation Generation \\for Evaluation, Data Augmentation, and Explanation}
+\title{\sysname: Automated, General-purpose Counterfactual Generation}
 \begin{comment}
 \author{
 Tongshuang Wu \\
@@ -203,18 +206,18 @@ $^{2}$Microsoft Research\hspace{5mm} \\
 \begin{document}
 \maketitle
 \begin{abstract}
-Minimal perturbations is effective for evaluating and calibrating model decision boundaries, but existing generation methods either cover limited linguistic patterns, or are hard to scale.
-We explore language-model based perturbation generation.
-We define the training prompts with two information:
-To enable targeted inspection, we use \emph{\tagstrs} to indicate \emph{how} to change a sentence with defined based on common linguistic capabilities, and \emph{where} to change by blanking certain linguistic features.
-We finetune GPT-2 on a combination of multiple existing datasets,  and verify its usefulness of the generations in three applications:
-(1) As contrast sets, the model performance decreases up to 19.3 points on them compared to on the original test set, revealing model inefficiencies.
-(2) As counterfactual data augmentation, they improve models on data slices, and models perform better on out-of-domain datasets, challenge sets, or pass more behavioral tests.
-\wts{Number?}
-(3) They also supply existing explanations and more effectively demonstrate the impact certain text.
+Counterfactual examples are widely effective for calibrating, evaluating, and explaining model decision boundaries, yet either cover limited linguistic patterns, or are hard to scale.
+We propose \sysname, a method for automatically generating general-purpose counterfactuals. 
+Framed as a text generation task (and modeled by finetuning GPT-2 on paired sentences), \sysname produces counterfactuals that are  realistic, diverse, and close to the original instance.
+The outputs can then be selected for various downstream tasks. 
+\sysname also allows targeted perturbations, through \tagstrs and the fill-in-the-blank structure.
+We demonstrate the effectiveness of \sysname in different applications:
+For training and evaluation, we observe that asking humans to evaluate counterfactuals is enough to produce high-quality contrast sets and training data that results in higher generalization accuracy at least 40\% effectively.
+As counterfactual explanations, \sysname can complement to popular feature attribution methods by finding their blind spots.
 \end{abstract}
 
 \input{sections/intro}
+%\input{sections/_intro_backup}
 \input{sections/relate}
 \input{sections/model}
 \input{sections/use_label}
@@ -230,6 +233,8 @@ We finetune GPT-2 on a combination of multiple existing datasets,  and verify it
 \appendix
 \input{sections/app_train_datasets}
 \input{sections/app_perturb_applications}
+\input{sections/app_augmentation}
+
 \input{sections/app_label_instruction}
 \input{sections/app_examples}
 \input{sections/app_perturb_similarity}
