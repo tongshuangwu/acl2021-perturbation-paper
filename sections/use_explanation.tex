@@ -67,7 +67,7 @@ We primarily test the compensation selection below, as it nicely combines the ov
 
 
 %%%%%%%
-\subsection{Evaluate local explanations?}
+\subsection{Evaluation: Complement SHAP?}
 We conduct a user study to verify whether our selected counterfactual explanations can compensate SHAP in helping people interpret the model, \ie if the selected counterfactual spot points that people would mis-interpret after viewing SHAP.
 We form the study as a counterfactual simulation on the model's behavior~\cite{hase2020evaluating}, where participants are asked to predict model's behavior on the given variations of a reference example.
 Intuitively, the more counterfactuals they simulate incorrectly, the more information they grasp if we show the counterfactuals to them.
@@ -93,10 +93,21 @@ We then randomly selected two of their submissions per reference example.
 As a within-subject study, we compared the error rate of human simulations across the three conditions.
 
 
-\paragraph{Results.}
-Participants performed well on Random but poorly on SHAP-c, showing that while SHAP and model interactions indeed helped experts simulate model behaviors on some counterfactuals, SHAP-c counterfactuals were beyond their mental models, and \emph{would still add value if they were presented as part of the explanation.}
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/exp_err_rate}
+\vspace{-15pt}
+\caption{
+Error rates on counterfactuals in different conditions. The higher the error rate, the more information missed by the participants (\ie and therefore can better complement model interactions and SHAP.)
+}
+\vspace{-10pt}
+\label{fig:err_rate}
+\end{figure}
 
-Participants also missed many Human counterfactuals, though it was expected --- these cases were surprising even to their human creators.
+\paragraph{Results.}
+As shown in Figure~\ref{fig:err_rate}, participants performed well on Random (error rate $e=23\%\pm7\%$) but poorly on SHAP-c ($47\%\pm 4\%$), showing that while SHAP and model interactions indeed helped experts simulate model behaviors on some counterfactuals, SHAP-c counterfactuals were beyond their mental models, and \emph{would still add value if they were presented as part of the explanation.}
+
+Participants also missed many Human counterfactuals ($40\%\pm 5\%$), though it was expected --- these cases were surprising even to their human creators.
 More interestingly, their performance on Human were slightly better than on SHAP-c, indicating that \emph{SHAP-c were at least as surprising as the Human selected abnormal cases.}
 
 More interestingly, their poor performances on the two conditions were for a different reasons: 
@@ -137,7 +148,7 @@ We observe that most cases flipped to \emph{contradiction} have the explicit wor
 \textbf{P}: Two women having drinks at the bar.\\
 \textbf{H}: \swap{Two}{Three} women are at a bar.\\
 \textbf{Pr}: \swap{entailment}{contradiction}\\
---
+--\\
 \textbf{P}: A boy and a girl gaze in a clothing store window.\\
 \textbf{H}: \swap{Two}{Three} kids are looking in a store window.
 \textbf{Pr}: \swap{entailment}{entailment}
