@@ -11,7 +11,9 @@ In training, counterfactuals usually augment the training data to improve model 
 Evaluation share similar setup with augmentations, mostly through adversarial attacks~\cite{Song2020UniversalAA}, contrast sets~\cite{kaushik2019learning} and challenge sets~\cite{Geiger2019PosingFG, liu-etal-2019-inoculation}.
 We show the automatically generated counterfactuals are also useful for training and evaluation.
 
-Counterfactuals also naturally support model explanations, as ``all \emph{why} questions are implicitly \emph{why P rather than Q} questions'', and ``explanations are sought in response to particular counterfactual cases or foils''~\cite{miller}.
+Counterfactuals also naturally support model explanations.
+%as ``all \emph{why} questions are implicitly \emph{why P rather than Q} questions'', and
+As \citet{miller} summarizes, ``explanations are sought in response to particular counterfactual cases or foils''~\cite{miller}.
 Popular feature importance attribution methods like SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI} all rely on masking or deletion to retrieve token importance, which can be viewed as a form of (incomplete) perturbation.
 Some work also explores directly presenting simple counterfactual examples~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual}.
 We explore the ranking of such counterfactactuals, and how they can be combined with existing feature attribution methods.
@@ -19,14 +21,13 @@ We explore the ranking of such counterfactactuals, and how they can be combined 
 %While counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
 
 \paragraph{Counterfactual generation.}
-Existing counterfactual generations are usually developed for particular applications.
-Most automated are for for generating adversarial examples. 
+Existing counterfactual generations are usually designed for particular applications.
+Most automated are for generating adversarial examples. 
 They extensively search candidate word replacements~\cite{alzantot2018generating, garg2020bae, alzantot2018generating, andreas2019good} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors.
 The exhaustive process is hard for people to scale to~\cite{ribeiro2018sear}.
 On the other hand, those evaluating and improving model decision boundaries rely on manual counterfactual generation, by manually rewriting each instance or through heuristic rules~\cite{Geiger2019PosingFG, li2020linguistically, jiang2019avoiding}.
-Such methods cover more diverse patterns than the automated methods, but the process is costly, and relies heavily on human creativity and domain expertise.
-Moreover, though human annotators also have shared strategies like negation, changing quantifiers~\cite{kaushik2019learning, gardner2020contrast}, the strategies are not well captured, making it hard to do structured augmentation or evaluation.
-
+Such methods cover more diverse patterns than the automated ones, but the process is costly, and relies heavily on human creativity and domain expertise.
+Moreover, though human annotators also have shared strategies like negation, changing quantifiers~\cite{kaushik2019learning, gardner2020contrast}, the strategies has yet to be  captured for targeted augmentation or evaluation.
 We unify the generation step for different applications as a NLG task, which bridge the scalability and diversity.
 We only distinguish the generated counterfactuals through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 

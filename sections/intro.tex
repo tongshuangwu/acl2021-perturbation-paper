@@ -21,11 +21,11 @@ In this rare case where counterfactuals can reliably be produced automatically, 
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 17cm 25cm 0cm},clip, width=1\columnwidth]{figures/teaser}
+\includegraphics[trim={0 17cm 26cm 0cm},clip, width=1\columnwidth]{figures/teaser}
 \vspace{-15pt}
 \caption{
-Overview of \sysname. 
-Given an original $x$ (A), we first generate (B) a large number of $\xp$-s, which are then (C) sorted for different downstream tasks, using different selection strategies.}
+The process of \sysname on a sentiment analysis instance.
+Given an original $x$ (A), we first generate (B) a large number of $\xp$-s, which are then (C) sorted and selected for different downstream use cases.}
 \vspace{-15pt}
 \label{fig:teaser}
 \end{figure} 
@@ -39,11 +39,11 @@ The produced set of counterfactuals is then ranked or filtered (Figure~\ref{fig:
 
 Through experiments on different classification tasks (Sentiment Analysis, Natural Language Inference, and Duplicate Question Detection), we demonstrate the usefulness of \sysname in three scenarios that require counterfactual reasoning: training, evaluation, and explanation. 
 For training and evaluation, we observe that asking humans to evaluate counterfactuals is enough to produce high-quality contrast sets~\cite{gardner2020contrast}, and training data that results in higher generalization accuracy (measured by out-of-domain datasets, challenge sets, contrast sets, and CheckLists~\cite{checklist:acl20}).
-Compared to the more difficult task of \emph{creating} one counterfactual, the evaluation process (30 seconds for validating three $\xp$ around one $x$) is at least 40\% more effective in terms of task completion time, even after aggressive filtering.
-
+Compared to the more difficult task of \emph{creating} one counterfactual, the evaluation process is at least 40\% more effective in terms of creation time, even after aggressive filtering.
+% (30 seconds for validating three $\xp$ around one $x$) 
 
 We also use \sysname to produce \emph{black-box counterfactual explanations}. 
 Research from the social sciences indicates that counterfactual contrast cases are more intuitive as explanations \cite{miller}.
 We prioritize counterfactuals with \emph{abnormal} model behaviors, \ie the actual changes in prediction do not match the expectation (measured by sentence similarity or perturbed feature weights.)
 In a model simulation user study, we observe that these explanations can complement popular feature attribution methods such as SHAP~\cite{NIPS2017_7062} by highlighting their missed blind spots: 
-After playing with the model and inspecting SHAP weights, NLP experts simulate at least \tofix{10\%} more abnormal ones incorrectly, compared to human-generated or random counterfactuals.
+After SHAP weights and interacting with the model, NLP experts simulate \tofix{5\%} and \tofix{25\%} more abnormal ones incorrectly, compared to human-generated or random counterfactuals.
