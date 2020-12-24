@@ -23,7 +23,11 @@
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{\sst model Accuracies on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets and contrast sets, while maintaining the others.}
+\caption{\sst model accuracies. 
+\maug maintains the \colbox{cid}{in-domain} and \colbox{cood}{out-of-domain} accuracies on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}), but improves on Twitter data (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}), likely because their distribution are less similar to SST-2 than the reviews.
+The model also improves on the \colbox{ccon}{contrast sets} (IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}).
+%on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}) and contrast sets IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}, while maintaining the ones on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}).
+}
 \vspace{-5pt}
 \label{table:aug_sst}
 \end{table*}}
@@ -46,7 +50,8 @@
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{\nli model accuracies on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast/challenge sets}. \texttt{aug-s} performs better than \mcomp on DNC, our target for data-slice-based augmentation. It also improves on other challenge sets.}
+\caption{\nli model performances. 
+\maug performs better than \mcomp on DNC~\cite{kim2019probing}, which is the target of the augmentation. It also improves on other \colbox{ccon}{contrast/challenge sets}~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue},  while maintaining the \colbox{cid}{in domain}, \colbox{cood}{out of domain} (MNLI~\cite{williams-etal-2018-broad}) accuracies.}
 \vspace{-5pt}
 \label{table:aug_nli}
 \end{table*}
@@ -89,6 +94,10 @@ TESTNAME &   $\Delta$ fail\%  \\
 \caption{
 Sample CheckList tests for \qqp, with $\Delta$ fail\% denoting the failure rate differences between \maug and \mcomp (negative means \maug is better).
 %However, the model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
+With $n=20,000$ and $m=1,911$, \maug achieved a compatible in-domain accuracy, reduced the failure rates on 11 tests (out of the 27 where \mcomp failed $>20\%$), and increased that for 2 tests.
+%Meanwhile, the models have similar accuracies on the test set ($84.5 \pm 0.6$ for \maug, and $84.7 \pm 1.0$ for \mcomp).
+%Some sample tests are in Table~\ref{table:aug_qqp}.
+The model improves consistently on tense, active/passive swap, and temporal distinction, and identifying the order of entities across tests, but gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
 }
 \label{table:aug_qqp}
 \vspace{-5pt}
@@ -159,11 +168,12 @@ For example, \ctrltag{[lexical]} \swap{man}{woman} is more similar to \ctrltag{[
 \subsection{Evaluation via Contrast Set}
 \label{subsec:contrast_set}
 
+
+
 %%%%%%%%%%%%%%%%%%%%%
 \TableAugSST
 \TableAugNLI
 %%%%%%%%%%%%%%%%%%%%%
-
 
 \paragraph{Collection.} 
 We crowdsourced the labels for the perturbations on Amazon Mechanical Turk. 
@@ -178,12 +188,11 @@ Following the contrast set definition, we filter the labeled $\xp$-s to only kee
 \paragraph{Models \& results.}
 We tested opensourced HuggingFace models~\cite{Wolf2019HuggingFacesTS}:
 DistilBERT fintuned on SST-2 for \sst\footnote{\url{https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english}},
-RoBERTa fintuned on MNLI~\cite{williams-etal-2018-broad} for \nli\footnote{\url{https://huggingface.co/roberta-large-mnli}},
+RoBERTa fintuned on MNLI for \nli\footnote{\url{https://huggingface.co/roberta-large-mnli}},
 and BERT fintuned on QQP\footnote{\url{https://huggingface.co/textattack/bert-base-uncased-QQP}}.
 We report model accuracies on the full test set, the original examples for collecting counterfactuals, and the contrast set.
 We also report consistency, \ie cases where the model predicts both the originals and and the counterfactuals correctly~\cite{li2020linguistically}.
 Table~\ref{table:contrast_set_result} shows that all the models perform worse on the contrast set, and the performance decreases for a similar amount compared to the original contrast set~\cite{kaushik2019learning}.
-
 
 
 \subsection{Train via Counterfactual Augmentation}
@@ -198,19 +207,32 @@ Their baselines \mcomp replace the $m$ counterfactuals with another $m$ original
 The reported model performances are averaged across 3 training data samples, each with 4 random seeds. More details in \S\ref{appendix:data_collection}.
 %Comparing with these models help highlight the effectiveness of perturbations with respect to adding the same amount of original data. 
 
-\begin{comment}
-\wts{This can also be at the end.}
-As detailed below, we observe that, compared to adding the same amount of original data: 
-(1) The perturbation augmentation helps improve models' generalization accuracies on out-of-domain datasets, challenge sets and contrast sets, as well as CheckList testing results~\cite{checklist:acl20}.
-Critically, the improvement maintains even when the augmentation size is small (\eg when $m/n<10\%$).
-\wts{change number.}
-(2) Meanwhile, it can maintain the in-domain accuracy.
-(3) However, random samples of augmentation may be insufficient. Rather, the data should be selected based on particular data slices that needs improvements. 
-Active learning might be a promising future direction.
-\wts{Maybe active learning should be in future work.}
-(4) The ratio of the original data and the new data is also important. Flipping out too much original data may hurt the model performance.
-\wts{See from the results if we want this takeaway.}
-\end{comment}
+\paragraph{Results.}
+As shown in Table~\ref{table:aug_sst}--\ref{table:aug_qqp}, compared to adding the same amount of original data, \emph{the augmentation helps improve models' generalization accuracy} on out-of-domain datasets, challenge sets and contrast sets, as well as CheckList testing results~\cite{checklist:acl20}.
+%Critically, in \nli and \qqp, the improvement maintains even when the augmentation size is small (\eg when $m/n<10\%$).
+%Meanwhile, it can maintain the in-domain accuracy.
+
+\TableAugQQP
+
+
+\emph{However, random counterfactuals may be insufficient.}
+Unlike for \sst, random counterfactuals are not effective for \nli or \qqp models, possibly because certain augmentations were repetitive (See \S\ref{subsec:gen_counterfactual_for_labeling}).
+Instead, we follow (but adjust) \citet{chen2019slice}'s data slicing strategies to prioritize counterfactuals related to error cases, \eg prepositions in DNC~\cite{kim2019probing} for \nli, and entity orders in CheckList for \qqp.
+The targeted augmentations then improve \maug in Table~\ref{table:aug_nli} and~\ref{table:aug_qqp}.
+
+\emph{The perturbation usually improves the model without hurting its counterpart.}
+In \nli, DNC includes pairs of probing examples (one from the original MNLI and one manually probed for a given linguistic pattern).
+%Because DNC includes both the probing counterfactuals and their paired original data, we can safely conclude that the model did not overfit to the augmented pattern.
+As a result, we can safely conclude that \nli did not overfit to the augmented pattern.
+Similarly, in most \qqp cases, the gain on one CheckList test does not hurt its counterparts (\eg all tests related to entity ordering were improved), except for \texttt{more X $\not\eq$ less X} and \texttt{more X $=$ less antonym(X)}.
+Future work should further strategize the ranking to more equally cover competing patterns. 
+
+\emph{The ratio of the original data and the counterfactuals is also important. }
+In both \nli and \qqp, just adding $m/n < 10\%$ data is sufficient to boost the performance.
+In \sst, while the counterfactual remains effective on most datasets, it hurts the model performance on Amzbook when the counterfactual takes a large proportion (Figure~\ref{fig:sst_trend}, Yelp followed a similar but more mild trend).
+We suspect that flipping out too much original data affect the data diversity, and in turn decreases the model performance.
+Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.
+
 
 
 
@@ -219,57 +241,13 @@ Active learning might be a promising future direction.
 \includegraphics[width=1\columnwidth]{figures/sst_trend_2}
 \vspace{-15pt}
 \caption{The accuracy trend on \sst datasets, as the total training datasize $m+n$ varies. The blue line shows $m=2k$ \maug, and the orange one represents the corresponding \mcomp.
-Though the counterfactuals remains useful on most datasets, it appears too many counterfactuals may be harmful (\eg Amzbook when $m=n=2k$). \wts{Maybe cut/appendix?}
+Though the counterfactuals remain useful on most datasets, too many counterfactuals may be harmful (\eg Amzbook when $m=n=2k$).
+\wts{Maybe cut/appendix?}
 % (when $m+n=4k$, we have $m=n=2k$ on the orange line)
 }
 \vspace{-10pt}
 \label{fig:sst_trend}
 \end{figure}
-
-\paragraph{\sst.}
-Similar to \citet{kaushik2019learning}, we evaluate \sst model's generalization accuracy on out of domain datasets.
-%For each dataset, we randomly selected up to 2,000 examples.
-As shown in Table~\ref{table:aug_sst}, compared to the same amount of original data, we were able to maintain the in-domain and out-of-domain accuracies on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}.)
-Meanwhile, \maug improves on the out-of-domain Twitter data (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}), likely because their distribution are less similar to SST-2 than the reviews.
-The model also improves on the contrast sets (IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}).
-
-%, when we train models with different number of original data $n$
-%\wts{Am I reading too much into these results? We can also cut the figure/paragraph...}
-Interestingly, the $m/n$ ratio seems important.
-As in Figure~\ref{fig:sst_trend}, while the counterfactual remains effective on most datasets, it hurts model performance on Amzbook when the counterfactual takes a large proportion (Yelp followed a similar but more mild trend).
-We suspect that flipping out too much original data affect the data diversity, and in turn decreases the model performance.
-Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.
-
-\paragraph{\nli.}
-% m=20k, n=1574
-Unlike in \sst, random counterfactuals did not bring improvements on any datasets, possibly because certain augmentations were repetitive for the model (See \S\ref{subsec:gen_counterfactual_for_labeling}).
-%We suspect a large number of perturbations are teaching the model patterns that it has already learned (\eg perturbations contrasting subjects ``man'' and ``woman'' may be unnecessary.) 
-%For example, While flipping the from ``man'' to ``woman'' is a perfectly valid lexical change, the existing \dnli dataset already cover data points contrasting the subject of two sentences.
-Instead, we follow (but adjust) \citet{chen2019slice}'s data slicing strategies, and prioritize counterfactuals that can improve error cases identified in DNC~\cite{kim2019probing}.
-As a result, \maug was able to perform better on DNC (Table~\ref{table:aug_nli}), as well as some other challenge sets~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue}.
-%As shown in Figure~\ref{}, higher ratios of augmentation data is more useful. 
-%That said, 
-%Because DNC includes both the probing counterfactuals and their paired original data, we can safely conclude that the model did not overfit to the augmented pattern.
-%The model also performs better on some other challenge sets that are not our initial improvement targets~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue}.
-Importantly, just adding $<10\%$ data is sufficient to boost the performance.
-
-\TableAugQQP
-
-\paragraph{\qqp.}
-We validate the models using tests defined in CheckList, a behavioral testing framework that measures models' linguistic capabilities using the failure rates of multiple tests.\footnote{Because failure rates are more sensitive, we say a model capability is affected, if the failure rate of a test changes more than 5\% (\eg 20\% to 21\% is insignificant), and the delta accounts for more than 10\% of the original failure rate (\eg decreasing 8\% from 100\% does not count.)}
-Similar to \nli, we focused on cases that are helpful on failed tests, \eg the entity orders.
-%(slicing on examples with multiple entities, and \ctrltag{shuffle} them).
-%, temporal information (\eg find examples with \exinline{before} and \BLANK it to hopefully get \exinline{after}
-With $n=20,000$ and $m=1,911$, \maug achieved a compatible in-domain accuracy, reduced the failure rates on 11 tests (out of the 27 where \mcomp failed $>20\%$), and increased that for 2 tests.
-%Meanwhile, the models have similar accuracies on the test set ($84.5 \pm 0.6$ for \maug, and $84.7 \pm 1.0$ for \mcomp).
-%Some sample tests are in Table~\ref{table:aug_qqp}.
-The gain on one test usually does not hurt its counterparts, and the model improved consistently on tense, active/passive swap, and temporal distinction, and identifying the order of entities across tests (see \emph{Order} in Figure~~\ref{table:aug_qqp}). 
-However, the model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}, indicating potential overfitting.
-%\texttt{more X $\not\eq$ less X} and \texttt{more X $=$ less antonym(X)}.
-Future work should further strategize the ranking to more equally cover competing patterns. 
-%However, we did see one potential overfitting: While the model gets significantly better on \texttt{more X $\not\eq$ less X}, it sacrifices the performance on \texttt{more X $=$ less antonym(X)}.
-%Future work should further strategize the sampling, such that the augmentation distributes more equally across various related or contrasting sub-cases. 
-
 
 
 
