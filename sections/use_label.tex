@@ -87,7 +87,7 @@ TESTNAME &   $\Delta$ fail\%  \\
 \end{tabular}
 \vspace{-5pt}
 \caption{
-Sample CheckList tests for \qqp, where \maug performed better than \mcomp, with $\Delta$ fail\% denoting the failure rate difference between \maug and \mcomp (negative means \maug is better).
+Sample CheckList tests for \qqp, with $\Delta$ fail\% denoting the failure rate differences between \maug and \mcomp (negative means \maug is better).
 %However, the model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
 }
 \label{table:aug_qqp}
@@ -99,15 +99,12 @@ Sample CheckList tests for \qqp, where \maug performed better than \mcomp, with 
 \section{Use 1 \& 2: Training \& Evaluation}
 \label{sec:app_label}
 
-Manually created counterfactuals help evaluate models' decision boundaries~\cite{gardner2020contrast} or used for counterfactual data augmentation~\cite{kaushik2019learning}, but \emph{creating} variations has been shown to be much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
+Manually created counterfactuals are used to evaluate models' decision boundaries~\cite{gardner2020contrast} and for counterfactual data augmentation~\cite{kaushik2019learning}, but \emph{creating} variations has been shown to be much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
 %However, while counterfactuals are already cheaper to collect than completely new examples~\cite{Khashabi2020MoreBF}, it still takes people more time to create counterfactuals than to evaluate them~\cite{ribeiro2018sear}. 
-We aim to show that the automatically generated ones can serve similar purposes at a lower cost.
-
-We label our counterfactuals in crowdsourcing tasks for three classification tasks: 
-(1) Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive} for \sst,
-(2) \dnli~\cite{bowman-etal-2015-large} for \nli, and 
-(3) \dqqp~\cite{wang2018glue} for \qqp.
-We verify that the automatically generated ones can serve similar purposes at a lower labeling cost.
+We show that the automatically generated ones can serve similar purposes at a lower cost, by crowd-labeling counterfactuals on three datasets: 
+(1) \sst with Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive},
+(2) \nli with \dnli~\cite{bowman-etal-2015-large}, and 
+(3) \dqqp~\cite{wang2018glue}.
 
 \subsection{Generating \& Ranking $\xp$ for Labeling}
 \label{subsec:gen_counterfactual_for_labeling}
@@ -130,28 +127,6 @@ For example, \ctrltag{[lexical]} \swap{man}{woman} is more similar to \ctrltag{[
 %With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
 
-\subsection{Evaluation via Contrast Set}
-\label{subsec:contrast_set}
-
-\paragraph{Collection.} 
-We crowdsourced the labels for the perturbations on Amazon Mechanical Turk. 
-For each round of labeling, the annotator is given the original instance (and its label) as a reference, and they are tasked to label three variations of the instance by (1) validity and (2) classification task label. 
-We carefully removed noisy workers using hidden ``gold rounds'' and filters on label distributions and completion time, and removed noisy labels through majority votes.
-More detailed descriptions are in \S\ref{appendix:label_instruct}. 
-
-For each task, we crowd labeled 1,500 perturbations on 500 original examples, and kept around 400 perturbations on 270 original examples after validity and majority vote filtering.\footnote{For \qqp and \nli, we only perturbed \emph{duplicate} and \emph{entailment} examples, as others are significantly harder to flip.}
-Following the contrast set definition, we filter the labeled $\xp$-s to only keep $\xp$-s whose groundtruth label is different from $x$'s, resulting in 100-300 perturbed instances.
-%: 106 $\xp$ on 88 $x$ for \sst, 276 $\xp$ on 202 $x$ for \nli, 243 $\xp$ on 185 $x$ for \qqp.
-\nli was the easiest to change labels, with a flip rate of $60\%$, and \sst was the hardest (only flipping 36.9\%).
-
-\paragraph{Models \& results.}
-We tested opensourced HuggingFace models~\cite{Wolf2019HuggingFacesTS}:
-DistilBERT fintuned on SST-2 for \sst\footnote{\url{https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english}},
-RoBERTa fintuned on MNLI for \nli\footnote{\url{https://huggingface.co/roberta-large-mnli}},
-and BERT fintuned on QQP\footnote{\url{https://huggingface.co/textattack/bert-base-uncased-QQP}},
-We report model accuracies on the full test set, the original examples for collecting perturbations, and the perturbed, contrast set.
-We also report consistency, \ie the ratio of the counterfactual groups for which a model's predictions are correct for all examples (including the original $x$)~\cite{li2020linguistically}.
-Table~\ref{table:contrast_set_result} shows that all the models perform worse on the contrast set, and the performance decreases for a similar amount compared to the original contrast set~\cite{kaushik2019learning}.
 
 \begin{table}
 \small
@@ -181,22 +156,46 @@ Table~\ref{table:contrast_set_result} shows that all the models perform worse on
 \end{table}
 %\end{comment}
 
+\subsection{Evaluation via Contrast Set}
+\label{subsec:contrast_set}
 
 %%%%%%%%%%%%%%%%%%%%%
 \TableAugSST
 \TableAugNLI
 %%%%%%%%%%%%%%%%%%%%%
 
+
+\paragraph{Collection.} 
+We crowdsourced the labels for the perturbations on Amazon Mechanical Turk. 
+For each round of labeling, the annotator is given the original instance (and its label) as a reference, and they are tasked to label three variations of the instance by (1) validity and (2) classification task label. 
+We carefully removed noisy workers using hidden ``gold rounds'' and filters on label distributions and completion time, and removed noisy labels through majority votes.
+More detailed descriptions are in \S\ref{appendix:label_instruct}. 
+For each task, we crowd labeled 1,500 perturbations on 500 original examples, and kept around 400 perturbations on 270 original examples after validity and majority vote filtering.\footnote{For \qqp and \nli, we only perturbed \emph{duplicate} and \emph{entailment} examples, as others are significantly harder to flip.}
+Following the contrast set definition, we filter the labeled $\xp$-s to only keep $\xp$-s whose groundtruth label is different from $x$'s, resulting in 100-300 perturbed instances.
+%: 106 $\xp$ on 88 $x$ for \sst, 276 $\xp$ on 202 $x$ for \nli, 243 $\xp$ on 185 $x$ for \qqp.
+\nli was the easiest to change labels, with a flip rate of $60\%$, and \sst was the hardest (only flipping 36.9\%).
+
+\paragraph{Models \& results.}
+We tested opensourced HuggingFace models~\cite{Wolf2019HuggingFacesTS}:
+DistilBERT fintuned on SST-2 for \sst\footnote{\url{https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english}},
+RoBERTa fintuned on MNLI~\cite{williams-etal-2018-broad} for \nli\footnote{\url{https://huggingface.co/roberta-large-mnli}},
+and BERT fintuned on QQP\footnote{\url{https://huggingface.co/textattack/bert-base-uncased-QQP}}.
+We report model accuracies on the full test set, the original examples for collecting counterfactuals, and the contrast set.
+We also report consistency, \ie cases where the model predicts both the originals and and the counterfactuals correctly~\cite{li2020linguistically}.
+Table~\ref{table:contrast_set_result} shows that all the models perform worse on the contrast set, and the performance decreases for a similar amount compared to the original contrast set~\cite{kaushik2019learning}.
+
+
+
 \subsection{Train via Counterfactual Augmentation}
 \label{subsec:augmentation}
 %\paragraph{Collection.}
 We collected the data through similar procedures as for contrast sets, with one change:
-Because counterfactuals that do not change the groundtruth label can also improve model stability, we keep all the valid $\xp$-s for one $x$, as long as at least one of them flips the groundtruth label.
+Because counterfactuals that do not change the groundtruth label can also improve model stability, we keep all the valid $\xp$-s for one $x$, as long as at least one of them flips the groundtruth.
 
 %\paragraph{Models.}
-For each augmented model (\maug) in this section, we include $m$ perturbations, as well as $n$ examples sampled from the original dataset (the base examples of the perturbations will always be included).
-We also train compensation models as baselines (\mcomp), which have $n+m$ original examples (the $n$ part stays the same as their corresponding augmented counterpart.)
-We report the average performance across 3 data samples, each with 4 random seeds. More details in \S\ref{appendix:data_collection}.
+For each augmented model (\maug), we include $m$ counterfactuals, as well as $n$ examples from the original dataset (the base examples of the counterfactuals will always be included).
+Their baselines \mcomp replace the $m$ counterfactuals with another $m$ original examples
+The reported model performances are averaged across 3 training data samples, each with 4 random seeds. More details in \S\ref{appendix:data_collection}.
 %Comparing with these models help highlight the effectiveness of perturbations with respect to adding the same amount of original data. 
 
 \begin{comment}
@@ -219,8 +218,8 @@ Active learning might be a promising future direction.
 \centering
 \includegraphics[width=1\columnwidth]{figures/sst_trend_2}
 \vspace{-15pt}
-\caption{The accuracy trend on two \sst datasets, as the total training datasize ($m+n$) varies. The blue line shows an augmentation of $m=2k$ counterfactuals, and the blue one represents the corresponding \mcomp.
-Though the counterfactuals remains useful on datasets like SemEval across all $m+n$, it appears too many counterfactuals may be harmful (Amzbook).
+\caption{The accuracy trend on \sst datasets, as the total training datasize $m+n$ varies. The blue line shows $m=2k$ \maug, and the orange one represents the corresponding \mcomp.
+Though the counterfactuals remains useful on most datasets, it appears too many counterfactuals may be harmful (\eg Amzbook when $m=n=2k$). \wts{Maybe cut/appendix?}
 % (when $m+n=4k$, we have $m=n=2k$ on the orange line)
 }
 \vspace{-10pt}
@@ -236,9 +235,9 @@ The model also improves on the contrast sets (IMDb-Contrast~\cite{gardner2020con
 
 %, when we train models with different number of original data $n$
 %\wts{Am I reading too much into these results? We can also cut the figure/paragraph...}
-\wts{Maybe cut / appendix?}Interestingly, different datasets react differently to the $m/n$ ratio.
-As in Figure~\ref{fig:sst_trend}, while the counterfactual remains effective on some datasets (\eg SemEval, Senti140 and contrast sets), when the proportion of perturbations is large, it may hurt model performance on some datasets (Amzbook; Yelp followed a similar but less observable trend).
-We suspect that flipping out too much original data may decrease the diversity of vocabulary and syntactic structures, and in turn decreases the model performance.
+Interestingly, the $m/n$ ratio seems important.
+As in Figure~\ref{fig:sst_trend}, while the counterfactual remains effective on most datasets, it hurts model performance on Amzbook when the counterfactual takes a large proportion (Yelp followed a similar but more mild trend).
+We suspect that flipping out too much original data affect the data diversity, and in turn decreases the model performance.
 Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.
 
 \paragraph{\nli.}
@@ -246,32 +245,33 @@ Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ N
 Unlike in \sst, random counterfactuals did not bring improvements on any datasets, possibly because certain augmentations were repetitive for the model (See \S\ref{subsec:gen_counterfactual_for_labeling}).
 %We suspect a large number of perturbations are teaching the model patterns that it has already learned (\eg perturbations contrasting subjects ``man'' and ``woman'' may be unnecessary.) 
 %For example, While flipping the from ``man'' to ``woman'' is a perfectly valid lexical change, the existing \dnli dataset already cover data points contrasting the subject of two sentences.
-Instead, we follow (but adjust) \citet{chen2019slice}'s data slicing strategies, and prioritized counterfactuals that can improve error cases identified by \citet{kim2019probing} (referred to as DNC).
-As a result, \maug trained on targeted counterfactuals was able to perform better on DNC (Table~\ref{table:aug_nli}), while maintaining accuracies (on SNLI test set and MNLI~\cite{williams-etal-2018-broad}.
+Instead, we follow (but adjust) \citet{chen2019slice}'s data slicing strategies, and prioritize counterfactuals that can improve error cases identified in DNC~\cite{kim2019probing}.
+As a result, \maug was able to perform better on DNC (Table~\ref{table:aug_nli}), as well as some other challenge sets~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue}.
 %As shown in Figure~\ref{}, higher ratios of augmentation data is more useful. 
 %That said, 
+%Because DNC includes both the probing counterfactuals and their paired original data, we can safely conclude that the model did not overfit to the augmented pattern.
+%The model also performs better on some other challenge sets that are not our initial improvement targets~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue}.
 Importantly, just adding $<10\%$ data is sufficient to boost the performance.
-Because DNC includes both the probing counterfactuals and their paired original data, we can safely conclude that the model did not overfit to a new pattern.
-The model also performs better on some other challenge sets that are not our initial improvement targets~\cite{naik2018stress, glockner-etal-2018-breaking, wang2018glue}.
 
 \TableAugQQP
 
 \paragraph{\qqp.}
-We validate the models using tests defined in CheckList.
-As a behavioral testing framework, CheckList defines multiple tests, and measures models' linguistic capabilities using the failure rates of each test.
-\footnote{Because failure rates are more sensitive than accuracy, we say a model capability is affected, if the failure rate of a test changes more than 5\% (\eg 20\% to 21\% is insignificant), and the delta accounts for more than 10\% of the original failure rate (\eg decreasing 8\% from 100\% to 92\% does not count.)}
+We validate the models using tests defined in CheckList, a behavioral testing framework that measures models' linguistic capabilities using the failure rates of multiple tests.\footnote{Because failure rates are more sensitive, we say a model capability is affected, if the failure rate of a test changes more than 5\% (\eg 20\% to 21\% is insignificant), and the delta accounts for more than 10\% of the original failure rate (\eg decreasing 8\% from 100\% does not count.)}
 Similar to \nli, we focused on cases that are helpful on failed tests, \eg the entity orders.
 %(slicing on examples with multiple entities, and \ctrltag{shuffle} them).
 %, temporal information (\eg find examples with \exinline{before} and \BLANK it to hopefully get \exinline{after}
-Augmenting $n=20,000$ with $m=1,911$, \maug with compatible in-domain accuracy reduced the failure rates on 11 tests (out of the 27 where \mcomp failed $>20\%$), and increased that for 2 tests.
+With $n=20,000$ and $m=1,911$, \maug achieved a compatible in-domain accuracy, reduced the failure rates on 11 tests (out of the 27 where \mcomp failed $>20\%$), and increased that for 2 tests.
 %Meanwhile, the models have similar accuracies on the test set ($84.5 \pm 0.6$ for \maug, and $84.7 \pm 1.0$ for \mcomp).
 %Some sample tests are in Table~\ref{table:aug_qqp}.
 The gain on one test usually does not hurt its counterparts, and the model improved consistently on tense, active/passive swap, and temporal distinction, and identifying the order of entities across tests (see \emph{Order} in Figure~~\ref{table:aug_qqp}). 
-However, we did see one potential overfitting: The model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
+However, the model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}, indicating potential overfitting.
 %\texttt{more X $\not\eq$ less X} and \texttt{more X $=$ less antonym(X)}.
-Future work should further strategize the sampling, such that the counterfactual distributes more equally across competing patterns. 
+Future work should further strategize the ranking to more equally cover competing patterns. 
 %However, we did see one potential overfitting: While the model gets significantly better on \texttt{more X $\not\eq$ less X}, it sacrifices the performance on \texttt{more X $=$ less antonym(X)}.
 %Future work should further strategize the sampling, such that the augmentation distributes more equally across various related or contrasting sub-cases. 
+
+
+
 
 
 
@@ -292,7 +292,7 @@ Labeling three variations of a given example is reasonably easy, as (1) annotato
 As a result, the median time for labeling one round (three counterfactuals) is 30 seconds.
 Even in the most extreme (and very rare) case where we only keep 100 contrast set examples after 500 rounds of validation, the average ``creation'' time per counterfactual is 2.5 minutes, which is still 40\% more efficient than manual creation:
 \citet{kaushik2019learning} reported that workers spent roughly 5 minutes to revise a IMDb review and 4 minutes a sentence (for \nli), even prior to additional filtering and validation.
-Similarly, \citet{gardner2020contrast} mentioned that three expert annotators spent 70 hours to create 588 counterfactual examples for IMDB review.
+Similarly, \citet{gardner2020contrast} mentioned that three expert annotators spent 70 hours to create 588 counterfactual examples for IMDb review.
 
 %Even for shorter image captions in NLVR2 visual reasoning dataset~\cite{suhr2018corpus}, annotations would take approximately 30 seconds for one textual perturbation.
 

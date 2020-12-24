@@ -223,18 +223,18 @@ As part of the data labeling task in \S\ref{sec:app_label}, we also asked crowdw
 
 \paragraph{Controllability.}
 We finetune another GPT-2 model with training prompts that \emph{do not} contain the \tagstrshorts (called \emph{\sysname-a}), and quantify the impact of \tagstrs through an ablation study.
-For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on \tofix{120} prompts (\tofix{50} unique original sentences).
+For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on \tofix{250} prompts (\tofix{100} unique original sentences).
 For each prompt, we generate counterfactuals through beam search (beam $=10$), and recompute the \tagstrshorts.
 We deem the control successful if at least one of the recomputed \tagstrshort matches the input in the top three returns (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
-The success rate increases by \tofix{$48.7\% \pm 38.1\%$} across all \tagstrs.
-\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
-\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
+The success rate increases by \tofix{$28.4\% \pm 18.2\%$} across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\% from 40.4\% to 48.4\%) to \ctrltag{insert} (67.5\% from 11.1\% to 78.7\%)
+%\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
+%\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
 
 We note three common failure cases for the \tagstrshorts:
 %Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
 (1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
-(2) $x$ does not have the corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence does not have more than one adjective or noun (\eg \exinline{the movie is good}).
-(3) The pattern-to-perturb is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
+(2) $x$ does not have the corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
+(3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
 In the ablation study, we filtered out prompts that fell under cases 1 and 2.
 
 
