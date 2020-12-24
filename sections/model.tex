@@ -67,8 +67,7 @@ D2) \emph{realistic}, or the $\xp$ has a high probability of occurrence and bein
 In the reasoning process, such ``nearly occurred'' instances are deemed more critical than those that involve rare assumptions and strange coincidences~\cite{kahneman}.
 In the context of natural language, \emph{validity} means being grammatically correct~\cite{morris2020textattack}, and being semantically meaningful (\eg \exinline{This is a great superfluous person} is grammatical but not meaningful.) 
 
-Because there can be inifinite numbers of ``what-ifs'' or ``foils''~\cite{pearl2018causal, kahneman}, we also expect the generator $g$ to produce a series of D3) \emph{diverse} counterfactuals, using various strategies, and various initiations under the same strategy.
-These counterfactuals can then support different downstream tasks. 
+Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, kahneman}, we also expect the generator $g$ to produce a series of D3) \emph{diverse} counterfactuals that can support different downstream tasks, using various strategies, and various initiations of the same strategy.
 
 %Additionally, augmentations usually prioritize (3) \emph{diversity} --- a group of $x$s are preturbed using various strategies, and various initiations under the same strategy, such that they provide different constraints on finetuning decision boundaries.
 %On the other hand, evaluations and explanations require more (4) \emph{controlled} perturbations for systematic and targeted inspections.
@@ -136,10 +135,10 @@ These counterfactuals can then support different downstream tasks.
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 17cm 26cm 0cm},clip, width=1\columnwidth]{figures/blank}
+\includegraphics[trim={0 30.5cm 53.2cm 0cm}, clip, width=1\columnwidth]{figures/blank}
 \vspace{-15pt}
 \caption{Given a pair of sentences $(x, \xp)$, we generate multiple training prompts with (A) a primary \tagstr, and various blanking strategies, from (B) just the changed tokens, (C) the subtrees, (D) the merged changes, and (E) the entire sentence.
-We concatenate the information with special tokens like \perturbtoken.
+%We concatenate the information with special tokens like \perturbtoken.
 }
 \vspace{-10pt}
 \label{fig:blank}
@@ -150,8 +149,7 @@ We concatenate the information with special tokens like \perturbtoken.
 We form the perturbation as a text generation task using language models (LMs), which predict the continuing text given preceding prompts.
 %Here, instead of their common use case, \ie generating the remaining paragraphs, 
 Pretrained on a large number of webpages curated and filtered by humans, LMs like GPT-2~\cite{radford2019language} naturally generate more realistic (D2) and diverse (D3) counterfactuals compared to templates~\cite{ribeiro2018sear} or perturbation functions~\cite{wu2019errudite}.
-We use the original sentence $x$ as the prompt, and finetune off-the-shelf LMs to generate $\xp$.
-%: \exinline{$x$ \perturbtoken $\xp$ \stoptoken}.
+We use the original sentence $x$ as the prompt, and finetune off-the-shelf LMs to generate $\xp$: \exinline{$x$ \perturbtoken $\xp$ \stoptoken}.
 
 \paragraph{Training prompts with controls.}
 We further modify the training prompts to allow targeted perturbations, as in Figure~\ref{fig:blank}.

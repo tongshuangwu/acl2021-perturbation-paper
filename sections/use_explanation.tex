@@ -135,7 +135,10 @@ We compare three types of selected counterfactuals:
 (1) \cshap, the \sysname-generated counterfactuals, selected to complement SHAP; 
 (2) \crandom, the randomly selected \sysname counterfactuals; 
 (3) \chuman, the human generated counterfactuals.
-Three graduate students played with the model for up to 10 times, and submitted one final counterfactual where they found the model prediction surprising.
+For every base example, three graduate students each queried the model for up to 10 times and submitted one counterfactual, where the model prediction was incorrect and counterintuitive with respect to the original SHAP score.
+
+
+played with the model for up to 10 times in a similar interface, and submitted one final counterfactual where the model prediction was incorrect and counterintuitive with respect to the original SHAP score.
 We then randomly selected two of their submissions per base example.
 As a within-subject study, we compared the error rate of human simulations across the three conditions.
 
@@ -165,9 +168,9 @@ More interestingly, their poor performances on the two conditions were for diffe
 %\ie \emph{Missing inspections v.s. Missing bugs within an inspected spots.}
 When a participant mis-predicted a \cshap counterfactual $\xp$, \tofix{80\%} of the time, they covered the related pattern in their model interaction (\ie $>80\%$ of the changed tokens in $\xp$ were also changed in at least one query), and the number dropped to \tofix{$62\%$} in \chuman.
 This indicates that, compared to \chuman where participants missed the inspection spots of another human creator (and therefore had to ``guess using intuitions''), they were \emph{misled} by their inspections in \cshap --- ``labeled based on similar examples I tried'', as one subject articulated.
-For example, when the model predicted \emph{Duplicate} on their query \exinline{How do you overcome \add{your} emotional attachment?}, it was hard for them to imagine model predicting \emph{Non-Duplicate} on \exinline{How do you overcome \add{this} emotional attachment?} 
+For example, it was hard for them to imagine model predicting \emph{Duplicate} on Figure~\ref{fig:explanation}B (\swap{help}{find}), when the model predicted \emph{Non-Duplicate} on their query \exinline{How do I \swap{help}{play with}...?}
 In other words, \emph{SHAP-c found more bugs within spots where humans considered inspected.}
 
-Moreover, in their freeform responses, \tofix{5 out of 9} participants mentioned they prioritized perturbing words with high feature weights, which further indicated the importance of selecting \emph{unexpected prediction change} for them.
+Moreover, in their freeform responses, \tofix{5 out of 9} participants mentioned they prioritized perturbing words with high feature weights, further indicating the importance of selecting \emph{unexpected prediction change} for them.
 
 

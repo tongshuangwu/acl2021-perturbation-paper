@@ -2,20 +2,21 @@
 \label{sec:discuss}
 
 We propose \sysname, an automated method for general-purpose counterfactual generation. 
-As a text generation task, \sysname takes in a natural sentence, as well as (optionally) \tagstrs and blanks as the prompt, and output corresponding counterfactuals, which can be further filtered for different downstream applications. 
-We demonstrate the usefulness of \sysname in three applications, and show that the it can support counterfactual data augmentation, contrast set generation, as well as counterfactual explanation.
+As a text generation task, \sysname takes in a sentence, as well as (optionally) \tagstrs and blanks as the prompt.
+It outputs corresponding counterfactuals, which can be further filtered for different downstream use cases. 
+We show that the \sysname can support counterfactual data augmentation, contrast set generation, as well as counterfactual explanation.
 Below, we discuss promising future work:
 
 \textbf{Supporting existing counterfactual reasoning tools.}
-Besides independent use cases, \sysname can also support and extend existing tools for data programming, model testing and error analysis.
-For example, counterfactuals can be featurized (similar to \S\ref{subsec:global_exp}) into labeling functions in Snorkel~\cite{ratner2017snorkel}, such that we can learn whether certain perturbation types are more likely to preserve (or invert) the label, and generalize the patterns to unlabeled counterfactuals.
-Or domain experts can create perturbation tests more easily if \sysname serves as an additional building block for Errudite~\cite{wu2019errudite} or CheckList~\cite{checklist:acl20}.
+Besides independent use cases, \sysname can also support existing tools for data programming, model testing and error analysis.
+For example, featurizing counterfactuals into Snorkel labeling functions~\cite{ratner2017snorkel} helps collect the training and evaluation data more efficiently (similar to \S\ref{subsec:global_exp}).
+Or, domain experts can create perturbation tests more easily if \sysname serves as an additional building block for Errudite~\cite{wu2019errudite} or CheckList~\cite{checklist:acl20}.
 
 
 \textbf{Human-in-the-loop Counterfactual Generation.}
-Besides labeling (in data collection) and placing blanks (in interactive explanation), humans can add more values when they actively collaborate with \sysname.
-For example, human creators are more likely to help increase the diversity of the covered patterns, if they are asked to come up with more counterfactuals that are different from those covered automatically.
+Besides placing blanks and labeling counterfactuals, humans can add more values when they actively collaborate with \sysname.
+For example, human creators can increase the diversity of the covered patterns, if they are asked to come up with more counterfactuals that are different from those covered automatically.
 In tasks that require context-dependent counterfactual generations, human annotators can also initiate seed counterfactuals for \sysname to extend.
-For example, \citet{gardner2020contrast} created contrast sets for multi-hop question answering (DROP~\cite{Dua2019DROP}) by adding compositional reasoning steps \emph{related to} the corresponding paragraph.
-Such context- and logic- aware perturbations is hard for the model alone; however, it can easily perturb the reasoning step \emph{once} the human adds it into the sentence-to-perturb.
+For example, \citet{gardner2020contrast} perturbed multi-hop question answering by adding compositional reasoning steps \emph{related to} the corresponding paragraph.
+Such context- and logic- aware perturbations are hard for the model alone; however, it can further perturb the reasoning step \emph{once} the human adds it into the sentence.
 

@@ -92,12 +92,12 @@ TESTNAME &   $\Delta$ fail\%  \\
 \end{tabular}
 \vspace{-5pt}
 \caption{
-Sample CheckList tests for \qqp, with $\Delta$ fail\% denoting the failure rate differences between \maug and \mcomp (negative means \maug is better).
+Sample CheckList tests~\cite{checklist:acl20} for \qqp, with $\Delta$fail\% denoting the failure rate differences between \maug and \mcomp (negative means \maug is better).
 %However, the model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
-With $n=20,000$ and $m=1,911$, \maug achieved a compatible in-domain accuracy, reduced the failure rates on 11 tests (out of the 27 where \mcomp failed $>20\%$), and increased that for 2 tests.
+With $n=20,000$ and $m=1,911$, \maug reduced the failure rates on 11 tests (out of the 27 where \mcomp failed $>20\%$), and increased that for 2 tests.
 %Meanwhile, the models have similar accuracies on the test set ($84.5 \pm 0.6$ for \maug, and $84.7 \pm 1.0$ for \mcomp).
 %Some sample tests are in Table~\ref{table:aug_qqp}.
-The model improves consistently on tense, active/passive swap, and temporal distinction, and identifying the order of entities across tests, but gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
+The model improves consistently on identifying the order of entities across tests (and tense, active/passive swap, etc.), but gets better on \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
 }
 \label{table:aug_qqp}
 \vspace{-5pt}
@@ -160,7 +160,7 @@ For example, \ctrltag{[lexical]} \swap{man}{woman} is more similar to \ctrltag{[
 \end{tabular}
 \vspace{-5pt}
 \caption{Perturbations as contrasts sets, with accuries on the original development set, the examples used for perturbations (\emph{Orig.}), the perturbed-to contrast sets (\emph{Con.}), and the consistency between \emph{Orig.} and \emph{Con.}}
-\vspace{-5pt}
+\vspace{-10pt}
 \label{table:contrast_set_result}
 \end{table}
 %\end{comment}
@@ -208,9 +208,9 @@ The reported model performances are averaged across 3 training data samples, eac
 %Comparing with these models help highlight the effectiveness of perturbations with respect to adding the same amount of original data. 
 
 \paragraph{Results.}
-As shown in Table~\ref{table:aug_sst}--\ref{table:aug_qqp}, compared to adding the same amount of original data, \emph{the augmentation helps improve models' generalization accuracy} on out-of-domain datasets, challenge sets and contrast sets, as well as CheckList testing results~\cite{checklist:acl20}.
+As shown in Table~\ref{table:aug_sst}--\ref{table:aug_qqp}, compared to adding the same amount of original data, \emph{the augmentation helps improve models' generalization accuracy} on out-of-domain datasets, challenge and contrast sets, as well as CheckList testing results.
 %Critically, in \nli and \qqp, the improvement maintains even when the augmentation size is small (\eg when $m/n<10\%$).
-%Meanwhile, it can maintain the in-domain accuracy.
+Meanwhile, it maintains the in-domain accuracy.
 
 \TableAugQQP
 
@@ -227,10 +227,10 @@ As a result, we can safely conclude that \nli did not overfit to the augmented p
 Similarly, in most \qqp cases, the gain on one CheckList test does not hurt its counterparts (\eg all tests related to entity ordering were improved), except for \texttt{more X $\not\eq$ less X} and \texttt{more X $=$ less antonym(X)}.
 Future work should further strategize the ranking to more equally cover competing patterns. 
 
-\emph{The ratio of the original data and the counterfactuals is also important. }
+\emph{The ratio of the counterfactuals matters. }
 In both \nli and \qqp, just adding $m/n < 10\%$ data is sufficient to boost the performance.
 In \sst, while the counterfactual remains effective on most datasets, it hurts the model performance on Amzbook when the counterfactual takes a large proportion (Figure~\ref{fig:sst_trend}, Yelp followed a similar but more mild trend).
-We suspect that flipping out too much original data affect the data diversity, and in turn decreases the model performance.
+We suspect that flipping out too much original data affects the data diversity, and in turn decreases the model performance.
 Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.
 
 
@@ -242,7 +242,7 @@ Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ N
 \vspace{-15pt}
 \caption{The accuracy trend on \sst datasets, as the total training datasize $m+n$ varies. The blue line shows $m=2k$ \maug, and the orange one represents the corresponding \mcomp.
 Though the counterfactuals remain useful on most datasets, too many counterfactuals may be harmful (\eg Amzbook when $m=n=2k$).
-\wts{Maybe cut/appendix?}
+%\wts{Maybe cut/appendix?}
 % (when $m+n=4k$, we have $m=n=2k$ on the orange line)
 }
 \vspace{-10pt}
