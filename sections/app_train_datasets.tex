@@ -1,25 +1,76 @@
 %\begin{comment}
-\begin{table*}
+\begin{table*}[t]
 \small
 \centering
-\setlength{\tabcolsep}{3.5pt}
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrrrrrrrr}
 \toprule
 \textbf{Dataset} & \textbf{\ctrltag{negation}} & \textbf{\ctrltag{quantifier}} & \textbf{\ctrltag{leixcal}} & \textbf{\ctrltag{resemantic}} & \textbf{\ctrltag{insert}} & \textbf{\ctrltag{delete}} & \textbf{\ctrltag{restructure}} & \textbf{\ctrltag{shuffle}} & \emph{\ctrltag{global}} \\ 
 \midrule
-        CAD &      3456 &         457 &    10650 &        4634 &    2169 &    2162 &          234 &       84 &    3756 \\
-    Crawled &         0 &           0 &     5000 &           0 &    5000 &    5000 &            0 &      108 &    5000 \\
-   contrast &       336 &         436 &     1607 &        1291 &     589 &     586 &          275 &      149 &     877 \\
-       hans &        50 &           0 &        0 &           0 &    3926 &    3926 &          494 &     1602 &       2 \\
-    paranmt &      2797 &         825 &    10000 &       10000 &    6442 &    6205 &         5136 &     1417 &   10000 \\
-       paws &        81 &        1815 &    10000 &       10000 &    3630 &    3403 &         4551 &    10000 &   10000 \\
- winogrande &      3011 &          94 &    10000 &        6927 &     120 &     124 &          453 &       65 &    3184 \\
-      total &      9731 &        3627 &    47257 &       32852 &   21876 &   21406 &        11143 &    13425 &   32819 \\
+        CAD &      3,456 &         457 &    10,650 &        4,634 &    2,169 &    2,162 &          234 &       84 &    3,756 \\
+   contrast &       336 &         436 &     1,607 &        1,291 &     589 &     586 &          275 &      149 &     877 \\
+       hans &        50 &           0 &        0 &           0 &    3,926 &    3,926 &          494 &     1,602 &       2 \\
+    paranmt &      2,797 &         825 &    10,000 &       10000 &    6,442 &    6,205 &         5,136 &     1,417 &   10,000 \\
+       paws &        81 &        1,815 &    10,000 &       10000 &    3,630 &    3,403 &         4,551 &    10,000 &   10,000 \\
+ winogrande &      3,011 &          94 &    10,000 &        6,927 &     120 &     124 &          453 &       65 &    3184 \\
+    Crawled &         0 &           0 &     5,000 &           0 &    5,000 &    5,000 &            0 &      108 &    5,000 \\
+      \textbf{Total} &      9,731 &        3,627 &    47,257 &       32,852 &   21,876 &   21,406 &        11,143 &    13,425 &   32,819 \\
 \bottomrule
-\vspace{-10pt}
+\vspace{-15pt}
 \end{tabular}
 \caption{The datasets used for finetuning the GPT-2 perturbation model, and the \tagstr distributions.}
 \label{table:gpt_train_stats}
+\vspace{10pt}
+
+
+%\begin{table*}[t]
+\small
+\centering
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{c p{0.75\linewidth}}
+\toprule
+\textbf{Application} & \textbf{Strategies} \\ 
+\midrule
+Data augmentation & 
+    lexical~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU}\newline
+    paraphrasing~\cite{iyyer2018adversarial} \newline
+    perturbation functions~\cite{ratner2017snorkel}
+\\\midrule
+Counterfactual data aug. & 
+    manual~\cite{kaushik2019learning}
+\\\midrule
+Adversarial attack & 
+    lexical~\cite{alzantot2018generating, garg2020bae, li-etal-2020-bert-attack, morris2020textattack, tan2020s, jin2020bert, ebrahimi2017hotflip, Zhang2019GeneratingFA, Jia2019CertifiedRT} \newline
+    template~\cite{jiang2019avoiding}\newline
+    insert~\cite{Song2020UniversalAA}
+\\\midrule
+Contrast \& challenge set & 
+    manual~\cite{li2020linguistically} \newline
+    templates~\cite{li2020linguistically}
+\\\midrule
+Challenge sets  & 
+    lexical (heuristic)~\cite{kaushik2019learning, naik2018stress} \newline
+    paraphrasing~\cite{Kavumba2019WhenCP} \newline
+    templates~\cite{Geiger2019PosingFG, kaushik2019learning, nie2019analyzing, mccoy2019right}
+\\\midrule
+Model analysis & 
+    Template~\cite{Goodwin2020ProbingLS}\newline
+    Perturbation functions~\cite{wu2019errudite, bowman-etal-2015-large}
+\\\midrule
+Explanations & 
+    lexical~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual} \newline
+    % probably also lexical
+    lexical (mask)~\cite{ramon2019counterfactual, ribeiro2018anchors}
+\\
+\bottomrule
+\end{tabular}
+\vspace{-5pt}
+
+\caption{Paper survey on the perturbation applications.}
+\label{table:perturb_application}
+%\end{table*}
+\vspace{-10pt}
+
 \end{table*}
 %\end{comment}
 
@@ -86,3 +137,12 @@ With the interchangeable orders and the blanks, we generate 657,144 training pro
 We use the data to finetune an off-the-shelf GPT-2 model (from \citet{Wolf2019HuggingFacesTS}), but any LM can potentially be used.
 %\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
 We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
+
+
+
+
+\section{Survey of Perturbation Applications}
+\label{appendix:paper_survey}
+
+
+Table~\ref{table:perturb_application} summarizes the perturbation applications and their generation strategies.

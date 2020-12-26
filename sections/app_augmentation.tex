@@ -1,12 +1,15 @@
 \begin{figure*}
 \centering
 \includegraphics[width=0.9\textwidth]{figures/mturk_instruction.pdf}
-\vspace{-15pt}
-\caption{A sample instruction for the \nli task, with annotators providing labels based for the perturbed hypotheses (\emph{New S2}). Instructions are similar for \qqp and \sst, except for the label definitions and the examples. \wts{Change to hypothesis screenshot.}}
+\vspace{-1pt}
+\caption{A sample instruction for the \nli task, with annotators providing labels based for the perturbed hypotheses (\emph{New S2}). Instructions are similar for \qqp and \sst, except for the label definitions and the examples.}
 \vspace{-10pt}
 \label{fig:mturk_instruction_detail}
 
 \end{figure*}
+
+
+
 
 \section{Additional Details to Train \& Eval \S\ref{sec:app_label}}
 \label{appendix:app_label}
@@ -41,8 +44,17 @@ Formally, the distance between two perturbations is ($a_1$ is an abbreviation fo
 $$d(\xp_1, \xp_2) = \alpha\cdot\mathbb{1}(s_1 = s_2) + \beta\cdot\mathbb{1}(r_1 = r_2) + \gamma\cdot\mathbb{1}(a_1=a_2)$$
 With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
-\subsection{MTurk Labeling Details}
-\label{appendix:label_instruct}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/mturk_label}
+\vspace{-5pt}
+\caption{A sample labeling task: The crowdworkers annotate three perturbations based on their validity and class label, with respect to the original instance.}
+\vspace{-15pt}
+\label{fig:mturk_instruction}
+\end{figure}
+
+
+
 
 \begin{figure*}
 \centering
@@ -51,9 +63,24 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \caption{The instruction for the explanation study.}
 \vspace{-10pt}
 \label{fig:mturk_instruction_detail}
-
 \end{figure*}
-\paragraph{Procedure\footnote{A complete annotation demo is available at \mturkurl.}}
+
+
+\begin{figure*}
+\centering
+\includegraphics[width=1\textwidth]{figures/explanation_task_ui}
+\vspace{-15pt}
+\caption{The instruction for counterfactual explanation user study in \S\ref{}.}
+\vspace{-10pt}
+\label{fig:explanation_ui}
+\end{figure*}
+
+
+\subsection{MTurk Labeling Details}
+\label{appendix:label_instruct}
+
+
+\paragraph{Procedure}
 The study started with an introduction, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction_detail}): 
 ``given a reference example, the crowdworker should annotate its perturbed variations, based on whether the perturbation is valid (\emph{sounds natural}), and the classification task label.''
 To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
@@ -85,3 +112,4 @@ For each given $(m,n)$, we create three different samples of training data, and 
 Each sample is further averaged over four random seeds.
 For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16, and selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and perturbation examples.)
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
+
