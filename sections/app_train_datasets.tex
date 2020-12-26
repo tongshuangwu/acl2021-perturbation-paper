@@ -1,7 +1,3 @@
-\section{GPT-2 as Counterfactual Generator}
-\label{appendix:train_data}
-
-\subsection{Training data collection}
 %\begin{comment}
 \begin{table*}
 \small
@@ -20,11 +16,17 @@
  winogrande &      3011 &          94 &    10000 &        6927 &     120 &     124 &          453 &       65 &    3184 \\
       total &      9731 &        3627 &    47257 &       32852 &   21876 &   21406 &        11143 &    13425 &   32819 \\
 \bottomrule
+\vspace{-10pt}
 \end{tabular}
 \caption{The datasets used for finetuning the GPT-2 perturbation model, and the \tagstr distributions.}
 \label{table:gpt_train_stats}
 \end{table*}
 %\end{comment}
+
+\section{GPT-2 as Counterfactual Generator}
+\label{appendix:train_data}
+
+\subsection{Training data collection}
 
 
 We combined the following NLP datasets in finetuning our GPT-2 perturbation model.
@@ -62,11 +64,12 @@ The dataset contains 10k pairs of premises and hypotheses created based on 10 he
 
 
 \paragraph{Crawled} 
-\wts{Explain why we included the crawled and why only some columns.}
+We additionally crawled some sentence pairs from non-paired datasets like SQuAD~\cite{rajpurkar-etal-2016-squad} to boost some specific patterns and increase lexical diversity. 
+We estimated \emph{close} pairs (D1) using edit distance, but noticed that it inevitably paired up some unrelated examples (\eg \exinline{how do I not be} and \exinline{how do I recover it} are incorrectly considered \ctrltag{negation} pairs.)
+We only included them for the most determined patterns, \ie \ctrltag{lexical}, \ctrltag{insert}, \ctrltag{delete}, and \ctrltag{shuffle}.
 
 
-
-\subsection{Training Prompts}
+\subsection{Training Prompts \& Parameters}
 
 Given a pair, we use the two sentences interchangeably as $x$ and $\xp$ to learn the perturbations both ways.
 We compute its primary \tagstr based on linguistic features like part-of-speech tagging or dependency trees, and blank out the changed subphrases in $\xp$.
@@ -81,5 +84,5 @@ As a result, we form up to four unique training prompts given one $(x, \xp)$ pai
 
 With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
 We use the data to finetune an off-the-shelf GPT-2 model (from \citet{Wolf2019HuggingFacesTS}), but any LM can potentially be used.
-\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
+%\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
 We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.

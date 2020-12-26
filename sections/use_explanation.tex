@@ -58,7 +58,7 @@ Here, we operationalize the concept of \emph{abnormality}, and use it to select 
 We define abnormalities around one example as \emph{the discrepancy between the expected and the actual changes in the prediction}.
 Given a predictor $f$, we define the actual change in prediction as $d_f(\xp, x)$, and the expected change as $\hat{d}_f(\xp, x)$.
 The distance between the expectation and reality then becomes:
-$$\Delta d_f(\xp, x) = |\hat{d}_f(\xp, x)-d_f(\xp, x)|$$
+$$\Delta d_f(\xp, x) = \hat{d}_f(\xp, x)-d_f(\xp, x)$$
 We select two abnormal, ``turning point'' counterfactuals, \ie unexpected large gap in prediction when the perturbation is considered minimum $\xp_l = \argmax_{\xp} \Delta d_f(\xp, x)$, or large perturbation resulting in unchanged prediction $\xp_s = \argmin_{\xp} \Delta d_f(\xp, x)$.
 
 Whereas $d_f(\xp, x)=|f_p(\xp)-f_p(x)|$ where $f_p(x)$ denotes the prediction probability of $f$ on $x$, $d_f(\xp, x)$ can take various forms. 
@@ -131,23 +131,19 @@ We concluded the study with open-ended questions on their model query and simula
 \newcommand{\crandom}{\emph{Random}\xspace}
 \newcommand{\chuman}{\emph{Human}\xspace}
 \paragraph{Conditions.} 
-We compare three types of selected counterfactuals:
+We compare three types of counterfactuals:
 (1) \cshap, the \sysname-generated counterfactuals, selected to complement SHAP; 
 (2) \crandom, the randomly selected \sysname counterfactuals; 
 (3) \chuman, the human generated counterfactuals.
 For every base example, three graduate students each queried the model for up to 10 times and submitted one counterfactual, where the model prediction was incorrect and counterintuitive with respect to the original SHAP score.
-
-
-played with the model for up to 10 times in a similar interface, and submitted one final counterfactual where the model prediction was incorrect and counterintuitive with respect to the original SHAP score.
 We then randomly selected two of their submissions per base example.
-As a within-subject study, we compared the error rate of human simulations across the three conditions.
 
 
 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=1\columnwidth]{figures/exp_err_rate}
+\includegraphics[width=1\columnwidth]{figures/err_rate}
 \vspace{-15pt}
 \caption{
 Error rates on counterfactuals in different conditions. The higher the error rate, the more information missed by the participants (\ie and therefore can better complement model interactions and SHAP.)
@@ -157,19 +153,18 @@ Error rates on counterfactuals in different conditions. The higher the error rat
 \end{figure}
 
 \paragraph{Results.}
-As in Figure~\ref{fig:err_rate}, participants performed well on \crandom (error rate $e=23\%\pm7\%$) but poorly on \cshap ($47\%\pm 4\%$).
+As a within-subject study, we compared \emph{the error rate of human simulations across the three conditions}.
+Figure~\ref{fig:err_rate} shows that, compared to \crandom (error rate $e=22\%\pm9\%$) and \chuman ($e=34\%\pm11\%$), participants mis-simulated more \cshap counterfactuals ($46\%\pm 5\%$).
 While they were able to simulate model behaviors on some counterfactuals, \cshap ones were beyond their learnings from SHAP and model interactions, and \emph{would still add value if they were presented.}
 
-Participants also missed many \chuman counterfactuals ($40\%\pm 5\%$).
-It was expected, as these cases were surprising even to their human creators.
-Their performance on \chuman were slightly better than on \cshap, indicating that \emph{SHAP-c were at least as surprising as the Human selected abnormal cases.}
 
-More interestingly, their poor performances on the two conditions were for different reasons: 
-%\ie \emph{Missing inspections v.s. Missing bugs within an inspected spots.}
-When a participant mis-predicted a \cshap counterfactual $\xp$, \tofix{80\%} of the time, they covered the related pattern in their model interaction (\ie $>80\%$ of the changed tokens in $\xp$ were also changed in at least one query), and the number dropped to \tofix{$62\%$} in \chuman.
-This indicates that, compared to \chuman where participants missed the inspection spots of another human creator (and therefore had to ``guess using intuitions''), they were \emph{misled} by their inspections in \cshap --- ``labeled based on similar examples I tried'', as one subject articulated.
-For example, it was hard for them to imagine model predicting \emph{Duplicate} on Figure~\ref{fig:explanation}B (\swap{help}{find}), when the model predicted \emph{Non-Duplicate} on their query \exinline{How do I \swap{help}{play with}...?}
-In other words, \emph{SHAP-c found more bugs within spots where humans considered inspected.}
+More interestingly, \emph{\cshap found more bugs within spots where humans considered inspected.}
+Usually, participants simulated the model incorrectly because they missed the inspection spots.
+For example, they focused on editing ``depression'' in Figure~\ref{fig:explanation}A, and therefore had to ``guess using intuitions'' when simulating Figure~\ref{fig:explanation}B.
+However, in 24\% of the missed \cshap cases, users successfully covered the related pattern\footnote{At least one of their queries perturbed the same spans as the given counterfactual, and the text overlap between the query and the counterfactual is over 70\%}, and was misled by their inspections --- ``labeled based on similar examples I tried'', as one subject articulated.
+It was hard for them to imagine model predicting \emph{Duplicate} on Figure~\ref{fig:explanation}B (\swap{help}{find}), when the model predicted \emph{Non-Duplicate} on their query \exinline{How do I \swap{help}{play with}...?}
+The number dropped to $15\%$ for the \chuman condition.
+
 
 Moreover, in their freeform responses, \tofix{5 out of 9} participants mentioned they prioritized perturbing words with high feature weights, further indicating the importance of selecting \emph{unexpected prediction change} for them.
 

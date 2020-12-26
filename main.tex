@@ -116,7 +116,7 @@
 \definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 %\definecolor{ctemplate}{rgb}{0.23, 0.30, 0.45}
 \definecolor{cword}{rgb}{0, 0, 0.7}
-%\newcommand{\BLANK}{BLANK}
+\newcommand{\BLANK}{\texttt{BLANK}}
 
 % format
 \newcommand{\clabel}[1]{\emph{#1}\xspace}
@@ -233,12 +233,11 @@ As counterfactual explanations, \sysname complements popular feature attribution
 
 \appendix
 \input{sections/app_train_datasets}
-\input{sections/app_perturb_applications}
+
 \input{sections/app_augmentation}
+\input{sections/app_explanation}
+\input{sections/app_perturb_applications}
 
-
-\input{sections/app_label_instruction}
 \input{sections/app_examples}
-\input{sections/app_perturb_similarity}
 
 \end{document}

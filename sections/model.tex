@@ -138,7 +138,7 @@ Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, ka
 \includegraphics[trim={0 30.5cm 53.2cm 0cm}, clip, width=1\columnwidth]{figures/blank}
 \vspace{-15pt}
 \caption{Given a pair of sentences $(x, \xp)$, we generate multiple training prompts with (A) a primary \tagstr, and various blanking strategies, from (B) just the changed tokens, (C) the subtrees, (D) the merged changes, and (E) the entire sentence.
-%We concatenate the information with special tokens like \perturbtoken.
+We concatenate the information with special tokens like \perturbtoken.
 }
 \vspace{-10pt}
 \label{fig:blank}
@@ -149,7 +149,8 @@ Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, ka
 We form the perturbation as a text generation task using language models (LMs), which predict the continuing text given preceding prompts.
 %Here, instead of their common use case, \ie generating the remaining paragraphs, 
 Pretrained on a large number of webpages curated and filtered by humans, LMs like GPT-2~\cite{radford2019language} naturally generate more realistic (D2) and diverse (D3) counterfactuals compared to templates~\cite{ribeiro2018sear} or perturbation functions~\cite{wu2019errudite}.
-We use the original sentence $x$ as the prompt, and finetune off-the-shelf LMs to generate $\xp$: \exinline{$x$ \perturbtoken $\xp$ \stoptoken}.
+We use the original sentence $x$ as the prompt, and finetune off-the-shelf LMs to generate $\xp$.
+%: \exinline{$x$ \perturbtoken $\xp$ \stoptoken}.
 
 \paragraph{Training prompts with controls.}
 We further modify the training prompts to allow targeted perturbations, as in Figure~\ref{fig:blank}.

@@ -1,14 +1,10 @@
 \section{Survey of Perturbation Applications}
 \label{appendix:paper_survey}
 
-
-Table~\ref{table:perturb_application} summarizes the perturbation applications and their generation strategies.
-
-%\begin{comment}
 \begin{table*}
 \small
 \centering
-%\setlength{\tabcolsep}{3.5pt}
+\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{r c c p{0.55\linewidth}}
 \toprule
 \textbf{Application} & \textbf{$y = \hat{y}$}? & $f(x) = f(\xp)$? & \textbf{Strategies} \\ 
@@ -19,7 +15,7 @@ Data augmentation & \cmark & \qmark &
     perturbation functions~\cite{ratner2017snorkel}
 \\\midrule
 Counterfactual data aug. & \xmark & \qmark & 
-    manual~\cite{kaushik2019learning} \newline
+    manual~\cite{kaushik2019learning}
 \\\midrule
 Adversarial attack & \cmark & \xmark & 
     lexical~\cite{alzantot2018generating, garg2020bae, li-etal-2020-bert-attack, morris2020textattack, tan2020s, jin2020bert, ebrahimi2017hotflip, Zhang2019GeneratingFA, Jia2019CertifiedRT} \newline
@@ -50,4 +46,5 @@ Explanations & \qmark & \qmark &
 \caption{Paper survey on the perturbation applications.}
 \label{table:perturb_application}
 \end{table*}
-%\end{comment}
+
+Table~\ref{table:perturb_application} summarizes the perturbation applications and their generation strategies.

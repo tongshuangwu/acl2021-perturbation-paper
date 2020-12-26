@@ -202,9 +202,10 @@ We collected the data through similar procedures as for contrast sets, with one 
 Because counterfactuals that do not change the groundtruth label can also improve model stability, we keep all the valid $\xp$-s for one $x$, as long as at least one of them flips the groundtruth.
 
 %\paragraph{Models.}
+We finetune \texttt{roberta-base} models~\cite{liu2019roberta} in HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
 For each augmented model (\maug), we include $m$ counterfactuals, as well as $n$ examples from the original dataset (the base examples of the counterfactuals will always be included).
 Their baselines \mcomp replace the $m$ counterfactuals with another $m$ original examples
-The reported model performances are averaged across 3 training data samples, each with 4 random seeds. More details in \S\ref{appendix:data_collection}.
+The reported model performances are averaged across 3 training data samples, each with 4 random seeds (More in \S\ref{appendix:data_collection}).
 %Comparing with these models help highlight the effectiveness of perturbations with respect to adding the same amount of original data. 
 
 \paragraph{Results.}
