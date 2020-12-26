@@ -18,7 +18,7 @@
 \bottomrule
 \vspace{-15pt}
 \end{tabular}
-\caption{The datasets used for finetuning the GPT-2 perturbation model, and the \tagstr distributions.}
+\caption{The datasets used for finetuning the GPT-2 generation model, and the \tagstr distributions.}
 \label{table:gpt_train_stats}
 \vspace{10pt}
 
@@ -27,46 +27,46 @@
 \small
 \centering
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{c p{0.75\linewidth}}
+\begin{tabular}{c p{0.77\linewidth}}
 \toprule
 \textbf{Application} & \textbf{Strategies} \\ 
 \midrule
 Data augmentation & 
-    lexical~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU}\newline
-    paraphrasing~\cite{iyyer2018adversarial} \newline
-    perturbation functions~\cite{ratner2017snorkel}
+    Lexical~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU}\newline
+    Paraphrasing~\cite{iyyer2018adversarial} \newline
+    Perturbation functions~\cite{ratner2017snorkel}
 \\\midrule
 Counterfactual data aug. & 
-    manual~\cite{kaushik2019learning}
+    Manual~\cite{kaushik2019learning}
 \\\midrule
 Adversarial attack & 
-    lexical~\cite{alzantot2018generating, garg2020bae, li-etal-2020-bert-attack, morris2020textattack, tan2020s, jin2020bert, ebrahimi2017hotflip, Zhang2019GeneratingFA, Jia2019CertifiedRT} \newline
-    template~\cite{jiang2019avoiding}\newline
-    insert~\cite{Song2020UniversalAA}
+    Lexical~\cite{alzantot2018generating, garg2020bae, li-etal-2020-bert-attack, morris2020textattack, tan2020s, jin2020bert, ebrahimi2017hotflip, Zhang2019GeneratingFA, Jia2019CertifiedRT} \newline
+    Template~\cite{jiang2019avoiding}\newline
+    Insert~\cite{Song2020UniversalAA}
 \\\midrule
-Contrast \& challenge set & 
-    manual~\cite{li2020linguistically} \newline
-    templates~\cite{li2020linguistically}
+Contrast set & 
+    Manual~\cite{gardner2020contrast} \newline
+    Templates~\cite{li2020linguistically}
 \\\midrule
 Challenge sets  & 
-    lexical (heuristic)~\cite{kaushik2019learning, naik2018stress} \newline
-    paraphrasing~\cite{Kavumba2019WhenCP} \newline
-    templates~\cite{Geiger2019PosingFG, kaushik2019learning, nie2019analyzing, mccoy2019right}
+    Lexical (heuristic)~\cite{kaushik2019learning, naik2018stress} \newline
+    Paraphrasing~\cite{Kavumba2019WhenCP} \newline
+    Templates~\cite{Geiger2019PosingFG, kaushik2019learning, nie2019analyzing, mccoy2019right}
 \\\midrule
 Model analysis & 
     Template~\cite{Goodwin2020ProbingLS}\newline
-    Perturbation functions~\cite{wu2019errudite, bowman-etal-2015-large}
+    Perturbation functions~\cite{wu2019errudite, bowman-etal-2015-large, checklist:acl20}
 \\\midrule
 Explanations & 
-    lexical~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual} \newline
+    Lexical~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual} \newline
     % probably also lexical
-    lexical (mask)~\cite{ramon2019counterfactual, ribeiro2018anchors}
+    Lexical (through masking)~\cite{ramon2019counterfactual, ribeiro2018anchors}
 \\
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
 
-\caption{Paper survey on the perturbation applications.}
+\caption{A short survey on counterfactual application papers, and their generation strategies.}
 \label{table:perturb_application}
 %\end{table*}
 \vspace{-10pt}
@@ -86,7 +86,6 @@ The distribution is shown in Table~\ref{table:gpt_train_stats}.
 
 \paragraph{Contrast set}
 In \cite{gardner2020contrast}, authors of 10 existing NLP dataset each manually perturbed 100-1,000 test instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance.
-\wts{Make sure NLP is expanded somewhere in intro}
 The perturbation pattern varies based on the tasks and the annotators, allowing us to learn diverse perturbation methods.
 To make sure we can use the contrast set to evaluate the sentiment analysis model, we excluded the IMDB movie review from the training.
 \footnote{Similarly, though QQP would be a potentially interesting dataset for training the perturbation model, we omitted it so QQP can be used in our evaluation.}
@@ -134,7 +133,7 @@ As a result, we form up to four unique training prompts given one $(x, \xp)$ pai
 %max_log_prob_diff
 
 With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
-We use the data to finetune an off-the-shelf GPT-2 model (from \citet{Wolf2019HuggingFacesTS}), but any LM can potentially be used.
+We use the data to finetune an off-the-shelf GPT-2 model from \citet{Wolf2019HuggingFacesTS}, but any LM can potentially be used.
 %\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
 We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
 

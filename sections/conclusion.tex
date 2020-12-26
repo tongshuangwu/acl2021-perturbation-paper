@@ -7,6 +7,12 @@ It outputs corresponding counterfactuals, which can be further filtered for diff
 We show that the \sysname can support counterfactual data augmentation, contrast set generation, as well as counterfactual explanation.
 Below, we discuss promising future work:
 
+\textbf{More balanced sentence pairs and sampling.}
+The \sysname model inevitably inherits the training data bias.
+For example, its lexical changes are more likely to return \swap{man}{woman} than \swap{man}{child}, or \swap{good}{bad} than \swap{good}{inspiring}.
+Further, we observed in \qqp experiments that augmentations can overfit to one pattern while hurting its counterpart. 
+Future work should focus on enhancing the vocabulary diversity of the training data pairs, and developing sampling strategies that more equally cover competing patterns.
+
 \textbf{Supporting existing counterfactual reasoning tools.}
 Besides independent use cases, \sysname can also support existing tools for data programming, model testing and error analysis.
 For example, featurizing counterfactuals into Snorkel labeling functions~\cite{ratner2017snorkel} helps collect the training and evaluation data more efficiently (similar to \S\ref{subsec:global_exp}).
@@ -16,7 +22,5 @@ Or, domain experts can create perturbation tests more easily if \sysname serves 
 \textbf{Human-in-the-loop Counterfactual Generation.}
 Besides placing blanks and labeling counterfactuals, humans can add more values when they actively collaborate with \sysname.
 For example, human creators can increase the diversity of the covered patterns, if they are asked to come up with more counterfactuals that are different from those covered automatically.
-In tasks that require context-dependent counterfactual generations, human annotators can also initiate seed counterfactuals for \sysname to extend.
-For example, \citet{gardner2020contrast} perturbed multi-hop question answering by adding compositional reasoning steps \emph{related to} the corresponding paragraph.
-Such context- and logic- aware perturbations are hard for the model alone; however, it can further perturb the reasoning step \emph{once} the human adds it into the sentence.
-
+In tasks that require context-dependent counterfactual generations --- a difficult task for the sentence-based model alone --- human annotators can also initiate seed counterfactuals for \sysname to extend.
+For example, to perturb multi-hop question answering instances~\cite{gardner2020contrast}, the human can start by adding the compositional reasoning steps \emph{related to} the corresponding paragraph, so the model can further perturb around the it.

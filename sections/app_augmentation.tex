@@ -2,9 +2,12 @@
 \centering
 \includegraphics[width=0.9\textwidth]{figures/mturk_instruction.pdf}
 \vspace{-1pt}
-\caption{A sample instruction for the \nli task, with annotators providing labels based for the perturbed hypotheses (\emph{New S2}). Instructions are similar for \qqp and \sst, except for the label definitions and the examples.}
+\caption{
+The instruction for the \nli labeling task in \S\ref{sec:app_label}, with annotators labeling the perturbed hypotheses (\emph{New S2}). 
+Instructions are similar for \qqp and \sst, except for the label definitions and the examples.
+}
 \vspace{-10pt}
-\label{fig:mturk_instruction_detail}
+\label{fig:mturk_instruction}
 
 \end{figure*}
 
@@ -50,7 +53,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \vspace{-5pt}
 \caption{A sample labeling task: The crowdworkers annotate three perturbations based on their validity and class label, with respect to the original instance.}
 \vspace{-15pt}
-\label{fig:mturk_instruction}
+\label{fig:mturk_ui}
 \end{figure}
 
 
@@ -60,9 +63,9 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \centering
 \includegraphics[width=1\textwidth]{figures/explanation_instruction}
 \vspace{-15pt}
-\caption{The instruction for the explanation study.}
+\caption{The instruction for the explanation study in \S\ref{subsec:exp_user_study}.}
 \vspace{-10pt}
-\label{fig:mturk_instruction_detail}
+\label{fig:explanation_instruction}
 \end{figure*}
 
 
@@ -70,7 +73,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \centering
 \includegraphics[width=1\textwidth]{figures/explanation_task_ui}
 \vspace{-15pt}
-\caption{The instruction for counterfactual explanation user study in \S\ref{}.}
+\caption{A sample explanation interface task.}
 \vspace{-10pt}
 \label{fig:explanation_ui}
 \end{figure*}
@@ -81,10 +84,10 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
 
 \paragraph{Procedure}
-The study started with an introduction, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction_detail}): 
+The study started with an introduction, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction}): 
 ``given a reference example, the crowdworker should annotate its perturbed variations, based on whether the perturbation is valid (\emph{sounds natural}), and the classification task label.''
 To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
-The annotator then completed 22 tasks, each labeling 3 variations of a single example.
+The annotator then completed 22 tasks, each labeling 3 variations of a single example, as in Figure~\ref{fig:mturk_ui}.
 The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'' (6 labeled examples), with unambiguous examples and known groundtruth labels, which later served as filters for high quality crowdworkers.
 As a result, each annotator contributed $20 \times 3=60$ labels.
 The median task completion time was around 15-20 minutes (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli), and participants received an average payment of \$2.5 (equivalent to an hourly wage of \$7.5-10).
