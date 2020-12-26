@@ -1,35 +1,33 @@
 \section{Related Work}
 \label{sec:relate}
 
-\paragraph{The applications of counterfactuals.}
-
-Counterfactuals in NLP are most broadly used for, model training, evaluation, and explanation.
+\textbf{The applications of counterfactuals.}
+Counterfactuals in NLP are most broadly used for model training, evaluation, and explanation.
 In training, counterfactuals usually augment the training data to improve model stability~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU} and generalizability.
 \citet{kaushik2019learning} and \citet{teney2020learning} showed that counterfactual augmentations help mitigate the weights of spurious features.
 %\citet{teney2020learning} further proposed to treat instances in pairs to emphasize the difference in the training process. 
 %Our data can also support such experiments.
-Evaluation share similar setup with augmentations, mostly through adversarial attacks~\cite{Song2020UniversalAA}, contrast sets~\cite{kaushik2019learning} and challenge sets~\cite{Geiger2019PosingFG, liu-etal-2019-inoculation}.
+Evaluation focuses on similar aspects as training, mostly through adversarial attacks~\cite{Song2020UniversalAA}, contrast sets~\cite{kaushik2019learning} and challenge sets~\cite{Geiger2019PosingFG, liu-etal-2019-inoculation}.
 We show the automatically generated counterfactuals are also useful for training and evaluation.
 
-Counterfactuals also naturally support model explanations.
-%as ``all \emph{why} questions are implicitly \emph{why P rather than Q} questions'', and
-As \citet{miller} summarizes, ``explanations are sought in response to particular counterfactual cases or foils''~\cite{miller}.
-Popular feature importance attribution methods like SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI} all rely on masking or deletion to retrieve token importance, which can be viewed as a form of (incomplete) perturbation.
+Counterfactuals also naturally support model explanations, as ``explanations are sought in response to particular counterfactual cases or foils''~\cite{miller}.
+Popular feature importance attribution methods like SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI} all retrieve token importance through masking, which can be viewed as a form of (incomplete) counterfactual.
 Some work also explores directly presenting simple counterfactual examples~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual}.
-We explore the ranking of such counterfactactuals, and how they can be combined with existing feature attribution methods.
+We explore the ranking of such examples, and combine them with existing feature attribution methods.
 %Perturbation is also used for explanations, but the use is much less prominent compared to structured data.
 %While counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
 
-\paragraph{Counterfactual generation.}
-Existing counterfactual generations are usually designed for particular applications.
-Most automated are for generating adversarial examples. 
-They extensively search candidate word replacements~\cite{alzantot2018generating, garg2020bae, alzantot2018generating, andreas2019good} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors.
-The exhaustive process is hard for people to scale to~\cite{ribeiro2018sear}.
-On the other hand, those evaluating and improving model decision boundaries rely on manual counterfactual generation, by manually rewriting each instance or through heuristic rules~\cite{Geiger2019PosingFG, li2020linguistically, jiang2019avoiding}.
-Such methods cover more diverse patterns than the automated ones, but the process is costly, and relies heavily on human creativity and domain expertise.
-Moreover, though human annotators also have shared strategies like negation, changing quantifiers~\cite{kaushik2019learning, gardner2020contrast}, the strategies has yet to be  captured for targeted augmentation or evaluation.
-We unify the generation step for different applications as a NLG task, which bridge the scalability and diversity.
-We only distinguish the generated counterfactuals through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
+\noindent\textbf{Counterfactual generation.}
+Existing generation methods are usually for particular applications.
+Most automated ones are for adversarial examples. 
+They enumerate through candidate word replacements~\cite{alzantot2018generating, garg2020bae, alzantot2018generating, andreas2019good} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors.
+The exhaustive search is hard for people to scale to~\cite{ribeiro2018sear}.
+On the other hand, those evaluating and improving model decision boundaries lean towards manual rewrites and perturbation functions~\cite{checklist:acl20}.
+Such methods cover more diverse patterns, but the process is costly, and relies heavily on human creativity and domain expertise.
+Moreover, though human annotators also share strategies like negation, subject-object swapping~\cite{kaushik2019learning, gardner2020contrast}, the strategies have yet to be captured for targeted use.
+Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable on a small amount of data (\eg \citet{li2020linguistically} covered 20\% NLI data.)
+We unify the generation for different use cases as an NLG task, which bridges the scalability and diversity.
+We only distinguish them through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 
 
 
@@ -37,15 +35,3 @@ We only distinguish the generated counterfactuals through posterior constraints~
 
 
 
-
-
-
-
-
-
-
-%Dan's email:
-%This survey by Amit Chaudhary provides a nice visual overview of most existing data augmentation methods for NLP, including lexical substitution, text-surface transformation, random noise injection, and many others. But why is that such techniques are not used much in NLP? Longpre et al. (2020) test two popular data augmentation methods with recent pre-trained Transformer models. They find that they generally don’t improve results. They hypothesise that common data augmentation methods confer the same benefits as pre-training, which makes them largely redundant with current methods. In the future, data augmentation may be most useful for settings where current models fail or that currently represent blind spots. Examples of such settings are negation or malformed input (Ettinger et al., 2019; Rogers et al., 2020).
-%Another source for data augmentation are adversarial examples. A great way to get started is to use the TextAttack library, the CleverHans for NLP. The library provides implementations of a numerous adversarial attacks and tools to train models with data augmentation—with built-in support for transformers models. A recent paper in this area that I particularly enjoyed is by Tan et al. (2020) who create adversarial examples by perturbing the inflectional morphology of words to probe for bias against English dialects in pre-trained language models. As pre-trained methods become more powerful, it will be key to ensure that they are robust to a wide range of possible variations in language.
-
-%https://www.aclweb.org/anthology/2020.acl-main.263.pdf?utm_campaign=NLP%20News&utm_medium=email&utm_source=Revue%20newsletter

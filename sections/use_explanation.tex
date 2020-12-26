@@ -45,7 +45,7 @@ Compared to the opaque SHAP feature weights in Figure~\ref{fig:explanation}A~\ci
 \swap{help}{find} in \emph{Q2} does not change the prediction.
 
 However, the cognitive burden of complete explanations around one instance is too great.
-As a result, \citet{miller} concluded that people usually \emph{select} a small subset of (counterfactual) explanations on contrastive cases (``foils'') that they find unexpected. 
+As a result, \citet{miller} concluded that people usually \emph{select} a small subset of explanations on contrastive cases (``foils'') that they find unexpected. 
 As such, he further proposed that ``abnormality could be used to infer likely foils.''
 Here, we operationalize the concept of \emph{abnormality}, and use it to select different explanations.
 
@@ -69,8 +69,8 @@ On the other hand, as a \emph{complement} to existing feature attribution method
 Methods like SHAP or LIME provides valuable overview on important features (which is not available in pure counterfactual explanations.
 However, as mentioned in \S\ref{sec:relate}, they only estimate weights by \emph{masking} the words, and therefore do not reflect how model would react to replaced words or insertions --- a nuance that is usually overlooked.
 Therefore, abnormalities selected this way can help highlight the missed pieces, and better calibrate users' trust on the predictor. 
-Figure~\ref{fig:explanation}B shows such a $\xp_l$: \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is not an important word according to SHAP; Whereas changing the important ``in depression'' in Figure~\ref{fig:explanation}D still results in \emph{Duplicate} (a $\xp_s$).
-Detailed distance functions are in \tofix{\S\ref{X}}.
+Figure~\ref{fig:explanation}B shows such a $\xp_l$: \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is not an important word according to SHAP; Whereas changing the important ``in depression'' in Figure~\ref{fig:explanation}D still results in \emph{Duplicate} ($\xp_s$).
+Detailed distance functions are in \S\ref{appendix:exp_rank}.
 
 
 \paragraph{Interactive explanations: user-selected abnormalities.}
@@ -122,7 +122,7 @@ Intuitively, the more they simulate incorrectly, the more information they grasp
 We recruited \tofix{13} graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate the behavior of a \qqp BERT model for 20 rounds.
 In each round, the participants were given a base example with the model's prediction, as well as the SHAP weights, highlighted in the text and with a bar chart (Figure~\ref{fig:explanation}A).
 The participants were allowed to query the model around the base example for up to 10 times, by making small changes to Q2 and seeing the resulting model predictions.
-It was equivalent to unlimited model access --- participants submitted \tofix{$6.9\pm3.0$} queries.
+It was equivalent to unlimited model access --- participants submitted $6.3\pm3.2$ queries per round.
 More interactions with the predictor usually result in better mental models~\cite{miller}, and we are interested in whether our selected ones \emph{still add information} afterwards.
 Participants then simulated the model's predictions on six counterfactuals (displayed similar to Figure~\ref{fig:explanation}B), two from each of the following three conditions.
 We concluded the study with open-ended questions on their model query and simulation strategies.
@@ -156,7 +156,7 @@ Error rates on counterfactuals in different conditions. The higher the error rat
 
 \paragraph{Results.}
 As a within-subject study, we compared \emph{the error rate of human simulations across the three conditions}.
-Figure~\ref{fig:err_rate} shows that, compared to \crandom (error rate $e=22\%\pm9\%$) and \chuman ($e=34\%\pm11\%$), participants mis-simulated more \cshap counterfactuals ($46\%\pm 5\%$).
+Figure~\ref{fig:err_rate} shows that, compared to \crandom (error rate $e=23\%\pm6\%$) and \chuman ($e=38\%\pm11\%$), participants mis-simulated more \cshap counterfactuals ($45\%\pm 6\%$).
 While they were able to simulate model behaviors on some counterfactuals, \cshap ones were beyond their learnings from SHAP and model interactions, and \emph{would still add value if they were presented.}
 
 
@@ -168,6 +168,6 @@ It was hard for them to imagine model predicting \emph{Duplicate} on Figure~\ref
 The number dropped to $15\%$ for the \chuman condition.
 
 
-Moreover, in their freeform responses, \tofix{5 out of 9} participants mentioned they prioritized perturbing words with high feature weights, further indicating the importance of selecting \emph{unexpected prediction change} for them.
+Moreover, in their freeform responses, 7 out of 13 participants mentioned they prioritized perturbing words with high feature weights, further indicating the importance of selecting \emph{unexpected prediction change} for them.
 
 

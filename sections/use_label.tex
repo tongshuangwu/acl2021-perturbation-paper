@@ -110,7 +110,7 @@ The model improves consistently on identifying the order of entities across test
 
 Manually created counterfactuals are used to evaluate models' decision boundaries~\cite{gardner2020contrast} and for counterfactual data augmentation~\cite{kaushik2019learning}, but \emph{creating} variations has been shown to be much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
 %However, while counterfactuals are already cheaper to collect than completely new examples~\cite{Khashabi2020MoreBF}, it still takes people more time to create counterfactuals than to evaluate them~\cite{ribeiro2018sear}. 
-We show that the automatically generated ones can serve similar purposes at a lower cost, by crowd-labeling counterfactuals on three datasets: 
+We show that the automatically generated ones can serve similar purposes at a lower cost, by crowd-labeling counterfactuals on three datasets (More in \S\ref{appendix:app_label_data}): 
 (1) \sst with Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive},
 (2) \nli with \dnli~\cite{bowman-etal-2015-large}, and 
 (3) \dqqp~\cite{wang2018glue}.
@@ -232,7 +232,7 @@ Future work should further strategize the ranking to more equally cover competin
 In both \nli and \qqp, just adding $m/n < 10\%$ data is sufficient to boost the performance.
 In \sst, while the counterfactual remains effective on most datasets, it hurts the model performance on Amzbook when the counterfactual takes a large proportion (Figure~\ref{fig:sst_trend}, Yelp followed a similar but more mild trend).
 We suspect that flipping out too much original data affects the data diversity, and in turn decreases the model performance.
-Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.
+Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy over augmenting with non-counterfactual data.
 
 
 

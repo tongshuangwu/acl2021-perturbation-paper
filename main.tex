@@ -84,8 +84,8 @@
 
 
 \definecolor{cexample}{rgb}{0.23, 0.30, 0.45}
-\newcommand{\exinline}[1]{ {\color{cexample}``#1''\xspace}}
-\newcommand{\fillin}[1]{ {\color{cexample}#1\xspace}}
+\newcommand{\exinline}[1]{{\color{cexample}``#1''\xspace}}
+\newcommand{\fillin}[1]{{\color{cexample}#1\xspace}}
 
 \newcommand{\fontsmall}{\fontsize{9pt}{11pt}\selectfont}
 \newcommand{\fontnormal}{\fontsize{10pt}{12pt}\selectfont}
@@ -145,9 +145,9 @@
 \newcommand{\ie}{\emph{i.e.,}\xspace}
 
 % tasks
-\newcommand{\nli}{NLI\xspace}
-\newcommand{\sst}{Sentiment\xspace}
-\newcommand{\qqp}{QQP\xspace}
+\newcommand{\nli}{\emph{NLI}\xspace}
+\newcommand{\sst}{\emph{Sentiment}\xspace}
+\newcommand{\qqp}{\emph{QQP}\xspace}
 
 \def \dsst{SST-2\xspace}
 \def \dqqp{QQP\xspace}
@@ -206,14 +206,13 @@ $^{2}$Microsoft Research\hspace{5mm} \\
 \begin{document}
 \maketitle
 \begin{abstract}
-Counterfactual examples are widely effective for calibrating, evaluating, and explaining model decision boundaries, yet either cover limited linguistic patterns, or are hard to scale.
+Counterfactual examples are widely effective for calibrating, evaluating, and explaining model decision boundaries, yet either existing generation methods cover limited linguistic patterns or are hard to scale.
 We propose \sysname, a method for automatically generating general-purpose counterfactuals. 
-Framed as a text generation task (and modeled by finetuning GPT-2 on paired sentences), \sysname produces counterfactuals that are  realistic, diverse, and close to the original instance.
-The outputs can then be selected for various downstream tasks. 
+Framed as a text generation task (and modeled by finetuning GPT-2 on paired sentences), \sysname produces counterfactuals that are realistic, diverse, and close to the original instance.
 \sysname also allows targeted perturbations, through \tagstrs and the fill-in-the-blank structure.
-We demonstrate the effectiveness of \sysname in different applications:
-For training and evaluation, we observe that asking humans to evaluate counterfactuals is enough to produce high-quality contrast sets and training data that results in higher generalization accuracy at least 40\% effectively.
-As counterfactual explanations, \sysname complements popular feature attribution methods by finding their blind spots.
+We propose various strategies to selection the outputs for downstream tasks, and demonstrate \sysname in different applications:
+By validating diverse counterfactuals, we produced high-quality evaluation contrast sets and training data that results in higher generalization accuracy, with at least 40\% less effort.
+As counterfactual explanations, \sysname helps reveal models' abnormal behaviors both locally and globally, and complements popular feature attribution methods by finding their blind spots.
 \end{abstract}
 
 \input{sections/intro}
@@ -224,7 +223,7 @@ As counterfactual explanations, \sysname complements popular feature attribution
 \input{sections/use_explanation}
 
 \input{sections/conclusion}
-
+\input{sections/ack}
 \bibliography{ref}
 \bibliographystyle{acl_natbib}
 
