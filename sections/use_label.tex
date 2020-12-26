@@ -228,6 +228,8 @@ As a result, we can safely conclude that \nli did not overfit to the augmented p
 Similarly, in most \qqp cases, the gain on one CheckList test does not hurt its counterparts (\eg all tests related to entity ordering were improved), except for \texttt{more X $\not\eq$ less X} and \texttt{more X $=$ less antonym(X)}.
 Future work should further strategize the ranking to more equally cover competing patterns. 
 
+
+\begin{comment}
 \emph{The ratio of the counterfactuals matters. }
 In both \nli and \qqp, just adding $m/n < 10\%$ data is sufficient to boost the performance.
 In \sst, while the counterfactual remains effective on most datasets, it hurts the model performance on Amzbook when the counterfactual takes a large proportion (Figure~\ref{fig:sst_trend}, Yelp followed a similar but more mild trend).
@@ -249,6 +251,7 @@ Though the counterfactuals remain useful on most datasets, too many counterfactu
 \vspace{-10pt}
 \label{fig:sst_trend}
 \end{figure}
+\end{comment}
 
 
 

@@ -33,11 +33,12 @@ Given an original $x$ (A), we generate (B) a large number of $\xp$-s, which are 
  
 
 In this work, we formalize the task of \emph{automatic counterfactual generation}, where given an input $x$, the goal is to produce a set of counterfactuals $\xp$-s with reasonable relationships $x \rightarrow \xp_i$. 
-We frame the task as text generation, and finetune GPT-2 \cite{radford2019language} on a dataset of  $(x, \xp)$ pairs, such that it learns to generate general purpose counterfactuals that are \emph{realistic}, \emph{diverse}, and \emph{close to $x$}.
+We frame the task as text generation, and finetune GPT-2~\cite{radford2019language} on a dataset of  $(x, \xp)$ pairs, such that it learns to generate general purpose $\xp$-s that are \emph{realistic}, \emph{diverse}, and \emph{close to $x$}.
 We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B). 
 The produced counterfactuals are then ranked and selected according to the applications of interest (Figure~\ref{fig:teaser}C).
 
-We demonstrate the usefulness of \sysname in facilitating counterfactual training and evaluation. We ask humans to \emph{label} diverse counterfactuals rather than create them from scratch \cite{gardner2020contrast, kaushik2019learning}, producing high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the cost, and training data that improves generalization in three different tasks (Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), when compared to adding the same amount of non-counterfactual data.
+We demonstrate the usefulness of \sysname in facilitating counterfactual training and evaluation. 
+By asking humans to \emph{label} diverse counterfactuals rather than create them from scratch \cite{gardner2020contrast, kaushik2019learning}, we produce high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the cost, as well as training data that improves generalization in three different tasks (Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), when compared to adding the same amount of non-counterfactual data.
 
 % (on Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), we observe that asking humans to validate \emph{diverse} counterfactuals is enough to produce high-quality contrast sets~\cite{gardner2020contrast} and training data that improves generalization accuracy (measured by out-of-domain datasets, challenge sets, contrast sets, and CheckLists~\cite{checklist:acl20}).
 
@@ -47,10 +48,12 @@ We demonstrate the usefulness of \sysname in facilitating counterfactual trainin
 %, even after aggressive filtering.
 % (30 seconds for validating three $\xp$ around one $x$) 
 
-We also demonstrate how \sysname can produce high quality \emph{black-box counterfactual explanations}. Such explanations have been elusive in NLP, despite evidence from social science research \cite{miller} indicating that they may be more intuitive than feature attribution or attention maps, or at least be complementary to these methods. 
+We also demonstrate how \sysname can produce high quality \emph{black-box counterfactual explanations}.
+Such explanations have been elusive in NLP, despite evidence from social science research \cite{miller} indicating that they may be more intuitive than feature attribution or attention maps, or at least be complementary to these methods. 
 % We prioritize counterfactuals with \emph{abnormal} model behaviors, \ie the actual changes in prediction do not match the expectation.
 %(measured by sentence similarity or perturbed feature weights.)
-We validate this hypothesis in user study, where expert users did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals, even after seeing SHAP explanations \cite{NIPS2017_7062} and manually creating counterfactuals to explore the model's behavior. This indicates that seeing such explanations would add a lot of information that users are currently missing (much of which consisting of mistaken model predictions) even if when they perform manual counterfactual analysis and use feature attribution methods.
+We validate this hypothesis in user study, and observed that expert users only did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals, even after seeing SHAP explanations \cite{NIPS2017_7062} and manually exploring the model's behavior. 
+This indicates that seeing such explanations would add a lot of information that users are currently missing (much of which consisting of mistaken model predictions) when they perform manual counterfactual analysis and use feature attribution methods.
 
 
 % we observe that \sysname explanations can complement popular feature attribution methods and highlight their blind spots.
