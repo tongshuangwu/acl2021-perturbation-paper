@@ -31,8 +31,8 @@
 \includegraphics[trim={0 20cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2}
 \vspace{-15pt}
 \caption{
-A \qqp instance and its counterfactuals, with explanations and predictions ($\mathbf{=}$ means \emph{Duplicate}, and $\mathbf{\not\eq}$ \emph{Non-Duplicate}).
-Counterfactual explanations can compensate the feature weights from SHAP (A), \ie they (B) concretize the opaque weights using readable examples, and (C, D) alert abnormal missed by SHAP.
+(A) A \qqp instance with explanations and predictions ($\mathbf{=}$ means \emph{Duplicate}, $\mathbf{\not\eq}$ \emph{Non-Duplicate}), as well as the feature weights from SHAP.
+Counterfactual explanations complement SHAP, \ie they (B) concretize the opaque weights using readable examples, and (C, D) alert abnormalities missed by SHAP.
 }
 \vspace{-10pt}
 \label{fig:explanation}
@@ -46,8 +46,8 @@ Compared to the opaque SHAP feature weights in Figure~\ref{fig:explanation}A~\ci
 
 However, the cognitive burden of complete explanations around one instance is too great.
 As a result, \citet{miller} concluded that people usually \emph{select} a small subset of explanations on contrastive cases (``foils'') that they find unexpected. 
-As such, he further proposed that ``abnormality could be used to infer likely foils.''
-Here, we operationalize the concept of \emph{abnormality}, and use it to select different explanations.
+They further proposed that ``abnormality could be used to infer likely foils.''
+Here, we operationalize the concept of \emph{abnormality} to select different explanations.
 
 
 \subsection{Selections for Different Explanations}
@@ -59,7 +59,7 @@ We define abnormalities around one example as \emph{the discrepancy between the 
 Given a predictor $f$, we define the actual change in prediction as $d_f(\xp, x)$, and the expected change as $\hat{d}_f(\xp, x)$.
 The distance between the expectation and reality then becomes:
 $$\Delta d_f(\xp, x) = \hat{d}_f(\xp, x)-d_f(\xp, x)$$
-We select two abnormal, ``turning point'' counterfactuals, \ie unexpected large gap in prediction when the perturbation is considered minimum $\xp_l = \argmax_{\xp} \Delta d_f(\xp, x)$, or large perturbation resulting in unchanged prediction $\xp_s = \argmin_{\xp} \Delta d_f(\xp, x)$.
+We select two abnormal, ``turning point'' counterfactuals, \ie large gap in prediction when the perturbation is considered trivial: $\xp_l = \argmax_{\xp} \Delta d_f(\xp, x)$, or large perturbation resulting in unchanged prediction: $\xp_s = \argmin_{\xp} \Delta d_f(\xp, x)$.
 
 Whereas $d_f(\xp, x)=|f_p(\xp)-f_p(x)|$ where $f_p(x)$ denotes the prediction probability of $f$ on $x$, $d_f(\xp, x)$ can take various forms. 
 As a standalone explanation method, it can be the cosine distance in the \emph{Embedding space}.
@@ -67,7 +67,7 @@ The embedding can be either model-agnostic~\cite{reimers-2019-sentence-bert}, or
 
 On the other hand, as a \emph{complement} to existing feature attribution methods, $\hat{d}_f$ can be the importance (weights) of the perturbed tokens in $x$.
 Methods like SHAP or LIME provides valuable overview on important features (which is not available in pure counterfactual explanations.
-However, as mentioned in \S\ref{sec:relate}, they only estimate weights by \emph{masking} the words, and therefore do not reflect how model would react to replaced words or insertions --- a nuance that is usually overlooked.
+However, as mentioned in \S\ref{sec:relate}, they only estimate weights by \emph{masking} the words, and therefore do not reflect how models would react to replaced words or insertions --- a nuance that is usually overlooked.
 Therefore, abnormalities selected this way can help highlight the missed pieces, and better calibrate users' trust on the predictor. 
 Figure~\ref{fig:explanation}B shows such a $\xp_l$: \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is not an important word according to SHAP; Whereas changing the important ``in depression'' in Figure~\ref{fig:explanation}D still results in \emph{Duplicate} ($\xp_s$).
 Detailed distance functions are in \S\ref{appendix:exp_rank}.
@@ -75,7 +75,7 @@ Detailed distance functions are in \S\ref{appendix:exp_rank}.
 
 \paragraph{Interactive explanations: user-selected abnormalities.}
 %\paragraph{Interactive explanation.}
-Automated selections point to general abnormality, but users should be able to point towards the part \emph{they} do not understand~\cite{miller}.
+Automated selections focus on general abnormality, but users should be able to point towards the part \emph{they} do not understand~\cite{miller}.
 %Furthermore, the method should allow explanations as a dialog. 
 The targeted generation seamlessly support such interactive explanation.
 For example, an analyst can follow up on Figure~\ref{fig:explanation}C, and inspect how the model react to other nouns by blanking ``a friend'' in Q2 (\eg to ``man'' or human names.)
@@ -85,8 +85,8 @@ For example, an analyst can follow up on Figure~\ref{fig:explanation}C, and insp
 \label{subsec:global_exp}
 %\paragraph{Global explanations: impacts of same changes.}
 \emph{Global} explanations provides systematic understandings beyond individual instances --- yet another important aspect of model explanations~\cite{miller}.
-We define global abnormality as \emph{perturbation patterns whose impact on the prediction is hard to generalize}, and find them in two steps:
-First, we featurize counterfactuals to create groups of similar perturbations, using the \tagstr between $\xp$ and $x$, the edited spans, etc.
+We define global abnormality as \emph{perturbation patterns whose impacts on the prediction are hard to generalize}, and find them in two steps:
+First, we featurize counterfactuals to create groups of similar counterfactuals, using the \tagstr between $\xp$ and $x$, the edited spans, etc.
 %(1) its \tagstr (\fexptag{negation} for the example in Figure~\ref{fig:blank}), 
 %(2) its remove phrases \fexpfrom{kids}, 
 %(3) its added phrases \fexpto{not}, \fexpto{children}, and 
@@ -121,7 +121,9 @@ Intuitively, the more they simulate incorrectly, the more information they grasp
 \paragraph{Procedure.}
 We recruited \tofix{13} graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate the behavior of a \qqp BERT model for 20 rounds.
 In each round, the participants were given a base example with the model's prediction, as well as the SHAP weights, highlighted in the text and with a bar chart (Figure~\ref{fig:explanation}A).
-The participants were allowed to query the model around the base example for up to 10 times, by making small changes to Q2 and seeing the resulting model predictions.
+The participants were allowed to 
+
+query the model around the base example for up to 10 times, by making small changes to Q2 and seeing the resulting model predictions.
 It was equivalent to unlimited model access --- participants submitted $6.3\pm3.2$ queries per round.
 More interactions with the predictor usually result in better mental models~\cite{miller}, and we are interested in whether our selected ones \emph{still add information} afterwards.
 Participants then simulated the model's predictions on six counterfactuals (displayed similar to Figure~\ref{fig:explanation}B), two from each of the following three conditions.
