@@ -14,13 +14,13 @@ Further, we observed in \qqp experiments that augmentations can overfit to one p
 Future work should focus on enhancing the vocabulary diversity of the training data pairs, and developing sampling strategies that more equally cover competing patterns.
 
 \emph{Supporting existing counterfactual reasoning tools.}
-Besides independent use cases, \sysname can also support existing tools for data programming, model testing and error analysis.
+Besides independent use cases, \sysname can also support existing tools that involve counterfactual generation.
 For example, featurizing counterfactuals into Snorkel labeling functions~\cite{ratner2017snorkel} helps collect the training and evaluation data more efficiently (similar to \S\ref{subsec:global_exp}).
-Or, domain experts can create perturbation tests more easily if \sysname serves as an additional building block for Errudite~\cite{wu2019errudite} or CheckList~\cite{checklist:acl20}.
+Or, domain experts can create perturbation tests more easily if \sysname serves as an additional building block for error analysis~\cite{wu2019errudite} or model testing~\cite{checklist:acl20}.
 
 
 \emph{Human-in-the-loop Counterfactual Generation.}
-Besides placing blanks and labeling counterfactuals, humans can add more values when they actively collaborate with \sysname.
+Humans can potentially add more values than placing blanks and labeling counterfactuals
 For example, human creators can increase the diversity of the covered patterns, if they are asked to come up with more counterfactuals that are different from those covered automatically.
 In tasks that require context-dependent counterfactual generations --- a difficult task for the sentence-based model alone --- human annotators can also initiate seed counterfactuals for \sysname to extend.
-For example, to perturb multi-hop question answering instances~\cite{gardner2020contrast}, the human can start by adding the compositional reasoning steps \emph{related to} the corresponding paragraph, so the model can further perturb around the it.
+For example, to perturb multi-hop question answering instances~\cite{gardner2020contrast}, the human can start by adding the compositional reasoning steps \emph{related to} the corresponding paragraph, so the model can further perturb around it.
