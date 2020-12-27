@@ -9,6 +9,20 @@ c. We formalize the task of counterfactual generation: given x, produce \xp, and
 d. we apply the model to training, eval, explanations. summary of results. Important: compare to counterfactuals created by hand, this is better and faster
 \end{comment}
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 18cm 30.5cm 0cm},clip, width=1\columnwidth]{figures/teaser}
+\vspace{-15pt}
+\caption{
+The process of \sysname on a sentiment analysis instance.
+Given an original $x$ (A), we generate (B) a large number of $\xp$-s, which are then (C) sorted and selected in different ways for downstream use cases.
+For example, as counterfactual explanations (D), we can select $\xp$ that complement the feature weights:  though both ``great'' and ``kids'' are deemed important, the selected $\xp$ show that changing them do not always result in model prediction change and reveal model errors.
+}
+\vspace{-15pt}
+\label{fig:teaser}
+\end{figure} 
+ 
+
 Counterfactual reasoning --- mentally simulating what \emph{would have happened} if conditions were different --- is a common tool for making causality assessments~\cite{kahneman}, which in turn are crucial for explanation~\cite{miller}, evaluation, and model training. For example, in Figure~\ref{fig:teaser}, $x=$ \exinline{It is great for kids.} is perturbed into $[\xp_1, \xp_2, ...]$ in such a way that the changes from $x$ to $\xp_i$ brings various insights by simulating what would have happened if $x$ was different.
 
 Applications of counterfactual reasoning to Natural Language Processing (NLP) generally specify the relationship $x \rightarrow \xp$, and then ask humans to manually create counterfactuals $\xp$, or perturbation functions that generate $\xp$.
@@ -20,17 +34,7 @@ Adversarial examples are a different form of counterfactual reasoning: $x$ and $
 %In this rare case where counterfactuals can reliably be produced automatically, humans are not able to create counterfactuals with the desired property as well as automatic methods~\cite{ribeiro2018semantically}, even though they excel at evaluating such counterfactuals.
 %TODO: NEed to say something about Li et al 2020 Linguistically-Informed Transformations (LIT): A Method for Automatically Generating Contrast Sets, maybe something about word substitution
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 17cm 26cm 0cm},clip, width=1\columnwidth]{figures/teaser}
-\vspace{-15pt}
-\caption{
-The process of \sysname on a sentiment analysis instance.
-Given an original $x$ (A), we generate (B) a large number of $\xp$-s, which are then (C) sorted and selected for different downstream use cases.}
-\vspace{-15pt}
-\label{fig:teaser}
-\end{figure} 
- 
+
 
 In this work, we formalize the task of \emph{automatic counterfactual generation}, where given an input $x$, the goal is to produce a set of counterfactuals $\xp$-s with reasonable relationships $x \rightarrow \xp_i$. 
 We frame the task as text generation, and finetune GPT-2~\cite{radford2019language} on a dataset of  $(x, \xp)$ pairs, such that it learns to generate general purpose $\xp$-s that are \emph{realistic}, \emph{diverse}, and \emph{close to $x$}.
