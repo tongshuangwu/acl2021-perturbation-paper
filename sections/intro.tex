@@ -11,12 +11,12 @@ d. we apply the model to training, eval, explanations. summary of results. Impor
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 18cm 30.5cm 0cm},clip, width=1\columnwidth]{figures/teaser}
+\includegraphics[trim={0 18cm 31cm 0cm},clip, width=1\columnwidth]{figures/teaser}
 \vspace{-15pt}
 \caption{
 The process of \sysname on a sentiment analysis instance.
-Given an original $x$ (A), we generate (B) a large number of $\xp$-s, which are then (C) sorted and selected in different ways for downstream use cases.
-For example, as counterfactual explanations (D), we can select $\xp$ that complement the feature weights:  though both ``great'' and ``kids'' are deemed important, the selected $\xp$ show that changing them do not always result in model prediction change and reveal model errors.
+Given an original (A) $x$, we generate (B) a large number of $\xp$, which are then (C) sorted and selected in different ways for downstream use cases.
+For example, as counterfactual explanations for a DistilBERT model (D), we can select $\xp$ that complement the feature weights: though both ``great'' and ``kids'' are deemed important, the selected $\xp$ shows that changing them do not always change the model prediction ($f(x)=f(\xp)=$\emph{positive}), and reveal model errors.
 }
 \vspace{-15pt}
 \label{fig:teaser}
@@ -32,17 +32,16 @@ These are costly to generate, and may miss important patterns due to their relia
 Though it is cheaper to automate the process with parsing templates~\cite{li2020linguistically}, the templates usually have limited coverage on either the patterns-to-perturb, or the applicable data points.
 Adversarial examples are a different form of counterfactual reasoning: $x$ and $\xp$ have different model predictions \emph{despite} being semantically equivalent --- i.e. most perturbations are word replacements or other forms of paraphrasing~\cite{iyyer2018adversarial, ribeiro2018semantically}.
 %In this rare case where counterfactuals can reliably be produced automatically, humans are not able to create counterfactuals with the desired property as well as automatic methods~\cite{ribeiro2018semantically}, even though they excel at evaluating such counterfactuals.
-%TODO: NEed to say something about Li et al 2020 Linguistically-Informed Transformations (LIT): A Method for Automatically Generating Contrast Sets, maybe something about word substitution
 
 
 
-In this work, we formalize the task of \emph{automatic counterfactual generation}, where given an input $x$, the goal is to produce a set of counterfactuals $\xp$-s with reasonable relationships $x \rightarrow \xp_i$. 
-We frame the task as text generation, and finetune GPT-2~\cite{radford2019language} on a dataset of  $(x, \xp)$ pairs, such that it learns to generate general purpose $\xp$-s that are \emph{realistic}, \emph{diverse}, and \emph{close to $x$}.
+In this work, we formalize the task of \emph{automatic counterfactual generation}, where given an input $x$, the goal is to produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with reasonable relationships $x \rightarrow \xp_i$. 
+We frame the task as text generation, and finetune GPT-2~\cite{radford2019language} on a combined datasets of  $(x, \xp)$ pairs, such that it learns to generate general purpose $\xp$-s that are \emph{realistic}, \emph{diverse}, and \emph{close to $x$}.
 We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B). 
 The produced counterfactuals are then ranked and selected according to the applications of interest (Figure~\ref{fig:teaser}C).
 
 We demonstrate the usefulness of \sysname in facilitating counterfactual training and evaluation. 
-By asking humans to \emph{label} diverse counterfactuals rather than create them from scratch \cite{gardner2020contrast, kaushik2019learning}, we produce high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the cost, as well as training data that improves generalization in three different tasks (Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), when compared to adding the same amount of non-counterfactual data.
+By asking humans to \emph{label} counterfactuals \emph{selected for diversity}, rather than create them from scratch \cite{gardner2020contrast, kaushik2019learning}, we produce high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the cost, as well as training data that improves generalization in three different tasks (Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), when compared to adding the same amount of non-counterfactual data.
 
 % (on Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), we observe that asking humans to validate \emph{diverse} counterfactuals is enough to produce high-quality contrast sets~\cite{gardner2020contrast} and training data that improves generalization accuracy (measured by out-of-domain datasets, challenge sets, contrast sets, and CheckLists~\cite{checklist:acl20}).
 
@@ -52,12 +51,19 @@ By asking humans to \emph{label} diverse counterfactuals rather than create them
 %, even after aggressive filtering.
 % (30 seconds for validating three $\xp$ around one $x$) 
 
-We also demonstrate how \sysname can produce high quality \emph{black-box counterfactual explanations}.
-Such explanations have been elusive in NLP, despite evidence from social science research \cite{miller} indicating that they may be more intuitive than feature attribution or attention maps, or at least be complementary to these methods. 
+We also demonstrate how \sysname can produce \emph{black-box counterfactual explanations}, as in Figure~\ref{fig:teaser}D.
+Such explanations have been elusive in NLP, despite evidence from social science research~\cite{miller} indicating that they may be more intuitive, or may complement feature attribution or attention maps. 
 % We prioritize counterfactuals with \emph{abnormal} model behaviors, \ie the actual changes in prediction do not match the expectation.
 %(measured by sentence similarity or perturbed feature weights.)
-We validate this hypothesis in user study, and observed that expert users only did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals, even after seeing SHAP explanations \cite{NIPS2017_7062} and manually exploring the model's behavior. 
-This indicates that seeing such explanations would add a lot of information that users are currently missing (much of which consisting of mistaken model predictions) when they perform manual counterfactual analysis and use feature attribution methods.
+We validate this hypothesis by \emph{selecting counterfactuals that potentially highlight mistaken model predictions}, \eg the model incorrectly predicts \emph{positive} after \swap{kids}{no one} in Figure~\ref{fig:teaser}D, even though ``kids'' is supposed to be important.
+In user study, we observed that expert users only did slightly better than random at predicting what a model would do on \sysname counterfactuals (accuracy: $55 \pm 6\%$), even after seeing SHAP explanations~\cite{NIPS2017_7062} and manually exploring the model's behavior. 
+This indicates that such explanations would add a lot of information that are currently missing from feature attribution methods and manual counterfactual analysis, much of which consisting of mistaken model predictions.
+In summary, we:
+\begin{compactenum}
+\item  Formalize the general purpose counterfactual generation task that separate the generation step from selections.
+\item Design training prompts and finetune GPT-2 as the generator, which returns counterfactuals that are targeted, diverse, and realistic.
+\item Propose appropriate selection strategies, and demonstrate \sysname in three scenarios that require counterfactual reasoning: \emph{training, evaluation, and explanation}.
+\end{compactenum}
 
 
 % we observe that \sysname explanations can complement popular feature attribution methods and highlight their blind spots.

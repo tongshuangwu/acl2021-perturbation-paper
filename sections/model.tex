@@ -53,22 +53,22 @@ Adversarial training 		& \cmark & \qmark \\
 % on a particular instance
 % 
 \subsection{Desiderata}
-Given an instance $x \in \xset$, we expect a counterfactual generator $g$ to produce a set of counterfactuals $\xp$-s ($[\xp_1, \xp_2, ...]$) with potentially varying relationships $x \rightarrow \xp_i$.
+Given an instance $x \in \xset$, we expect a counterfactual generator $g$ to produce a set of counterfactuals $\xp \in \hat{\xset} = \{\xp_1, \xp_2, ...\}$ with varying relationships $x \rightarrow \xp_i$, which includes the perturbation strategy, the change on the groundtruth labels, the model predictions, etc.
 % Each $\xp_i$ perturbs $x$ with certain strategies like negations, syntactic restructuring, etc., and the edited spans are instantiations of the strategies.
-For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser} are both instances of the \ctrltag{negation} relationship.\footnote{All examples shown are actual generations of the model.}
-Knowledge of such relationships can aid downstream filtering and ranking.
+For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser} are both instances of the perturbation strategy \ctrltag{negation}, though the prediction flips from \emph{positive} to \emph{negative} for the former, while staying intact for the latter.\footnote{All examples shown are actual generations of the model.}
+Knowledge of such relationships aid downstream filtering and ranking.
 % $x\rightarrow \xp$ then forms certain relationships that are useful for downstream filtering (\eg perturbation strategy, the added and removed tokens, the impacts on groundtruth label, model prediction, etc.)
 %The perturbation follow certain \emph{strategies} $s$ (e.g., negations~\cite{kaushik2019learning}, word substitution~\cite{li-etal-2020-bert-attack}, syntactical restructing~\cite{iyyer2018adversarial}).
 
 %Desired counterfactuals are usually~\cite{morris2020textattack}:
-We expect each counterfactual $\xp$ to be: 
-D1) \emph{close} to its $x$~\cite{pearl2018causal}, or it only involves minimal changes necessary for establishing certain effect, while leaving the rest of the instance intact.
+According to social science research and prior work on counterfactual applications, we expect an $\xp$ to have the following properties: 
+First, it should be \emph{close} to its $x$~\cite{pearl2018causal}, or it only involves minimal changes necessary for establishing certain effect, while leaving the rest of the instance intact.
 
-D2) \emph{realistic}, or that $\xp$ has a high probability of occurrence and being in the original $\xset$.
+Second, it should be \emph{realistic}, or that $\xp$ has a high probability of occurrence and being in the original $\xset$.
 Such ``nearly occurred'' instances are cognitively more critical than those that involve rare assumptions and coincidences~\cite{kahneman}.
-For natural language, \emph{realistic} means being grammatically correct~\cite{morris2020textattack}, and being semantically meaningful (\eg \exinline{This is a great superfluous person} is grammatical but not meaningful.) 
+For natural language, \emph{realistic} means being grammatically correct~\cite{morris2020textattack}, and being semantically meaningful (\eg \exinline{It is watchable for water} is grammatical but not meaningful.) 
 
-Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, kahneman}, we also expect the generator $g$ to produce a series of D3) \emph{diverse} counterfactuals that can support different downstream tasks, using various strategies, and various initiations of the same strategy.
+Moreover, because there can be infinite numbers of ``what-ifs''~\cite{pearl2018causal, kahneman}, we also expect the generator $g$ to produce a series of \emph{diverse} counterfactuals that can support different downstream tasks, using various strategies, and various initiations of the same strategy.
 
 %Additionally, augmentations usually prioritize (3) \emph{diversity} --- a group of $x$s are preturbed using various strategies, and various initiations under the same strategy, such that they provide different constraints on finetuning decision boundaries.
 %On the other hand, evaluations and explanations require more (4) \emph{controlled} perturbations for systematic and targeted inspections.
@@ -97,7 +97,7 @@ Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, ka
 \ctrltag{shuffle}
     & \tagdefine{To move (or swap) key phrases or entities around the sentence.} \newline
     A \swap{dog}{woman} is embraced by the \swap{woman}{dog}.
-    & \cite{zhang2019paws, mccoy2019right}
+    & \cite{zhang2019paws}
 \\ \midrule
 \ctrltag{lexical}
     & \tagdefine{Changing just one word or noun chunks without breaking the POS tags.} \newline
@@ -107,27 +107,27 @@ Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, ka
 \ctrltag{resemantic}
     & \tagdefine{To replace short phrases or clauses without affecting the parsing tree.}\newline
       A dog is \swap{embraced by the woman}{wrapped in a blanket}.
-    & \cite{wieting2017paranmt}
+    & \cite{sakaguchi2019winogrande}
 \\ \midrule
 \ctrltag{insert}
     & \tagdefine{To add constraints without affecting the parsing structure of other parts.} \newline
       A dog is embraced by the \add{little} woman.
-    & \cite{wieting2017paranmt}
+    & \cite{mccoy2019right}
 \\ \midrule
 \ctrltag{delete}
     & \tagdefine{To remove constraints without affecting the parsing structure of other parts.} \newline
     A dog is embraced \remove{by the woman}.
-    & \cite{wieting2017paranmt}
+    & \cite{mccoy2019right}
 \\ \midrule
 \ctrltag{restructure}
     & \tagdefine{To alter the dependency tree structure, \eg changing from passive to positive.} \newline
     A dog is \swap{embraced by}{hugging} the woman.
-    & \cite{zhang2019paws, mccoy2019right}
+    & \cite{wieting2017paranmt}
 \\
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{A list of \tagstrs used for semantically driving the counterfactual generation, their corresponding examples (all model generated), and the training datasets that contains most of the corresponding patterns.}
+\caption{A list of \tagstrs used for semantically driving the counterfactual generation, their corresponding examples (all model generated), and the representative training datasets for the corresponding patterns.}
 %\wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
 \label{table:ctrltag}
 \vspace{-10pt}
@@ -147,14 +147,14 @@ Because there can be inifinite numbers of ``what-ifs''~\cite{pearl2018causal, ka
 
 \subsection{Counterfactual generation as NLG}
 
-We form the perturbation as a text generation task using language models (LMs), which predict the continuing text given preceding prompts.
+We frame the perturbation as a text generation task using language models (LMs), which predict the continuing text given preceding prompts.
 %Here, instead of their common use case, \ie generating the remaining paragraphs, 
-Pretrained on a large number of webpages curated and filtered by humans, LMs like GPT-2~\cite{radford2019language} naturally generate more realistic (D2) and diverse (D3) counterfactuals compared to templates~\cite{ribeiro2018sear} or perturbation functions~\cite{wu2019errudite}.
+Pre-trained on a large number of web pages curated and filtered by humans, LMs like GPT-2~\cite{radford2019language} naturally generate more \emph{realistic} and \emph{diverse} counterfactuals compared to templates~\cite{ribeiro2018sear} or perturbation functions~\cite{wu2019errudite}.
 We use the original sentence $x$ as the prompt, and finetune off-the-shelf LMs to generate $\xp$: \exinline{$x$ \perturbtoken $\xp$ \stoptoken}.
 
 \paragraph{Training prompts with controls.}
 We further modify the training prompts to allow targeted perturbations, as in Figure~\ref{fig:blank}.
-Besides boosting diversity on top of LMs, the targeted perturbations enable new forms of downstream applications, \eg interactive explanation~\cite{miller}, slice-based data augmentation~\cite{chen2019slice}.
+Besides boosting diversity on top of LMs, the targeted perturbations enable new forms of downstream applications like interactive explanation~\cite{miller} and slice-based data augmentation~\cite{chen2019slice}.
 
 \emph{Where-to-perturb, with \texttt{[BLANK]}}.
 To perturb specific parts of $x$, We borrow the blank fill-in structure~\cite{donahue2020enabling}, \ie targeted subphrases are replaced with special \texttt{[BLANK]} tokens, and the actual content (``answers'' to blanks) are concatenated to the end. 
@@ -178,25 +178,25 @@ As in Figure~\ref{fig:blank}, we put \tagstrs before the blanked $\xp$ to priori
 
 %\wts{Add some more explanation on the design rationale. It is a more syntactic style change, and we try to minimize the overlaps between words; But we leave out the semantic ones because they overlap too much. arguably lexical and resemantic are similar, but we separate them because editing distance and because too many prior work do lexical change that it deserves a separate category.}
 
-\paragraph{Training data formation.}
-While we do not have a single NLP dataset for training a counterfactual generator, multiple existing datasets contain pair sentences that can be seen as counterfactuals of each other (D1). 
-We combined six datasets with paired data.
-These datasets all contain natural sentences (\eg WinoGrande~\cite{sakaguchi2019winogrande} for Commonsense tasks, PAWS~\cite{zhang2019paws} for paraphrasing) such that the finetuned model still maintain \emph{realistic} generation.
+\textbf{Training data formation.}
+While we do not have a single training set for counterfactual generation, multiple existing datasets contain pair sentences that can be seen as \emph{close} counterfactuals of each other. 
+We combined six such datasets.
+They all contain natural sentences (\eg WinoGrande~\cite{sakaguchi2019winogrande} for Commonsense tasks, PAWS~\cite{zhang2019paws} for paraphrasing) such that the finetuned model still maintain \emph{realistic} generation.
 Moreover, they each expresses a subset of the strategies, and therefore achieves fair coverage on all \tagstrs when combined.
 In total, we collected 657,144 training prompts from 191,415 sentence pairs.
 We list the representative datasets in Table~\ref{table:ctrltag}, and describe the datasets and the finetuning details in \S\ref{appendix:train_data}.
 
 
-\paragraph{Filtering \emph{realistic} generations.}
+\textbf{Filtering \emph{realistic} generations.}
 With \tagstrs and blanks,the generated counterfactuals can become ungrammatical or nonsensical, and therefore requires additional filtering.
 Inspired by the language model constraints used by \citet{morris2020textattack}, we score both $x$ and $\xp$ using un-finetuned GPT-2, and invalidate the $\xp$ if its log-probability (either on the full sentence or on the perturbed chunks) decreases more than 10 points compared to $x$.
 %(though their other constraints may also be useful.)
 
 
-\paragraph{Ranking \& Selection.}
-As a general-purpose and task-agnostic model, our finetuned GPT-2 generator does not distinguish counterfactual applications.
-Rather, it (targetedly) generates a large amount of counterfactuals with different combinations of \tagstrs and blanks, and the generated $\xp$-s should be further selected or ranked based on the relationship $x \rightarrow \xp$.
-For example, we can find adversarial examples using common filtering constraints (\eg sentence semantic similarity~\cite{morris2020textattack}).
+\textbf{Ranking \& Selection.}
+As a general-purpose and task-agnostic model, our generator does not distinguish counterfactual applications.
+Rather, it (targetedly) generates a large amount of counterfactuals with different combinations of \tagstrs and blanks, and the generated $\hat{\xset}$ should be further selected or ranked based on the relationship $x \rightarrow \xp$.
+For example, we find adversarial examples with common filtering constraints (\eg sentence semantic similarity~\cite{morris2020textattack}).
 We demonstrate different selections in \S\ref{sec:app_label} and \S\ref{sec:app_explain}.
 
 
@@ -214,7 +214,7 @@ We demonstrate different selections in \S\ref{sec:app_label} and \S\ref{sec:app_
 \paragraph{Validity / Realistic.}
 We verify the impact of the filtering through human evaluation.
 One of the coauthors manually labeled the validity of 600 augmentations generated on 120 instances from the three classification tasks (\sst, \nli, \qqp).
-The validity rate among all the generated instances were $61.5\%$, which increased to $78.3\%$ after the filtering. 
+The validity rate among all the generated instances is $61.5\%$, which increases to $78.3\%$ after the filtering. 
 As part of the data labeling task in \S\ref{sec:app_label}, we also asked crowdworkers to label whether a perturbed sentence is realistic (\emph{``likely written by a native English speaker''}), and they arrived at similar validation rates ($75.0\%$ for \dsst, $70.0\%$ for \dqqp, and $81.7\%$ for \dnli).
 %If no filter at all, the instances you see will only have 60% valid stuff (we care more about precision, every invalid counterfactual shown to a human is wasted time):
 %\wts{Maybe no need for the instruction; It's in appendix.}
@@ -231,7 +231,7 @@ The success rate increases by $28.4\% \pm 18.2\%$ across all \tagstrs, ranging f
 
 There are three common failure cases for the \tagstrshorts:
 %Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
-(1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
+(1) The dual manipulation from the \tagstrs and the blanks are in conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
 (2) $x$ does not have the corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
 (3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
 In the ablation study, we filtered out prompts that fell under cases 1 and 2.
