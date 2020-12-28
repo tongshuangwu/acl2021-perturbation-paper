@@ -26,8 +26,11 @@ On the other hand, those evaluating and improving model decision boundaries lean
 Such methods cover more diverse patterns, but the process is costly, and relies heavily on human creativity and domain expertise.
 Moreover, though human annotators also share strategies like negation, subject-object swapping~\cite{kaushik2019learning, gardner2020contrast}, the strategies have yet to be captured for targeted use.
 Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable on a small amount of data (\eg \citet{li2020linguistically} covered 20\% NLI data.)
-We unify the generation for different use cases as an NLG task, which bridges the scalability and diversity.
-We only distinguish them through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
+
+Closest to ours, \citet{madaan2020generate} generated diverse and plausible counterfactuals with controlled text generation~\cite{Dathathri2020Plug}, on top of GPT-2.
+However, their \emph{controls} are strictly driven by the known classifier at hand (\eg a sentiment classifier is required to establish the sentiment change in $x\rightarrow \xp$), limiting the use case to model evaluation.
+We unify the generation for different use cases and enable task-agnostic controls, which bridges the scalability and diversity.
+We only distinguish the generated ones through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 
 
 
