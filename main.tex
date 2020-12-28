@@ -16,6 +16,7 @@
 \usepackage[hyperref]{acl2020}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{stfloats}
 
 \renewcommand{\UrlFont}{\ttfamily\small}
 \usepackage{amsmath,amsthm,amssymb}
@@ -24,7 +25,7 @@
 % but it will improve the layout of the manuscript,
 % and will typically save some space.
 \usepackage{microtype}
-
+\usepackage{balance}
 \usepackage{paralist}
 \usepackage{verbatim}
 \usepackage[normalem]{ulem}
@@ -122,7 +123,8 @@
 \newcommand{\clabel}[1]{\emph{#1}\xspace}
 
 % constants
-\newcommand{\sysname}{{\color{red}Erised}\xspace}
+\newcommand{\sysname}{{\color{red}Polyjuice}\xspace}
+\newcommand{\modelurl}{\url{https://huggingface.co/tongshuangwu/polyjuice}}
 
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
 \newcommand{\tagstr}{control code\xspace}
@@ -161,7 +163,6 @@
 \newcommand{\yp}{\hat{y}}
 \newcommand{\xset}{\mathbf{X}}
 \newcommand{\tofix}[1]{{\color{red}#1}\xspace}
-
 
 
 
@@ -212,7 +213,7 @@ Framed as a text generation task (and modeled by finetuning GPT-2 on paired sent
 \sysname also allows targeted perturbations, through \tagstrs and the fill-in-the-blank structure.
 We propose various strategies to selection the outputs for downstream tasks, and demonstrate \sysname in different applications:
 By generating diverse counterfactuals for humans to label, \sysname produced high-quality datasets for evaluating and improving model generalization, with at least 40\% less effort.
-As counterfactual explanations, \sysname helps reveal models' erroneous behaviors both locally and globally, and complements popular feature attribution methods by finding their blind spots.
+As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods.
 \end{abstract}
 
 \input{sections/intro}
@@ -235,8 +236,9 @@ As counterfactual explanations, \sysname helps reveal models' erroneous behavior
 
 \input{sections/app_augmentation}
 \input{sections/app_explanation}
-\input{sections/app_perturb_applications}
+\balance
 
+\input{sections/app_perturb_applications}
 \input{sections/app_examples}
 
 \end{document}

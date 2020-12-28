@@ -117,3 +117,10 @@ Each sample is further averaged over four random seeds.
 For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16, and selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and perturbation examples.)
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
 
+
+\subsection{Criteria for CheckList Tests}
+\label{appendix:checklist}
+As a behavioral testing framework, CheckList defines multiple tests, and measures models' linguistic capabilities using the failure rates of each test.
+Because failure rates are more sensitive than accuracy, we say a model capability is affected, if the failure rate of a test changes (increases or decreases) more then 5\% (\eg failure rates going from 20\% to 21\% is insignificant), and the delta accounts for 10\% (\eg failure rates decreasing 8\% from 100\% to 92\% does not count.)
+
+
