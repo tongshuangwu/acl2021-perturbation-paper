@@ -38,6 +38,7 @@ Data augmentation &
 \\\midrule
 Counterfactual data aug. & 
     Manual~\cite{kaushik2019learning}
+    Lexical~\cite{garg2019counterfactual}
 \\\midrule
 Adversarial attack & 
     Lexical~\cite{alzantot2018generating, garg2020bae, li-etal-2020-bert-attack, morris2020textattack, tan2020s, jin2020bert, ebrahimi2017hotflip, Zhang2019GeneratingFA, Jia2019CertifiedRT} \newline
@@ -139,7 +140,68 @@ We use the data to finetune an off-the-shelf GPT-2 model from \citet{Wolf2019Hug
 We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
 
 
-\subsection{Ablation study for \tagstrs}
+\subsection{Intrinsic Evaluations}
+\label{appendix:intrinsic}
+\subsubsection{Closeness, Diversity, Realistic}
+
+Similar to \citet{madaan2020generate}, we verify that \sysname generations are realistic through human evaluations (\S\ref{subsec:label_efficiency}).
+We also quantify the diversity and closeness by comparing it to baseline models.
+
+For a given $x$ and its generated counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{malandrakis-etal-2019-controlled, zhu2018texygen} within the generated counterfactual set $\hat{\xset}$.
+The higher the BLEU, the more lexically different the generated phrases are to each other.
+Note that this only reflects one form of \relation{\xp} relationship that is task-agnostic. 
+Meanwhile, \emph{closeness} is measured using both the average semantic and syntactic distance between $x$ and every $\xp \in \hat{\xset}$.
+We compute the semantic distance using a pretrained sentence similarity model~\cite{reimers-2019-sentence-bert}, and the syntactic one using the tree edit distance~\cite{zhang1989simple}.
+
+
+We use similar baselines as \citet{madaan2020generate}: 
+(1) \emph{Masked-LM}, where we similarly blank certain parts of $x$ (by randomly placing up to three \texttt{[MASK]} tokens), and ask RoBERTa to fill in the blank.
+We rely on the CheckList implementation~\cite{checklist:acl20}, as it allows filling in multiple blanks at once through beam search. 
+
+(2) \emph{PPLM-BoW}~\cite{Dathathri2020Plug}, a model that uses a bag-of-words to control the generation.
+As the model generates \emph{arbitrary text} that do not depend on $x$, we agree with \citet{madaan2020generate} that PPLM-BoW should not satisfy the \emph{closeness} requirement.
+We use the first two words of $x$ as the input context (prompt), limit the length of the generation to be similar to $x$, and apply their default condition ``positive words.''
+
+We randomly select 120 instances from three classification tasks, \qqp, \nli, and \sst (40 per task), and generate 10 counterfactuals per $x$ using each of the three models.
+The averaged metrics are in Table~\ref{table:intrinsic}.
+\sysname achieves compatible diversity with PPLM-BoW (self-BLEU score), and compatible \emph{closeness} with Masked-LM, achieving a balance between both.
+
+\begin{table}[tb]
+\small
+    \centering
+    %\setlength{\tabcolsep}{1.3pt}
+    \begin{tabular}{lccc}
+    \toprule
+    \multirow{2}{*}{Model} & Diversity & \multicolumn{2}{c}{Closeness} \\
+    \cmidrule(lr){2-2}
+    \cmidrule(lr){3-4}
+    & Self-BLEU $\uparrow$ & Semantic $\downarrow$ & Tree edit $\downarrow$ \\
+    % \cmidrule{2-4}
+    \midrule
+    \sysname & \text{0.82} & 0.37 & 2.02 \\
+    Masked-LM & 0.66 & \textbf{0.27} & \textbf{1.89} \\
+    PPLM-BoW & \textbf{0.82} & 0.65 & 7.65 \\
+    \bottomrule
+    \end{tabular}
+    \vspace{-2.5mm}
+    \caption{The intrinsic metrics comparing \sysname with Masked-LM and PPLM-BoW. As expected, \sysname counterfactuals are \emph{closer} to the original instance than PPLM-BoW, and more \emph{diverse} than the Masked-LM ones.}
+    \vspace{-3mm}
+    \label{table:intrinsic}
+\end{table}
+
+Ideally, we would also like to compare \sysname with GYC~\citet{madaan2020generate}, a parallel work that became available less than one month before ours.
+Inspired by style transfer~\cite{yang2018unsupervised} and controlled text generation, GYC performs the perturbation on the latent space of the input $x$.
+Unfortunately, GYC requires extensive implemention, and has yet to be opensourced.
+
+Still, we believe that our infilling (\texttt{BLANK}) structure will improve the \emph{closeness} over the unconstrained GYC (called content and syntactic preservation in their case).
+We also hypothesize that \sysname has better (or at least compatible) diversity than GYC. 
+Per their intended use case --- model testing and debiasing --- the control functions in GYC are driven by the predictor-of-interest (\eg sentiment classifier, NER tagger). 
+As a result, most of the GYC changes seem to focus on features deemed important by the classifier (\eg \exinline{I am very disappointed with the service} is changed by \swap{disappointed}{pleased}, \swap{disappointed}{happy}, \swap{disappointed with}{pleased to get a good}).
+
+
+
+
+\subsubsection{Controllability with Ablation Studies}
 \label{appendix:ablation_control}
 
 We finetune another GPT-2 model with training prompts that \emph{do not} contain the \tagstrshorts (called \emph{\sysname-a}), and quantify the impact of \tagstrs through an ablation study.

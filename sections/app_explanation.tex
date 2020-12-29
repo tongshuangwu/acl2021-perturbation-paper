@@ -13,7 +13,7 @@ In this case, the expected change in prediction of perturbing a token $t$ is the
 For example, in Figure~\ref{fig:explanation}, $w(t=\text{{depression}})=0.276$.
 The actual prediction change is the weighted average of $|f_p(x)-f_p(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), with the weight being the number of words modified in $\xp$. 
 Intuitively, the more words changed in $\xp$, the less effect each word has; In Figure~\ref{fig:explanation}, we regard ``depression'' to be responsible for half of the impact on changing \swap{in depression}{suicidal}.
-More formally, for a given $x$ and its $\xp$-s, we use $r(\xp)$ to denote the set of words replaced or deleted from $x$ in $x \rightarrow \xp$.
+More formally, for a given $x$ and its $\xp$-s, we use $r(\xp)$ to denote the set of words replaced or deleted from $x$ in \relation{\xp}.
 We group the counterfactuals based on their affected words $G_t = \{\xp\ |\ t \in r(\xp)\}$. $d_f(t, x)$ then becomes:
 $$d_f(t, x) = \frac{1}{|G_t|+1} \left(w(t) + \sum_{\xp \in G_t} \frac{|f_p(x)-f_p(\xp)|}{|r(\xp)|}\right)$$
 We add the additional SHAP weight $w(t)$ as a smoothing factor to punish dominating outlier $\xp$.
@@ -31,7 +31,7 @@ To enable the grouping, we first featurize each counterfactual $\xp$ with respec
 (4) the combined template \fexptemp{\swap{kids}{children}}.
 For tokens involving multiple changes, we featurize both the primary and the combined changes, and so the example in Figure~\ref{fig:blank} also have additional features like \texttt{\fexptag{negation} \& \fexptag{lexical}}.
 
-For each feature $h$ we compute the its prediction change rate over all the counterfactuals $(x, \xp) \in G_{h}$ that have the said feature, and compute the probability of the predicted label changes: $Pr(y_1, y_2) = |G_h^{y_1\rightarrow y_2}|/|G_h|$, where $ G_h^{y_1\rightarrow y_2} = \{ (x, \xp)\ |\ (x, \xp) \in G_h, f(x)=y_1, f(\xp) = y_2 \}$.
+For each feature $h$ we compute the its prediction change rate over all the counterfactuals $(x, \xp) \in G_{h}$ that have the said feature, and compute the probability of the predicted label changes: $Pr(y_1, y_2) = |G_h^{y_1\veryshortarrow y_2}|/|G_h|$, where $ G_h^{y_1\veryshortarrow y_2} = \{ (x, \xp)\ |\ (x, \xp) \in G_h, f(x)=y_1, f(\xp) = y_2 \}$.
 The abnormality of a feature $h$ is represented by the entropy of the prediction change:
 $$I_h = -\sum_{y_1 \in Y, y_2 \in Y} Pr(y_1, y_2) \cdot \log Pr(y_1, y_2)$$
 We find the abormal feature with $\hat{h} = \argmin I_h$.

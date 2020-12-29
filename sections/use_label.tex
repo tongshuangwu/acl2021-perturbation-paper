@@ -113,29 +113,38 @@ The model improves consistently on identifying the entity orders across tests (a
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Use 1 \& 2: Training \& Evaluation}
+\section{\sysname for Training \& Evaluation}
 \label{sec:app_label}
+%\hao{suggestion: highlight the key results in 4.2, 4.3, and 4.4 upfront.}
+Manually created counterfactuals are used for evaluating and improving models' decision boundaries, but \emph{creating} variations has been shown to be much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
+We experiments on three datasets (more in \S\ref{appendix:app_label_data}), including
+(1) \sst Analysis with Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive},
+(2) Natural Language Inference (\nli) with \dnli~\cite{bowman-etal-2015-large}, and 
+(3) Duplicate Question Detection (\dqqp)~\cite{wang2018glue}.
 
-Manually created counterfactuals are used for evaluating models' decision boundaries~\cite{gardner2020contrast} and for counterfactual data augmentation~\cite{kaushik2019learning}, but \emph{creating} variations has been shown to be much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
-With experiments on three datasets (more in \S\ref{appendix:app_label_data}), we show that just labeling the \sysname counterfactuals can serve similar purposes at a lower cost:
-(1) \sst with Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive},
-(2) \nli with \dnli~\cite{bowman-etal-2015-large}, and 
-(3) \dqqp~\cite{wang2018glue}.
+We show that just labeling the \sysname counterfactuals can serve similar purposes, while saving at least 40\% of the creation time (\S\ref{subsec:label_efficiency}):
+Using the counterfactuals as contrast sets~\cite{gardner2020contrast}, we observe that the performances of state-of-the-art models decrease significantly (\S\ref{subsec:contrast_set}). 
+Used for data augmentation~\cite{kaushik2019learning} in \S\ref{subsec:augmentation}, we improve models generalization accuracies on out-of-domain datasets, challenge sets and contrast sets, as well as CheckList testing results~\cite{checklist:acl20}, while maintaining the in-domain accuracy.
 
-\subsection{Generating \& Selecting $\xp$ for Labeling}
+%\hao{the section below seems out of place}
+
+\subsection{Selection: Erroneous Slices \& Diversity }
 \label{subsec:gen_counterfactual_for_labeling}
 
-Not all counterfactuals have the same labeling utility, and we use the following two strategies to better compensate for the training space.
+To ensure we collect the most effective counterfactuals for evaluation (\S\ref{subsec:contrast_set}) and training (\S\ref{subsec:augmentation}), we select \sysname counterfactuals that are diverse, and fulfill the model's known blind spots.
+%Not all counterfactuals have the same labeling utility, and we use the following two strategies to better compensate for the training space.
+
+
+\emph{Prioritize diversity.}
+We prioritize diverse perturbations to cover more variations around local decision boundaries.
+We measure the similarity between counterfactuals based on weighted overlaps between their \tagstrs, the changed text, and the affected parsing tree structure (Distance function in \S\ref{appendix:app_label_distance}). 
+For example, \ctrltag{lexical} changes from ``man'' to ``woman'' and ``person'' is more similar than adding the \ctrltag{quantifier} (``two man'').
 
 \emph{Targeted counterfactuals.}
 \citet{longpre2020effective} found that typical data augmentations are likely to bring redundant benefits as pre-training, and suggested that the method should focus on where current models fail.
-As such, in our training (\S\ref{subsec:augmentation}), we prioritize counterfactuals that can fulfill the model's known blind spots, by slicing the original dataset and blanking specific subtrees.  
+In our training (\S\ref{subsec:augmentation}), we do so by slicing the original dataset and blanking specific subtrees.  
 For example, to highlight the impact of prepositions (\exinline{His surfboard is \swap{beneath}{lying on} him}), we first filter examples that have prepositions, and generate blanked prompts like \exinline{\ctrltag{[resemantic]} His surfboard is \texttt{[BLANK]} him.}
 
-\emph{Prioritize diversity.}
-To cover more variations around local decision boundaries, we select counterfactuals with \emph{diverse patterns} for each original instance.
-We measure the similarity between counterfactuals based on weighted overlaps between their \tagstrs, the text deleted and added, and the affected parsing tree structure. 
-For example, \ctrltag{lexical} changes from ``man'' to ``woman'' and ``person'' is more similar than adding the \ctrltag{quantifier} (``two man'').
 %The similarity computation is in \S\ref{appendix:perturb_similarity}. 
 %\wts{Need to write this part.} 
 %Formally, the distance between two counterfactuals is ($a_1$ is an abbreviation for $a(\xp_1, x)$):
@@ -148,7 +157,7 @@ For example, \ctrltag{lexical} changes from ``man'' to ``woman'' and ``person'' 
 \small
 \centering
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{c c c c c}
+\begin{tabular}{@{} c c c c c @{}}
 \toprule
 \textbf{Task} & \textbf{Dev.} & \textbf{Orig. set} & \textbf{Contrast set} & \textbf{Consistency} \\ 
 \midrule
@@ -172,7 +181,7 @@ For example, \ctrltag{lexical} changes from ``man'' to ``woman'' and ``person'' 
 \end{table}
 %\end{comment}
 
-\subsection{Evaluation via Contrast Sets}
+\subsection{Experiment: Evaluation}
 \label{subsec:contrast_set}
 
 
@@ -184,11 +193,11 @@ For example, \ctrltag{lexical} changes from ``man'' to ``woman'' and ``person'' 
 
 \paragraph{Collection} 
 We crowdsource the labels for the counterfactuals on Amazon Mechanical Turk. 
-For each round, the annotator is given the original instance $x$ and its groundtruth as references, and they are tasked to label three counterfactuals by (1) classification task label and (2) validity (\emph{``likely written by a native English speaker''}). 
+For each round, the annotator is given the original instance $x$ and its groundtruth as references, and they are tasked to label three counterfactuals by (1) classification task label and (2) plausibility (\emph{``likely written by a native English speaker''}). 
 We carefully remove noisy workers using hidden \emph{gold rounds}, as well as filters on label distributions and completion time.
 We also remove noisy labels through majority votes.
 More details are in \S\ref{appendix:label_instruct}. 
-For each task, we crowd labeled 1,500 $\xp$ on 500 original $x$, and kept around 400 of them on 270 $x$ after validity and majority vote filtering.\footnote{For \qqp and \nli, we only perturbed \emph{duplicate} and \emph{entailment} examples, as others are significantly harder to change.}
+For each task, we crowd labeled 1,500 $\xp$ on 500 original $x$, and kept around 400 of them on 270 $x$ after validity and majority vote filtering.\footnote{For \qqp and \nli, we only perturbed \emph{duplicate} and \emph{entailment} examples, as others are significantly harder to flips (called \emph{asymmetric counterfactuals}~\cite{garg2019counterfactual}).}
 Following the contrast set definition~\cite{gardner2020contrast}, we also filter the counterfactuals to only keep those whose groundtruth label is different from $x$'s, resulting in contrast sets with size 100-300.
 %: 106 $\xp$ on 88 $x$ for \sst, 276 $\xp$ on 202 $x$ for \nli, 243 $\xp$ on 185 $x$ for \qqp.
 We changed the \nli labels for 60\% of the time, whereas \sst was harder (only flipping 36.9\%).
@@ -203,7 +212,7 @@ We also report consistency, \ie cases where the model predicts both the original
 Table~\ref{table:contrast_set_result} shows that all the models perform worse on the contrast sets, and the performance decreases for a similar amount compared to the original contrast set.
 
 
-\subsection{Train via Counterfactual Augmentation}
+\subsection{Experiment: Training}
 \label{subsec:augmentation}
 %\paragraph{Collection.}
 We collected the data through similar procedures as for contrast sets, with one change:
@@ -241,15 +250,15 @@ Future work should further strategize the ranking to more equally cover competin
 
 
 
-\subsection{Labeling Validity Rate \& efficiency}
+\subsection{Plausibility \& Labeling Efficiency}
 \label{subsec:label_efficiency}
 
-\paragraph{Validity rate.}
-Crowd workers rated most counterfactuals to be valid and realistic: $75.0\%$ for \dsst, $70.0\%$ for \dqqp, and $81.7\%$ for \dnli.
-One of the authors also manually labeled 600 counterfactuals generated from 120 instances in the three classification tasks, and arrived at similar validation rates:
+\textbf{Plausibility.}
+Crowd workers rated most counterfactuals to be plausible: $75.0\%$ for \dsst, $70.0\%$ for \dqqp, and $81.7\%$ for \dnli.
+One of the authors also manually labeled 600 counterfactuals generated from 120 instances in the three classification tasks, and arrived at similar plausibility:
 The rate of unfiltered counterfactuals was $61.5\%$, which increased to $78.3\%$ after filtering, showing that the filtering is effective.
 
-\paragraph{Efficiency.}
+\textbf{Efficiency.}
 Labeling three counterfactuals of a given example is reasonably easy, as (1) annotators are better at \emph{verifying} counterfactuals than manually \emph{generating} them~\cite{ribeiro2018sear}, and (2) annotators only need to focus on the reference example and the corresponding perturbed phrases, rather than re-parsing the full instance for each label they submit~\cite{Khashabi2020MoreBF}.
 As a result, the median time for labeling one round (three counterfactuals) is 30 seconds.
 Even in the most extreme (and very rare) case where we only keep 100 contrast set examples after 500 rounds of validation, the average ``creation'' time per counterfactual is 2.5 minutes, which is still 40\% more efficient than manual creation:

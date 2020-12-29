@@ -34,6 +34,7 @@ We augment the data based on \dnli~\cite{bowman-etal-2015-large}.
 We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question pairs from the community question-answering website Quora.
 
 \subsection{Diversity Ranking in \S\ref{subsec:gen_counterfactual_for_labeling}}
+\label{appendix:app_label_distance}
 
 To select diverse counterfactuals for labeling, we first over generate a large number of candidates.
 For each original example, we randomly generate up to 10 blanked sentences. Each sentence contains up to three \BLANK tokens that spread over different parsing tree structures.

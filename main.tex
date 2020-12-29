@@ -83,11 +83,12 @@
 \newcommand{\changed}[2]{{#1}\arrow ~\add{#2}}
 \newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
 
+\newcommand{\relation}[1]{$x\veryshortarrow#1$\xspace}
 
-
+\newcommand{\ensuretext}[1]{#1}
+\newcommand{\marker}[2]{\ensuremath{^{\textsc{#1}}_{\textsc{#2}}}}
 \newcommand{\arkcomment}[3]{\ensuretext{\textcolor{#3}{[#1 #2]}}}
 %\renewcommand{\arkcomment}[3]{}  % uncomment for submission
-
 \newcommand{\hao}[1]{\arkcomment{\marker{H}{P}}{#1}{purple}}
 
 
@@ -214,12 +215,14 @@ $^{2}$Microsoft Research\hspace{5mm} \\
 \begin{document}
 \maketitle
 \begin{abstract}
-Counterfactual examples are widely effective for calibrating, evaluating, and explaining model decision boundaries, yet either existing generation methods cover limited linguistic patterns or are hard to scale.
-We propose \sysname, a method for automatically generating general-purpose counterfactuals. 
-Framed as a text generation task (and modeled by finetuning GPT-2 on paired sentences), \sysname produces counterfactuals that are realistic, diverse, and close to the original instance.
-\sysname also allows targeted perturbations, through \tagstrs and the fill-in-the-blank structure.
-We propose various strategies to selection the outputs for downstream tasks, and demonstrate \sysname in different applications:
-By generating diverse counterfactuals for humans to label, \sysname produced high-quality datasets for evaluating and improving model generalization, with at least 40\% less effort.
+%\hao{suggestion: mention something from the 2nd intro paragraph here:formulating into text gen is a solution (rather than the goal) to more efficient counterfactual generation.}
+Existing methods generate counterfactual examples for specific applications, even though most counterfactual can be broadly used for calibrating, evaluating, and explaining model decision boundaries.
+Constrained by their use cases, the methods each have a limited linguistic pattern coverage or are hard to scale.
+We propose to disentangle the generation from the applications, \ie gather general-purpose counterfactuals first, and then select them for specific applications.
+We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator \sysname, which produces plausible and diverse counterfactuals.
+It also allows control over where perturbations happen and what they do.
+With simple selection strategies, we demonstrate \sysname in different applications:
+by generating diverse counterfactuals for humans to label, \sysname produced high-quality datasets for evaluating and improving model generalization, with at least 40\% less effort.
 As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods.
 \end{abstract}
 
