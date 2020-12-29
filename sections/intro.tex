@@ -68,6 +68,7 @@ We also demonstrate how \sysname can produce \emph{black-box counterfactual expl
 We select \sysname counterfactuals \emph{that potentially highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
 %An example would be Figure~\ref{fig:teaser}D: the model incorrectly predicts \emph{positive} after \swap{kids}{no one} in Figure~\ref{fig:teaser}D, even though ``kids'' is supposed to be important.
 In user study, we observed that expert users only did slightly better than random at predicting what a model would do on \sysname counterfactuals (accuracy: $55 \pm 6\%$), even after seeing feature weights and inspecting the model with their own counterfactuals.
+In fact, \sysname finds more bugs within spots where humans considered inspected.
 This indicates that such explanations would complement feature attribution explanations and counterfactual analysis methods, echoing evidence from social science~\cite{miller}.
 
 
