@@ -15,13 +15,10 @@
 \newcommand{\fexptemp}[1]{\fexp{TEMP}{#1}}
 
 
-\section{Use 3: Counterfactual Explanations}
+\section{\sysname for Explanations}
 \label{sec:app_explain}
 %Both counterfactual explanations and semi-counterfactual explanations.
 %As defined in \cite{}
-
-
-
 
 
 
@@ -38,48 +35,56 @@ Counterfactual explanations complement SHAP, \ie they (B) concretize the opaque 
 \label{fig:explanation}
 \end{figure}
 
-%\wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
-\subsection{Local Explanations: Abnormality}
-Counterfactual explanations are more intuitive than feature attribution methods~\cite{miller}.
-Suppose we are inspecting the \qqp BERT model mentioned in \S\ref{subsec:contrast_set}.
-Compared to the opaque SHAP feature weights in Figure~\ref{fig:explanation}A~\cite{NIPS2017_7062}, Figure~\ref{fig:explanation}B more explicitly highlights that the model considers ``help'' trivial (weight$=0.05$): 
+Counterfactual explanations have been elusive in NLP, despite evidence from social science research~\cite{miller} indicating that they may be more intuitive than feature attribution methods. 
+Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively show that the \qqp model under inspection (the same as in \S\ref{subsec:contrast_set}) considers ``help'' trivial: 
 \swap{help}{find} in \emph{Q2} does not change the prediction.
 
-However, the cognitive burden of complete explanations is too great.
-As a result, \citet{miller} concluded that people usually \emph{select} a small subset of explanations on contrastive cases (``foils''), which can be inferred by \emph{abnormality}.
+Here, we first select counterfactuals to serve as local explanations in \S\ref{subsec:local_explain}.
+We evaluate their effectiveness in \S\ref{subsec:exp_user_study}, namely, \sysname counterfactuals complement feature attribution methods and counterfactual analysis, especially within spots where humans considered inspected.
+We discuss the use of $\xp$ beyond local explanations in \S\ref{subsec:exp_more}.
 
-We follow the principle, and similarly select abnormal counterfactuals as explanations, \ie cases where \emph{the expected and the actual changes in the prediction do not match}.
-Given a predictor $f$, we define the actual change in prediction as $d_f(\xp, x)=|f_p(\xp)-f_p(x)|$, where $f_p(x)$ denotes the prediction probability of $f$ on $x$.
-Meanwhile, the expected change is $\hat{d}_f(\xp, x)$.
-The distance between the expectation and reality then becomes:
-$$\Delta d_f(\xp, x) = \hat{d}_f(\xp, x)-d_f(\xp, x)$$
-We select two ``turning point'' counterfactuals, \ie (1) trivial perturbations that induce a large gap in prediction: $\xp_L = \argmax_{\xp} \Delta d_f(\xp, x)$, or (2) large perturbations resulting in unchanged prediction: $\xp_S = \argmin_{\xp} \Delta d_f(\xp, x)$.
+%\wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
+\subsection{Selection: Abnormalities as Explanations}
+\label{subsec:local_explain}
+
+\newcommand{\dist}{D_f}
+
+
+Because complete explanations is overwhelming, and \citet{miller} concluded that people usually only expect explanations on contrastive cases (``foils'') that they consider \emph{abnormal}.
+We similarly select abnormal counterfactuals as explanations, \ie counterfactuals where \emph{the expected and the actual changes in the prediction do not match}.
+
+Given a model $f$, we define the actual prediction change as $\dist(\xp, x)=|f_p(\xp)-f_p(x)|$, where $f_p(x)$ denotes the prediction probability of $f$ on $x$, and the expected change $\mathbb{E}[\dist(\xp, x)]$.
+The mismatch between the expectation and reality is then:
+$$\Delta\dist(\xp, x) = \dist(\xp, x)-\mathbb{E}[\dist(\xp, x)]$$
+We select two ``turning point'' counterfactuals, \ie (1) large prediction change from trivial perturbations (small expectations): $\xp_L = \argmax_{\xp} \Delta\dist(\xp, x)$, or (2) unchanged predictions from large changes: $\xp_U = \argmax_{\xp} -\Delta\dist(\xp, x)$. 
 
 %  (\eg for measuring ), model-agnostic~\cite{reimers-2019-sentence-bert} or dependent on the hidden layer of the model. The embedding can be either model-agnostic~\cite{reimers-2019-sentence-bert}, or the hidden state of a finetuned predictor
 
-$d_f(\xp, x)$ can take various forms. 
-As a standalone explanation method, it can be the cosine distance in the \emph{Embedding space}~\cite{reimers-2019-sentence-bert}.
-On the other hand, as a \emph{complement} to existing feature attribution methods, $\hat{d}_f$ can be the importance (weights) of the perturbed tokens in $x$.
+$\mathbb{E}[\boldsymbol{\cdot}]$ can take various forms.
+Though we can use the cosine distance in the latent space~\cite{reimers-2019-sentence-bert} to select standalone explanations, a more effective use case is to \emph{complement} existing feature attribution methods.
 %, which are not available in pure counterfactual explanations. However, as mentioned in \S\ref{sec:relate}, they only
-Methods like SHAP or LIME provide overviews of important features, but they estimate weights by \emph{masking} the words.
-As such, they do not reflect how models would react to replacements or additions --- a nuance that is usually overlooked.
+Methods like SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI} provide overviews of features weights, which are not available in pure counterfactual explanations.
+However, they estimate weights by \emph{masking} words, and therefore cannot reflect how models would react to replacements or additions.
+
+To highlight this usually overlooked nuance, we define $\mathbb{E}[\boldsymbol{\cdot}]$ using the importance (weights) of the perturbed tokens in $x$, estimated by SHAP.
 Abnormalities selected this way highlight the missed pieces, and better calibrate users' trust in the predictor. 
-Figure~\ref{fig:explanation}C shows such a $\xp_L$: \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is trivial according to SHAP; Whereas changing the important ``in depression'' in Figure~\ref{fig:explanation}D still results in \emph{Duplicate} ($\xp_S$).
+Figure~\ref{fig:explanation}C shows such a $\xp_L$: \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is trivial according to SHAP; Whereas changing the important ``in depression'' in Figure~\ref{fig:explanation}D still results in \emph{Duplicate} ($\xp_U$).
 Detailed distance functions are in \S\ref{appendix:exp_rank}.
 
 
 
-\subsection{Evaluation: Complement SHAP?}
+\subsection{Evaluation on Local Explanations}
 \label{subsec:exp_user_study}
 
-We conduct a user study to verify whether our local counterfactual explanations can complement SHAP, as the setup nicely combines the overview provided by SHAP, and the decision boundaries it omits.
+We conduct a user study to verify whether our local counterfactual explanations can complement SHAP.
+%, as the setup nicely combines the overview provided by SHAP, and the decision boundaries it omits.
 %\footnote{We defer more sophisticated designs and evaluations for interactive and global explanation to future work.}
 %, where participants are asked to predict model's behavior on the given variations of a base example.
 The study takes the form of counterfactual simulation~\cite{hase2020evaluating}, with participants predicting a model's behavior on counterfactuals.
 Intuitively, the more they simulate incorrectly, the more information they grasp \emph{if we show the counterfactuals to them}.
 
 \paragraph{Procedure.}
-We recruited \tofix{13} graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate a \qqp BERT model for 20 rounds.
+We recruited 13 graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate a \qqp BERT model for 20 rounds.
 In each round, the participants were given a base example with the model's prediction, as well as the SHAP weights, highlighted in the text and with a bar chart (Figure~\ref{fig:explanation}A).
 Moreover, they could create up to ten counterfactuals on their own, and query the model predictions on them.
 More interactions with the predictor usually result in better mental models~\cite{miller}, and we are interested in whether our selected ones \emph{still add information} after such nearly unlimited model access (participants submitted $6.3\pm3.2$ queries per round.)
@@ -120,9 +125,10 @@ However, in 24\% of the missed \cshap cases, participants successfully covered t
 It was hard for them to imagine model predicting \emph{Duplicate} on Figure~\ref{fig:explanation}B (\swap{help}{find}), when the model predicted \emph{Non-Duplicate} on their query \exinline{How do I \swap{help}{play with}...?}
 The number dropped to $15\%$ for the \chuman condition.
 In other words, \emph{\cshap found more bugs within spots where humans considered inspected.}
+%\hao{this is very interesting. close by summarizing the conclusion?}
 
-
-\subsection{$\xp$ beyond Local Explanations}
+\subsection{Beyond Local Explanations}
+\label{subsec:exp_more}
 
 \paragraph{Interactive explanations: user-selected abnormalities.}
 %\paragraph{Interactive explanation.}

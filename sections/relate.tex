@@ -3,7 +3,7 @@
 
 \textbf{The applications of counterfactuals.}
 Counterfactuals in NLP are most broadly used for model training, evaluation, and explanation.
-In training, counterfactuals usually augment the training data to improve model stability~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU} and generalizability.
+In training, counterfactuals usually augment the training data to improve model robustness~\cite{garg2019counterfactual, Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU} and generalizability.
 \citet{kaushik2019learning} and \citet{teney2020learning} showed that counterfactual augmentations help mitigate the weights of spurious features.
 %\citet{teney2020learning} further proposed to treat instances in pairs to emphasize the difference in the training process. 
 %Our data can also support such experiments.
@@ -28,7 +28,7 @@ Moreover, though human annotators also share strategies like negation, subject-o
 Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable on a small amount of data (\eg \citet{li2020linguistically} covered 20\% NLI data.)
 
 Closest to ours, \citet{madaan2020generate} generated diverse and plausible counterfactuals with controlled text generation~\cite{Dathathri2020Plug}, on top of GPT-2.
-However, their \emph{controls} are strictly driven by the known classifier at hand (\eg a sentiment classifier is required to establish the sentiment change in $x\rightarrow \xp$), limiting the use case to model evaluation.
+However, their \emph{controls} are strictly driven by the known classifier at hand (\eg a sentiment classifier is required to establish the sentiment change in \relation{\xp}), limiting the use case to model evaluation.
 We unify the generation for different use cases and enable task-agnostic controls, which bridges the scalability and diversity.
 We only distinguish the generated ones through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 
