@@ -23,7 +23,7 @@ Instructions are similar for \qqp and \sst, except for the label definitions and
 
 \textbf{Sentiment Analysis (\sst)} aims to determine the sentiment polarity of a given sentence (\emph{positive} or \emph{negative}). 
 We select Stanford Sentiment Treebank (\dsst)~\cite{socher2013recursive} as the base dataset for augmentation.
-It contains sentences extracted from full movie reviews on Rotten Tomatoes, which is relatively more aligned with the training data for the perturbation model. 
+It contains sentences extracted from full movie reviews on Rotten Tomatoes, which is relatively more aligned with the training data for the counterfactual model. 
 While the dataset also contains finer-grained labels on subphrases, we only use full sentences.
 As a result, the full training data contains 6,920 sentences.
 
@@ -37,14 +37,14 @@ We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question p
 
 To select diverse counterfactuals for labeling, we first over generate a large number of candidates.
 For each original example, we randomly generate up to 10 blanked sentences. Each sentence contains up to three \BLANK tokens that spread over different parsing tree structures.
-We generate prompts using all the combinations of \tagstrs and blanked sentences, and collect perturbations with a beam search (for each prompt, we used 10 beams and kept top three generations.)
+We generate prompts using all the combinations of \tagstrs and blanked sentences, and collect counterfactuals with a beam search (for each prompt, we used 10 beams and kept the top three generations.)
 
-Then, we sample perturbations \emph{with diverse patterns} to cover more variations around local decision boundaries.
-Specifically, we measure the similarity between perturbations based on weighted overlaps between their \tagstrs, the text tokens removed (denoted as $r(\xp)$) and added ($a(\xp)$), and the affected parsing tree structure $t(\xp)$. 
+Then, we sample counterfactuals \emph{with diverse patterns} to cover more variations around local decision boundaries.
+Specifically, we measure the similarity between counterfactuals based on weighted overlaps between their \tagstrs (denoted as $s(\xp)$), the text tokens removed ($r(\xp)$) and added ($a(\xp)$). 
 %For example, \ctrltag{[lexical]} \swap{man}{woman} is more similar to \ctrltag{[lexical]} \swap{man}{person} than \ctrltag{[quantifier]} \swap{man}{two men}.
 %The similarity computation is in \S\ref{appendix:perturb_similarity}. 
 %\wts{Need to write this part.} 
-Formally, the distance between two perturbations is ($a_1$ is an abbreviation for $a(\xp_1)$):
+Formally, the distance between two counterfactuals is ($a_1$ is an abbreviation for $a(\xp_1)$):
 $$d(\xp_1, \xp_2) = \alpha\cdot\mathbb{1}(s_1 = s_2) + \beta\cdot\mathbb{1}(r_1 = r_2) + \gamma\cdot\mathbb{1}(a_1=a_2)$$
 With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
@@ -52,7 +52,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \centering
 \includegraphics[width=0.9\columnwidth]{figures/mturk_label}
 \vspace{-5pt}
-\caption{A sample labeling task: The crowdworkers annotate three perturbations based on their validity and class label, with respect to the original instance.}
+\caption{A sample labeling task: The crowdworkers annotate three counterfactuals based on their validity and class label, with respect to the original instance.}
 \vspace{-15pt}
 \label{fig:mturk_ui}
 \end{figure}
@@ -74,7 +74,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \centering
 \includegraphics[width=1\textwidth]{figures/explanation_task_ui}
 \vspace{-15pt}
-\caption{A sample explanation interface task.}
+\caption{A sample explanation interface task for \S\ref{subsec:exp_user_study}.}
 \vspace{-10pt}
 \label{fig:explanation_ui}
 \end{figure*}
@@ -86,12 +86,12 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
 \paragraph{Procedure}
 The study started with an introduction, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction}): 
-``given a reference example, the crowdworker should annotate its perturbed variations, based on whether the perturbation is valid (\emph{sounds natural}), and the classification task label.''
+``given a reference example, the crowdworker should annotate its perturbed variations, based on whether the counterfactual is valid (\emph{sounds natural}), and the classification task label.''
 To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
 The annotator then completed 22 tasks, each labeling 3 variations of a single example, as in Figure~\ref{fig:mturk_ui}.
 The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'' (6 labeled examples), with unambiguous examples and known groundtruth labels, which later served as filters for high quality crowdworkers.
 As a result, each annotator contributed $20 \times 3=60$ labels.
-The median task completion time was around 15-20 minutes (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli), and participants received an average payment of \$2.5 (equivalent to an hourly wage of \$7.5-10).
+The median task completion time was around 15-20 minutes (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli), and participants received an average payment of \$2.5.
 
 \paragraph{Participants}
 We recruited participants from Amazon's Mechanical Turk (MTurk), limiting the pool to subjects from within the United States with a prior task approval rating of at least 97\% and a minimum of 1,000 approved tasks.
@@ -101,10 +101,10 @@ We applied two filtering strategies:
 (1) \emph{High quality worker.} 
 We only kept data from participants whose median labeling time was more than 18 seconds and correctly labeled at least 4 gold examples (out of 6), or who correctly labeled all gold ones.
 (2) \emph{Majority vote labeling.}
-We collected two annotations per perturbation, and only kept data points that at least one annotator deems \emph{valid}, and both annotators agree on a particular \emph{class label.}
+We collected two annotations per counterfactual, and only kept those that at least one annotator deemed \emph{valid}, and both annotators agreed on a particular \emph{class label.}
 
-As such, when set out to collect augmentations on 1,000 original examples (thus 3,000 perturbations), we typically collect perturbations for 1,000 perturbations on 600 original examples.
-One of the authors labeled a subset of 100 perturbations on 100 original examples in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, the raw labeling agreement $88\%$).
+As such, when set out to collect augmentations on 1,000 original examples (thus 3,000 counterfactuals), we typically collect counterfactuals for 1,000 counterfactuals on 600 original examples.
+One of the authors labeled a subset of 100 counterfactuals on 100 original examples in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, the raw labeling agreement $88\%$).
 
 
 \subsection{Training Details for \S\ref{subsec:augmentation}}
@@ -114,7 +114,7 @@ One of the authors labeled a subset of 100 perturbations on 100 original example
 We finetune \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
 For each given $(m,n)$, we create three different samples of training data, and Table~\ref{table:aug_sst}--\ref{table:aug_qqp} report the average and the variance of the samples.
 Each sample is further averaged over four random seeds.
-For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16, and selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and perturbation examples.)
+For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16, and selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and counterfactual examples.)
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
 
 

@@ -8,12 +8,12 @@
 \textbf{Dataset} & \textbf{\ctrltag{negation}} & \textbf{\ctrltag{quantifier}} & \textbf{\ctrltag{leixcal}} & \textbf{\ctrltag{resemantic}} & \textbf{\ctrltag{insert}} & \textbf{\ctrltag{delete}} & \textbf{\ctrltag{restructure}} & \textbf{\ctrltag{shuffle}} & \emph{\ctrltag{global}} \\ 
 \midrule
         CAD &      3,456 &         457 &    10,650 &        4,634 &    2,169 &    2,162 &          234 &       84 &    3,756 \\
-   contrast &       336 &         436 &     1,607 &        1,291 &     589 &     586 &          275 &      149 &     877 \\
-       hans &        50 &           0 &        0 &           0 &    3,926 &    3,926 &          494 &     1,602 &       2 \\
-    paranmt &      2,797 &         825 &    10,000 &       10000 &    6,442 &    6,205 &         5,136 &     1,417 &   10,000 \\
-       paws &        81 &        1,815 &    10,000 &       10000 &    3,630 &    3,403 &         4,551 &    10,000 &   10,000 \\
- winogrande &      3,011 &          94 &    10,000 &        6,927 &     120 &     124 &          453 &       65 &    3184 \\
-    Crawled &         0 &           0 &     5,000 &           0 &    5,000 &    5,000 &            0 &      108 &    5,000 \\
+   Contrast &       336 &         436 &     1,607 &        1,291 &     589 &     586 &          275 &      149 &     877 \\
+       HANS &        50 &           0 &        0 &           0 &    3,926 &    3,926 &          494 &     1,602 &       2 \\
+    ParaNMT-50M &      2,797 &         825 &    10,000 &       10000 &    6,442 &    6,205 &         5,136 &     1,417 &   10,000 \\
+       PAWS &        81 &        1,815 &    10,000 &       10000 &    3,630 &    3,403 &         4,551 &    10,000 &   10,000 \\
+ WinoGrande &      3,011 &          94 &    10,000 &        6,927 &     120 &     124 &          453 &       65 &    3184 \\
+    \emph{Crawled} &         0 &           0 &     5,000 &           0 &    5,000 &    5,000 &            0 &      108 &    5,000 \\
       \textbf{Total} &      9,731 &        3,627 &    47,257 &       32,852 &   21,876 &   21,406 &        11,143 &    13,425 &   32,819 \\
 \bottomrule
 \vspace{-15pt}
@@ -85,21 +85,20 @@ To achieve a more balanced distribution, for each dataset, we extract \tagstrs f
 The distribution is shown in Table~\ref{table:gpt_train_stats}.
 
 \paragraph{Contrast set}
-In \cite{gardner2020contrast}, authors of 10 existing NLP dataset each manually perturbed 100-1,000 test instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance.
-The perturbation pattern varies based on the tasks and the annotators, allowing us to learn diverse perturbation methods.
-To make sure we can use the contrast set to evaluate the sentiment analysis model, we excluded the IMDB movie review from the training.
-\footnote{Similarly, though QQP would be a potentially interesting dataset for training the perturbation model, we omitted it so QQP can be used in our evaluation.}
+Authors of 10 existing NLP dataset each manually perturbed 100-1,000 instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance~\cite{gardner2020contrast}.
+The perturbation patterns vary based on the tasks and the annotators, allowing us to learn diverse perturbation strategies.
+To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though QQP would be a potentially interesting dataset for training \sysname, we omitted it so QQP can be used in our evaluation.}
 %\wts{Re-train the model with other contrast sets.}
 
 
 \paragraph{Counterfactually-augmented data (CAD)}
-To augment the training data, \citet{kaushik2019learning} crowdsourced counterfactual perturbations for IMDB movie review (1.7k perturbations on 1.7k original instances) and SNLI (6.6k perturbations on 1.67k original instances).
-Similar to contrast set, the perturbation patterns vary based on the task, but can especially contribute to \ctrltag{negation}.
+To augment the training data, \citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k counterfactuals on 1.7k original instances) and SNLI (6.6k counterfactuals on 1.67k original).
+Similar to the contrast set, CAD's perturbation patterns vary based on the task, but can especially contribute to \ctrltag{negation}.
 We split the movie review paragraphs into paired sentences, to match the sentence length of other datasets.
 
 
-\paragraph{WINOGRANDE} is a large-scale dataset of 44k problems for testing common sense problems~\cite{sakaguchi2019winogrande}.
-The dataset contains nearly identical sentences that differ only by one trigger word, which flips the correct answer choice for certain questions.
+\paragraph{WinoGrande} is a large-scale dataset of 44k problems for testing common sense problems~\cite{sakaguchi2019winogrande}.
+The dataset contains nearly identical sentences that differ only by one trigger word (\eg one noun), which flips the correct answer choice for certain questions.
 The dataset is most suitable for lexical tokens that are suitable for similar use cases.
 
 \paragraph{ParaNMT-50M} contains 50 million English-English sentential paraphrase pairs, covering various domains and styles of text, as well as different sentence structures~\citet{wieting2017paranmt}. 
@@ -110,23 +109,25 @@ As a result, the dataset demonstrates the \ctrltag{shuffle} and \ctrltag{restruc
 
 
 \paragraph{HANS} is a controlled evaluation dataset designed for testing decision boundaries of NLI models~\cite{mccoy2019right}. 
-The dataset contains 10k pairs of premises and hypotheses created based on 10 heavily on fallible syntactic heuristic rules, and therefore compensates rarer structural changes that may be missed by PAWS.
+The dataset contains 10k pairs of premises and hypotheses created based on 10 heavily fallible syntactic templates, and therefore compensates rarer structural changes that may be missed by PAWS.
 
 
 \paragraph{Crawled} 
 We additionally crawled some sentence pairs from non-paired datasets like SQuAD~\cite{rajpurkar-etal-2016-squad} to boost some specific patterns and increase lexical diversity. 
-We estimated \emph{close} pairs (D1) using edit distance, but noticed that it inevitably paired up some unrelated examples (\eg \exinline{how do I not be} and \exinline{how do I recover it} are incorrectly considered \ctrltag{negation} pairs.)
+We estimated \emph{close} pairs using edit distance, and broadly included pairs as long as the editing is less than 60\%.
+This inevitably includes cases that should not be considered counterfactuals, and we further filter them using \tagstrs (see the section below).
+We noticed that it inevitably paired up some unrelated examples (\eg \exinline{how do I not be} and \exinline{how do I recover it} are incorrectly considered \ctrltag{negation} pairs.)
 We only included them for the most determined patterns, \ie \ctrltag{lexical}, \ctrltag{insert}, \ctrltag{delete}, and \ctrltag{shuffle}.
 
 
 \subsection{Training Prompts \& Parameters}
 
-Given a pair, we use the two sentences interchangeably as $x$ and $\xp$ to learn the perturbations both ways.
+Given a pair, we use the two sentences interchangeably as $x$ and $\xp$ to learn the counterfactuals both ways.
 We compute its primary \tagstr based on linguistic features like part-of-speech tagging or dependency trees, and blank out the changed subphrases in $\xp$.
 For example, \ctrltag{negation} occurs when we observe changes on negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlaps between tokens deleted and added.
-When multiple changes occur, we label it with the primary \tagstr, which most significantly change the semantic meaning on the corresponding subphrase.
-In Figure~\ref{fig:blank}, we use the tag \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
-If we cannot identify the \tagstr for a pair or if the editing distance is too large, we denote it with \ctrltag{[global]} and use them as negative samples.
+When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
+In Figure~\ref{fig:blank}, we use the \tagstrshort \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
+If we cannot identify the \tagstr for a pair or if the editing distance is too large, we denote it with \ctrltag{global} and use them as negative samples.
 Importantly, to allow flexible blanking at the generation time, instead of merely blanking the edited spans, we also extend the blank to cover their associated parsing structures, etc.
 As a result, we form up to four unique training prompts given one $(x, \xp)$ pair (Figure~\ref{fig:blank}).
 
@@ -151,8 +152,8 @@ The success rate increases by $28.4\% \pm 18.2\%$ across all \tagstrs, ranging f
 
 There are three common failure cases for the \tagstrshorts:
 %Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
-(1) The dual manipulation from the \tagstrs and the blanks are in conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
-(2) $x$ does not have the corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
+(1) The dual manipulation from the \tagstrs and the blanks conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
+(2) $x$ does not have a corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
 (3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
 In the ablation study, we filtered out prompts that fell under cases 1 and 2.
 
