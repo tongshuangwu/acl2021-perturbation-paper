@@ -58,7 +58,11 @@
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-
+\DeclareMathOperator*{\dist}{D_f}
+\DeclareMathOperator*{\fp}{f_p}
+\DeclareMathOperator*{\E}{\mathbf{H}}
+\DeclareMathOperator*{\R}{r}
+\newcommand{\relation}[1]{\R(#1)}
 
 \newcommand{\colbox}[2]{
 \begingroup
@@ -83,7 +87,6 @@
 \newcommand{\changed}[2]{{#1}\arrow ~\add{#2}}
 \newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
 
-\newcommand{\relation}[1]{$x\veryshortarrow#1$\xspace}
 
 \newcommand{\ensuretext}[1]{#1}
 \newcommand{\marker}[2]{\ensuremath{^{\textsc{#1}}_{\textsc{#2}}}}
@@ -199,9 +202,10 @@ Jeffrey Heer \\
 Tongshuang Wu$^{1}$ ~~~~~~~ 
 Marco Tulio Ribeiro$^{2}$ ~~~~~~~ 
 Jeffrey Heer$^{1}$ ~~~~~ 
-Daniel S. Weld$^{1}$}  \\ 
-$^{1}$Allen School, University of Washington\hspace{5mm}
-$^{2}$Microsoft Research\hspace{5mm} \\ 
+Daniel S. Weld$^{1,3}$}  \\ 
+$^{1}$University of Washington\hspace{5mm}
+$^{2}$Microsoft Research\hspace{5mm} 
+$^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\ 
 \href{mailto:wtshuang@cs.uw.edu}{\texttt {wtshuang@cs.uw.edu}}
 \hspace{8mm}
 \href{mailto:marcotcr@microsoft.com}{\texttt {marcotcr@gmail.com}}
@@ -222,7 +226,7 @@ We propose to disentangle the generation from the applications, \ie gather gener
 We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator \sysname, which produces plausible and diverse counterfactuals.
 It also allows control over where perturbations happen and what they do.
 With simple selection strategies, we demonstrate \sysname in different applications:
-by generating diverse counterfactuals for humans to label, \sysname produced high-quality datasets for evaluating and improving model generalization, with at least 40\% less effort.
+by generating diverse counterfactuals for humans to label, \sysname produced high-quality datasets for evaluating and improving model generalization, with at least 40\% less human effort.
 As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods.
 \end{abstract}
 
@@ -233,7 +237,7 @@ As counterfactual explanations, \sysname helps reveal models' erroneous behavior
 \input{sections/use_label}
 \input{sections/use_explanation}
 
-\input{sections/conclusion}
+\input{sections/discussion}
 \input{sections/ack}
 \bibliography{ref}
 \bibliographystyle{acl_natbib}

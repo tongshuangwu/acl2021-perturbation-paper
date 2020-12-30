@@ -33,6 +33,7 @@ We augment the data based on \dnli~\cite{bowman-etal-2015-large}.
 \textbf{Duplicate Question Detection (\qqp)} analyzes whether two questions are duplicate of each other (i.e., if you have the answer to one question, whether you can infer the answer for the other one.) 
 We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question pairs from the community question-answering website Quora.
 
+\begin{comment}
 \subsection{Diversity Ranking in \S\ref{subsec:gen_counterfactual_for_labeling}}
 \label{appendix:app_label_distance}
 
@@ -48,7 +49,7 @@ Specifically, we measure the similarity between counterfactuals based on weighte
 Formally, the distance between two counterfactuals is ($a_1$ is an abbreviation for $a(\xp_1)$):
 $$d(\xp_1, \xp_2) = \alpha\cdot\mathbb{1}(s_1 = s_2) + \beta\cdot\mathbb{1}(r_1 = r_2) + \gamma\cdot\mathbb{1}(a_1=a_2)$$
 With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
-
+\end{comment}
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.9\columnwidth]{figures/mturk_label}

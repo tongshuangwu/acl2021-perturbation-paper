@@ -149,7 +149,7 @@ We also quantify the diversity and closeness by comparing it to baseline models.
 
 For a given $x$ and its generated counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{malandrakis-etal-2019-controlled, zhu2018texygen} within the generated counterfactual set $\hat{\xset}$.
 The higher the BLEU, the more lexically different the generated phrases are to each other.
-Note that this only reflects one form of \relation{\xp} relationship that is task-agnostic. 
+Note that this only reflects one form of $\relation{\xp}$ relationship that is task-agnostic. 
 Meanwhile, \emph{closeness} is measured using both the average semantic and syntactic distance between $x$ and every $\xp \in \hat{\xset}$.
 We compute the semantic distance using a pretrained sentence similarity model~\cite{reimers-2019-sentence-bert}, and the syntactic one using the tree edit distance~\cite{zhang1989simple}.
 

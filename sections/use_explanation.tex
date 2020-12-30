@@ -36,37 +36,37 @@ Counterfactual explanations complement SHAP, \ie they (B) concretize the opaque 
 \end{figure}
 
 Counterfactual explanations have been elusive in NLP, despite evidence from social science research~\cite{miller} indicating that they may be more intuitive than feature attribution methods. 
-Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively show that the \qqp model under inspection (the same as in \S\ref{subsec:contrast_set}) considers ``help'' trivial: 
+Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively show that the \qqp model\footnote{\url{https://huggingface.co/textattack/bert-base-uncased-QQP}} considers ``help'' trivial: 
 \swap{help}{find} in \emph{Q2} does not change the prediction.
 
-Here, we first select counterfactuals to serve as local explanations in \S\ref{subsec:local_explain}.
-We evaluate their effectiveness in \S\ref{subsec:exp_user_study}, namely, \sysname counterfactuals complement feature attribution methods and counterfactual analysis, especially within spots where humans considered inspected.
+Here, we first select counterfactuals to serve as local explanations in \S\ref{subsec:local_explain}, and evaluate their effectiveness in \S\ref{subsec:exp_user_study}.
 We discuss the use of $\xp$ beyond local explanations in \S\ref{subsec:exp_more}.
 
 %\wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
 \subsection{Selection: Abnormalities as Explanations}
 \label{subsec:local_explain}
 
-\newcommand{\dist}{D_f}
+
 
 
 Because complete explanations is overwhelming, and \citet{miller} concluded that people usually only expect explanations on contrastive cases (``foils'') that they consider \emph{abnormal}.
 We similarly select abnormal counterfactuals as explanations, \ie counterfactuals where \emph{the expected and the actual changes in the prediction do not match}.
 
-Given a model $f$, we define the actual prediction change as $\dist(\xp, x)=|f_p(\xp)-f_p(x)|$, where $f_p(x)$ denotes the prediction probability of $f$ on $x$, and the expected change $\mathbb{E}[\dist(\xp, x)]$.
+Given a model $f$, we define the actual prediction change as $\dist(\fp, x)=|\fp(\xp)-\fp(x)|$, where $\fp(x)$ denotes the prediction probability of $f$ on $x$.
+Meanwhile, the \emph{human expectation} on the prediction change is $\E[\dist(\xp, x)]$.
 The mismatch between the expectation and reality is then:
-$$\Delta\dist(\xp, x) = \dist(\xp, x)-\mathbb{E}[\dist(\xp, x)]$$
-We select two ``turning point'' counterfactuals, \ie (1) large prediction change from trivial perturbations (small expectations): $\xp_L = \argmax_{\xp} \Delta\dist(\xp, x)$, or (2) unchanged predictions from large changes: $\xp_U = \argmax_{\xp} -\Delta\dist(\xp, x)$. 
+$$\Delta\dist(\xp, x) = \dist(\xp, x)-\E[\dist(\xp, x)]$$
+We select two \emph{expectation violation} counterfactuals, \ie (1) large prediction change from trivial perturbations (small expectations): $\xp_L = \argmax_{\xp} \Delta\dist(\xp, x)$, or (2) unchanged predictions from large changes: $\xp_U = \argmax_{\xp} -\Delta\dist(\xp, x)$. 
 
 %  (\eg for measuring ), model-agnostic~\cite{reimers-2019-sentence-bert} or dependent on the hidden layer of the model. The embedding can be either model-agnostic~\cite{reimers-2019-sentence-bert}, or the hidden state of a finetuned predictor
 
-$\mathbb{E}[\boldsymbol{\cdot}]$ can take various forms.
+$\E[\boldsymbol{\cdot}]$ can take various forms.
 Though we can use the cosine distance in the latent space~\cite{reimers-2019-sentence-bert} to select standalone explanations, a more effective use case is to \emph{complement} existing feature attribution methods.
 %, which are not available in pure counterfactual explanations. However, as mentioned in \S\ref{sec:relate}, they only
 Methods like SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI} provide overviews of features weights, which are not available in pure counterfactual explanations.
 However, they estimate weights by \emph{masking} words, and therefore cannot reflect how models would react to replacements or additions.
 
-To highlight this usually overlooked nuance, we define $\mathbb{E}[\boldsymbol{\cdot}]$ using the importance (weights) of the perturbed tokens in $x$, estimated by SHAP.
+To highlight this usually overlooked nuance, we define $\E[\boldsymbol{\cdot}]$ using the importance (weights) of the perturbed tokens in $x$, estimated by SHAP.
 Abnormalities selected this way highlight the missed pieces, and better calibrate users' trust in the predictor. 
 Figure~\ref{fig:explanation}C shows such a $\xp_L$: \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is trivial according to SHAP; Whereas changing the important ``in depression'' in Figure~\ref{fig:explanation}D still results in \emph{Duplicate} ($\xp_U$).
 Detailed distance functions are in \S\ref{appendix:exp_rank}.
@@ -101,8 +101,9 @@ We concluded the study with open-ended questions on their counterfactual creatio
 We compare three types of counterfactuals:
 (1) \cshap, the \sysname-generated counterfactuals, selected to complement SHAP; 
 (2) \crandom, the randomly selected \sysname counterfactuals; 
-(3) \chuman, the human generated counterfactuals, in which two graduate students played with the model, and each created one $\xp$ where the model prediction was incorrect and counterintuitive according to the SHAP score on the base example.
+(3) \chuman, the human generated counterfactuals, in which two graduate students (that did not participate in the actual study) played with the model, and each created one $\xp$ where the model prediction was incorrect and counterintuitive according to the SHAP score on the base example.
 
+\begin{comment}
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/err_rate.pdf}
@@ -113,11 +114,17 @@ Error rates on counterfactuals in different conditions. The higher the error rat
 \vspace{-10pt}
 \label{fig:err_rate}
 \end{figure}
+\end{comment}
 
 \paragraph{Results.}
 As a within-subject study, we compared \emph{the error rate of human simulations across the three conditions}.
-As in Figure~\ref{fig:err_rate}, while participants were able to simulate counterfactuals in \crandom (error rate $e=23\%\pm6\%$) and \chuman ($e=39\%\pm11\%$) to some extend, participants only did slightly better than random guess in \cshap ($45\%\pm 6\%$).
-This shows that \cshap ones were beyond participants' learnings from feature attributions and manual counterfactual analysis, and \emph{would still add value if they were presented.}
+%As in Figure~\ref{fig:err_rate}, 
+Participants were able to simulate counterfactuals in \crandom (error rate $e=23\%\pm6\%$), possibly because \crandom selections contained more minor variations that aligned with the SHAP values and participants' intuitions.
+They missed more \chuman ($e=39\%\pm11\%$) cases, and were even worse on \cshap ($45\%\pm 6\%$, only slightly better than random guess), though the confidence intervals overlap.
+
+This shows that \cshap counterfactuals were beyond participants' learnings from feature attributions and manual counterfactual analysis, and \emph{would still add value if they were presented.}
+They were also at least as effective as the \chuman condition, which is very expensive to create --- each graduate student spent 1.5-2 hours on the task.
+
 
 Usually, participants simulated the model incorrectly because they missed the inspection spots.
 For example, they repeatedly perturbed ``depression'' in Figure~\ref{fig:explanation}A, and therefore had to ``guess using intuitions'' when simulating Figure~\ref{fig:explanation}B.
@@ -127,6 +134,10 @@ The number dropped to $15\%$ for the \chuman condition.
 In other words, \emph{\cshap found more bugs within spots where humans considered inspected.}
 %\hao{this is very interesting. close by summarizing the conclusion?}
 
+\paragraph{Takeaway}
+\sysname counterfactuals complement feature attribution methods and counterfactual analysis, as effectively as hiring a second expert for the analysis (but much cheaper).
+In particular, they highlight erroneous spots where humans may be misled by their own analysis.
+
 \subsection{Beyond Local Explanations}
 \label{subsec:exp_more}
 
@@ -135,7 +146,7 @@ In other words, \emph{\cshap found more bugs within spots where humans considere
 Automated selections focus on general abnormality, but users should be able to point towards the part \emph{they} do not understand~\cite{miller}.
 %Furthermore, the method should allow explanations as a dialog. 
 The targeted generation seamlessly supports such interactive explanation.
-For example, an analyst can follow up on Figure~\ref{fig:explanation}C, and inspect how the model reacts to other nouns by blanking ``a friend'' in Q2 (\eg to ``man'' or human names.)
+For example, an analyst can follow up on Figure~\ref{fig:explanation}C by \texttt{BLANK}ing ``friend'' in Q2, and observe the model's unstable behaviors: it predicts \emph{Non-duplicate} when \remove{friend} is changed to \add{woman}, \add{kid}, \add{professional}, but remains \emph{Duplicate} when the noun is \add{man}, \add{student}.
 
 
 \paragraph{Global Explanations: Recurring edits with unclear impact.}

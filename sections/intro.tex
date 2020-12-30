@@ -26,7 +26,7 @@ Counterfactual reasoning --- mentally simulating what \emph{would have happened}
 For example, in Figure~\ref{fig:teaser}, \exinline{It is great for kids} is perturbed into multiple variations, and each variation brings a unique insight by simulating what would have happened if the sentence was different.
 
 %\hao{suggestion: it could be great if you can highlight the high cost of existing approaches by being more specific on, e.g., the cost of human annotation and cite some works backing it up. something like the human annotation in xxx costs xxx money/time would be very convincing. }
-Applications of counterfactual reasoning to Natural Language Processing (NLP) generally specify the relationship \relation{\xp}, and then create $\xp$ according to the relationship.
+Applications of counterfactual reasoning to Natural Language Processing (NLP) generally specify the relationship $x \veryshortarrow \xp$, and then create $\xp$ according to the relationship.
 As a result, the generation methods are heavily constrained by the application, each of which having their own limitations.
 For example, a minimal edit of a sentence $x$ that results in a different label is useful for model training and evaluation.
 Such $\xp$ are usually gathered with human efforts, \ie human annotators manually create counterfactuals~\cite{gardner2020contrast} or perturbation functions that generate counterfactuals~\cite{wu2019errudite}.
@@ -34,18 +34,18 @@ These are costly to generate --- taking 4-5 minutes per counterfactual~\cite{kau
 %Though it is cheaper to automate the process with parsing templates~\cite{li2020linguistically}, the templates usually have limited coverage on either the patterns-to-perturb, or the applicable data points.
 Adversarial examples are a different form of counterfactual reasoning: $x$ and $\xp$ have different model predictions \emph{despite} being minimally edited and semantically equivalent --- the latter limiting most perturbations to be automated word replacements or other forms of paraphrasing~\cite{iyyer2018adversarial, ribeiro2018semantically}.
 
-However, we observe that the generation methods do not have to be isolated, as various applications share similar requirements on \relation{\xp} (\eg minimal edits).
+However, we observe that the generation methods do not have to be isolated, as various applications share similar requirements on $x\veryshortarrow\xp$ (\eg minimal edits).
 In fact, the exhaustive search of automated methods can cover the training and evaluation more comprehensively, and non-paraphrasing changes like \emph{add negation} are valuable adversarials for tasks like named entity recognition. 
 %\hao{might be good to clarify that these two are not mutually-exclusive: adversarial examples should sometimes be close to the original}
 
 
 In this work, we formalize the task of \emph{automatic counterfactual generation}, which disentangles the generation from the application (\S\ref{sec:general_purpose}).
 It goes through two stages:
-First, in generation, given an input $x$, we produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with reasonable but \emph{application-agnostic} relationships $x \rightarrow \xp_i$ (Figure~\ref{fig:teaser}B).
+First, in generation, given an input $x$, we produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with reasonable but \emph{application-agnostic} relationships $x \veryshortarrow \xp_i$ (Figure~\ref{fig:teaser}B).
+We require the counterfactuals to be \emph{plausible}, \emph{diverse}, and \emph{close to $x$}.
 Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for the applications of interest (Figure~\ref{fig:teaser}C).
 
 We frame the generation step as text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \sysname using datasets of $(x, \xp)$ pairs. 
-As a result, \sysname learns to generate general purpose $\xp$ that are \emph{plausible}, \emph{diverse}, and \emph{close to $x$}.
 We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B). 
 
 %\hao{suggestions: merge the following paragraphs (which are tedious to read), trim the less interesting details, and highlight the results that are exciting.}
@@ -76,9 +76,9 @@ In summary, we:
 \begin{compactenum}
 \item  Formalize the general purpose counterfactual generation task, and frame it as text generation. In doing so, we separate the generation step from selections, bypassing constraints induced by applications at generation time.
 %. \hao{maybe emphasize the benefits of this}
-\item Finetune GPT-2 into a generator called \sysname, by collecting paired sentences and extending prior work on infilling language models with \tagstrs. 
+\item Finetune GPT-2 into a generator called \sysname, by collecting paired sentences and utilizing infilling language models with \tagstrs. 
 \sysname generates plausible and diverse counterfactuals, with control over where perturbations happen and what they do.
-The model is available at \modelurl.
+The model is available at \modelurl, and we plan to opensource the implementations for selection strategies.
 \item Apply \sysname to \emph{training, evaluation, and explanation of black box NLP models}, using various selection strategies.
 \sysname effectively helps collect data that can be used to evaluate and improve model generalization, and complements existing using feature attribution explanations.
 \end{compactenum}

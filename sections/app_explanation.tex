@@ -13,7 +13,7 @@ In this case, the expected change in prediction of perturbing a token $t$ is the
 For example, in Figure~\ref{fig:explanation}, $w(t=\text{{depression}})=0.276$.
 The actual prediction change is the weighted average of $|f_p(x)-f_p(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), with the weight being the number of words modified in $\xp$. 
 Intuitively, the more words changed in $\xp$, the less effect each word has; In Figure~\ref{fig:explanation}, we regard ``depression'' to be responsible for half of the impact on changing \swap{in depression}{suicidal}.
-More formally, for a given $x$ and its $\xp$-s, we use $r(\xp)$ to denote the set of words replaced or deleted from $x$ in \relation{\xp}.
+More formally, for a given $x$ and its $\xp$-s, we use $r(\xp)$ to denote the set of words replaced or deleted from $x$ in $\relation{\xp}$.
 We group the counterfactuals based on their affected words $G_t = \{\xp\ |\ t \in r(\xp)\}$. $d_f(t, x)$ then becomes:
 $$d_f(t, x) = \frac{1}{|G_t|+1} \left(w(t) + \sum_{\xp \in G_t} \frac{|f_p(x)-f_p(\xp)|}{|r(\xp)|}\right)$$
 We add the additional SHAP weight $w(t)$ as a smoothing factor to punish dominating outlier $\xp$.
