@@ -25,7 +25,7 @@
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 20cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
+\includegraphics[trim={0 21cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
 \vspace{-15pt}
 \caption{
 (A) A \qqp instance with explanations and predictions ($\mathbf{=}$ means \emph{Duplicate}, $\mathbf{\not\eq}$ \emph{Non-Duplicate}), as well as the feature weights from SHAP.
@@ -36,8 +36,10 @@ Counterfactual explanations complement SHAP, \ie they (B) concretize the opaque 
 \end{figure}
 
 Counterfactual explanations have been elusive in NLP, despite evidence from social science research~\cite{miller} indicating that they may be more intuitive than feature attribution methods. 
-Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively show that the \qqp model\footnote{\url{https://huggingface.co/textattack/bert-base-uncased-QQP}} considers ``help'' trivial: 
+Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively show that the BERT \qqp model\footnote{\url{https://huggingface.co/textattack/bert-base-uncased-QQP}} considers ``help'' trivial: 
 \swap{help}{find} in \emph{Q2} does not change the prediction.
+
+%
 
 Here, we first select counterfactuals to serve as local explanations in \S\ref{subsec:local_explain}, and evaluate their effectiveness in \S\ref{subsec:exp_user_study}.
 We discuss the use of $\xp$ beyond local explanations in \S\ref{subsec:exp_more}.
@@ -47,10 +49,9 @@ We discuss the use of $\xp$ beyond local explanations in \S\ref{subsec:exp_more}
 \label{subsec:local_explain}
 
 
-
-
-Because complete explanations is overwhelming, and \citet{miller} concluded that people usually only expect explanations on contrastive cases (``foils'') that they consider \emph{abnormal}.
+Because complete explanations is overwhelming, \citet{miller} concluded that people usually only expect explanations on contrastive cases (``foils'') that they consider \emph{abnormal}.
 We similarly select abnormal counterfactuals as explanations, \ie counterfactuals where \emph{the expected and the actual changes in the prediction do not match}.
+In other words, the relationship $\relation{\xp}$ used in the selection is \emph{the change of model prediction.}
 
 Given a model $f$, we define the actual prediction change as $\dist(\fp, x)=|\fp(\xp)-\fp(x)|$, where $\fp(x)$ denotes the prediction probability of $f$ on $x$.
 Meanwhile, the \emph{human expectation} on the prediction change is $\E[\dist(\xp, x)]$.
@@ -84,7 +85,7 @@ The study takes the form of counterfactual simulation~\cite{hase2020evaluating},
 Intuitively, the more they simulate incorrectly, the more information they grasp \emph{if we show the counterfactuals to them}.
 
 \paragraph{Procedure.}
-We recruited 13 graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate a \qqp BERT model for 20 rounds.
+We recruited 13 graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate the aforementioned \qqp model for 20 rounds.
 In each round, the participants were given a base example with the model's prediction, as well as the SHAP weights, highlighted in the text and with a bar chart (Figure~\ref{fig:explanation}A).
 Moreover, they could create up to ten counterfactuals on their own, and query the model predictions on them.
 More interactions with the predictor usually result in better mental models~\cite{miller}, and we are interested in whether our selected ones \emph{still add information} after such nearly unlimited model access (participants submitted $6.3\pm3.2$ queries per round.)
@@ -101,7 +102,7 @@ We concluded the study with open-ended questions on their counterfactual creatio
 We compare three types of counterfactuals:
 (1) \cshap, the \sysname-generated counterfactuals, selected to complement SHAP; 
 (2) \crandom, the randomly selected \sysname counterfactuals; 
-(3) \chuman, the human generated counterfactuals, in which two graduate students (that did not participate in the actual study) played with the model, and each created one $\xp$ where the model prediction was incorrect and counterintuitive according to the SHAP score on the base example.
+(3) \chuman, the human generated counterfactuals, in which two graduate students (that were not in the actual study) played with the model, and each created one $\xp$ where the model prediction was incorrect and counterintuitive according to the SHAP score on the base example.
 
 \begin{comment}
 \begin{figure}[t]
@@ -119,8 +120,8 @@ Error rates on counterfactuals in different conditions. The higher the error rat
 \paragraph{Results.}
 As a within-subject study, we compared \emph{the error rate of human simulations across the three conditions}.
 %As in Figure~\ref{fig:err_rate}, 
-Participants were able to simulate counterfactuals in \crandom (error rate $e=23\%\pm6\%$), possibly because \crandom selections contained more minor variations that aligned with the SHAP values and participants' intuitions.
-They missed more \chuman ($e=39\%\pm11\%$) cases, and were even worse on \cshap ($45\%\pm 6\%$, only slightly better than random guess), though the confidence intervals overlap.
+Participants were able to simulate the cases in \crandom (error rate $e=23\%\pm6\%$), possibly because \crandom selections contained more minor variations that aligned with the SHAP values and participants' intuitions.
+They missed more \chuman ($e=39\%\pm11\%$) cases, and were even slightly worse on \cshap ($45\%\pm 6\%$, only slightly better than random guess).%, though the confidence intervals overlap.
 
 This shows that \cshap counterfactuals were beyond participants' learnings from feature attributions and manual counterfactual analysis, and \emph{would still add value if they were presented.}
 They were also at least as effective as the \chuman condition, which is very expensive to create --- each graduate student spent 1.5-2 hours on the task.
@@ -128,13 +129,13 @@ They were also at least as effective as the \chuman condition, which is very exp
 
 Usually, participants simulated the model incorrectly because they missed the inspection spots.
 For example, they repeatedly perturbed ``depression'' in Figure~\ref{fig:explanation}A, and therefore had to ``guess using intuitions'' when simulating Figure~\ref{fig:explanation}B.
-However, in 24\% of the missed \cshap cases, participants successfully covered the related pattern,\footnote{At least one of their queries perturbed the same spans as the given counterfactual, and the text overlap between the query and the counterfactual was over 70\%.} but was misled by their inspections --- ``labeled based on similar examples I tried,'' as one subject articulated.
+However, in 24\% of the missed \cshap cases, participants successfully covered the related pattern,\footnote{At least one of their queries perturbed the same spans as the given counterfactual, and the text overlap between the query and the counterfactual was over 70\%.} but were misled by their inspections --- ``labeled based on similar examples I tried,'' as one subject articulated.
 It was hard for them to imagine model predicting \emph{Duplicate} on Figure~\ref{fig:explanation}B (\swap{help}{find}), when the model predicted \emph{Non-Duplicate} on their query \exinline{How do I \swap{help}{play with}...?}
 The number dropped to $15\%$ for the \chuman condition.
 In other words, \emph{\cshap found more bugs within spots where humans considered inspected.}
 %\hao{this is very interesting. close by summarizing the conclusion?}
 
-\paragraph{Takeaway}
+\noindent\textbf{Takeaway.}
 \sysname counterfactuals complement feature attribution methods and counterfactual analysis, as effectively as hiring a second expert for the analysis (but much cheaper).
 In particular, they highlight erroneous spots where humans may be misled by their own analysis.
 
@@ -152,18 +153,13 @@ For example, an analyst can follow up on Figure~\ref{fig:explanation}C by \textt
 \paragraph{Global Explanations: Recurring edits with unclear impact.}
 \label{subsec:global_exp}
 %\paragraph{Global explanations: impacts of same changes.}
-\emph{Global} explanations provide systematic understandings beyond individual instances --- yet another important aspect of model explanations~\cite{miller}.
-We define global abnormality as \emph{perturbation patterns whose impacts on the prediction are hard to generalize}, and find them in two steps:
-First, we featurize counterfactuals to create groups of similar counterfactuals, using the \tagstr between $\xp$ and $x$, the edited spans, etc.
-%(1) its \tagstr (\fexptag{negation} for the example in Figure~\ref{fig:blank}), 
-%(2) its remove phrases \fexpfrom{kids}, 
-%(3) its added phrases \fexpto{not}, \fexpto{children}, and 
-%(4) the combined template \fexptemp{\swap{kids}{children}}.
-Then, we rank the groups using the entropy of the prediction changes $(f(x) \rightarrow f(\xp))$ for all counterfactuals in a group.
-Larger entropy indicates that the perturbation has an unstable impact on the prediction.
-
-For example, when evaluating the \nli RoBERTa model (the same as in \S\ref{subsec:contrast_set}), one abnormal global perturbation is \swap{two}{three} in the hypothesis.
-Out of the 253 counterfactuals whose original $f(x)=$ \emph{entailment}, $138$ flipped to \emph{contradiction}, $22$ to \emph{neutral}, yet $93$ remained \emph{entailment}, resulting in entropy $I=0.91$.
+\emph{Global} explanations provide systematic understandings beyond individual instances --- yet another important aspect of model understanding~\cite{miller}.
+We define global abnormality as \emph{perturbation patterns whose impacts on the prediction are hard to generalize}.
+To locate them, we group counterfactuals based on their $\relation{\xp}$, which includes 
+\{\ tokens removed from $x$, added to $\xp$, and the corresponding \tagstr.\ \}
+Then, we select groups that contain counterfactuals with unstable prediction changes, quantified as large entropy on $(f(x) \veryshortarrow f(\xp))$.
+For example, when evaluating the \nli RoBERTa model in \S\ref{subsec:contrast_set}, one global abnormality is \swap{two}{three} in the hypothesis.
+Out of the 253 $\xp$ whose original $f(x)=$ \emph{entailment}, $138$ flipped to \emph{contradiction}, $22$ to \emph{neutral}, yet $93$ remained \emph{entailment}, resulting in entropy $I=0.91$.
 We observe that most cases flipped to \emph{contradiction} have the explicit word ``two'' in the premise, whereas the prediction-intact ones suggest that the model struggles with counting:
 
 \ebox{

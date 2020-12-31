@@ -134,7 +134,7 @@
 \newcommand{\clabel}[1]{\emph{#1}\xspace}
 
 % constants
-\newcommand{\sysname}{{\color{red}Polyjuice}\xspace}
+\newcommand{\sysname}{\textsc{Polyjuice}\xspace}
 \newcommand{\modelurl}{\url{https://huggingface.co/uw-hai/polyjuice}}
 
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
@@ -174,6 +174,7 @@
 \newcommand{\yp}{\hat{y}}
 \newcommand{\xset}{\mathbf{X}}
 \newcommand{\tofix}[1]{{\color{red}#1}\xspace}
+\newcommand{\dan}[1]{{\color{orange}#1}\xspace}
 
 
 
@@ -205,11 +206,12 @@ Jeffrey Heer$^{1}$ ~~~~~
 Daniel S. Weld$^{1,3}$}  \\ 
 $^{1}$University of Washington\hspace{5mm}
 $^{2}$Microsoft Research\hspace{5mm} 
-$^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\ 
+$^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\
+\hspace{-5mm}
 \href{mailto:wtshuang@cs.uw.edu}{\texttt {wtshuang@cs.uw.edu}}
-\hspace{8mm}
+\hspace{5mm}
 \href{mailto:marcotcr@microsoft.com}{\texttt {marcotcr@gmail.com}}
-\hspace{8mm}
+\hspace{10mm}
 \href{mailto:dan@cs.washington.edu}{\texttt {\{jheer,weld\}@cs.uw.edu}}
 }
 
@@ -220,14 +222,18 @@ $^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\
 \maketitle
 \begin{abstract}
 %\hao{suggestion: mention something from the 2nd intro paragraph here:formulating into text gen is a solution (rather than the goal) to more efficient counterfactual generation.}
-Existing methods generate counterfactual examples for specific applications, even though most counterfactual can be broadly used for calibrating, evaluating, and explaining model decision boundaries.
-Constrained by their use cases, the methods each have a limited linguistic pattern coverage or are hard to scale.
-We propose to disentangle the generation from the applications, \ie gather general-purpose counterfactuals first, and then select them for specific applications.
-We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator \sysname, which produces plausible and diverse counterfactuals.
-It also allows control over where perturbations happen and what they do.
-With simple selection strategies, we demonstrate \sysname in different applications:
-by generating diverse counterfactuals for humans to label, \sysname produced high-quality datasets for evaluating and improving model generalization, with at least 40\% less human effort.
-As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods.
+\dan{Counterfactual examples have been shown to be useful for many applications, including calibrating, evaluating, and explaining model decision boundaries. However, previous methods for generating such counterfactual examples have been tightly tailored to specific use, used  a limited range of linguistic patterns, or are hard to scale. 
+We propose to disentangle counterfactual generation from its use cases,} \ie, gather general-purpose counterfactuals first, and then select them for specific applications. 
+We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator, \sysname, which produces fluent and diverse counterfactuals. 
+It also allows control over where perturbations happen and what they do. With effective selections, we show \sysname supports multiple use cases: by generating diverse counterfactuals for humans to label, \sysname helps produce high-quality datasets for model training and evaluation, with at least 40\% less human effort. 
+As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods. 
+ %
+%Existing methods generate counterfactual examples for specific applications, even though most of the examples can be broadly used for calibrating, evaluating, and explaining model decision boundaries. 
+%Constrained by their use cases, the methods each have a limited linguistic pattern coverage or are hard to scale. 
+%We propose to disentangle the generation from the use cases, \ie, gather general-purpose counterfactuals first, and then select them for specific applications. 
+%We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator, \sysname, which produces fluent and diverse counterfactuals. 
+%It also allows control over where perturbations happen and what they do. With effective selections, we show \sysname supports multiple use cases: by generating diverse counterfactuals for humans to label, \sysname helps produce high-quality datasets for model training and evaluation, with at least 40\% less human effort. 
+%As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods. 
 \end{abstract}
 
 \input{sections/intro}
