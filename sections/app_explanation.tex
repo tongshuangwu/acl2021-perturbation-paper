@@ -19,7 +19,7 @@ $$\dist(t, x) = \frac{1}{|G_t|+1} \left(s(t) + \sum_{\xp \in G_t} w(t)\cdot |\fp
 We add the additional SHAP weight $s(t)$ as a smoothing factor to punish dominating outlier $\xp$.
 Then the gap between the expectation and the reality is (similar to \S\ref{subsec:local_explain}):
 $$\Delta\dist(t, x) = \dist(t, x)-\E[\dist(t, x)]$$
-We first find the abnormal tokens: (1) $t$ with small SHAP weight, but $\xp$ that change $t$ experience large prediction change on average: $t_L = \argmax_{t\in x} \Delta\dist(t, x)$, and (2) $t$ with large SHAP weight, but $\xp$ with $t$ changed usually have intact prediction: $t_U = \argmin_{t\in x} \Delta\dist(t, x)$.
+We first find the abnormal tokens: (1) $t$ with small SHAP weight, but $\xp$ that change $t$ experience large prediction change on average: $t_L = \argmax_{t\in x} \Delta\dist(t, x)$, and (2) $t$ with large SHAP weight, but $\xp$ with $t$ changed usually have intact prediction: $t_U = \argmax_{t\in x} -\Delta\dist(t, x)$.
 
 Then, we use the most extreme cases within the groups of $G_{t_L}$ and $G_{t_U}$ as the concrete counterfactual explanations, based on their prediction change $|\fp(x)-\fp(\xp)|$, and the aggregated SHAP weights of all the changed tokens:
 $$\xp_L = \argmax_{\xp \in G_{t_L}} \left( |f_p(x)-f_p(\xp)| - \sum_{u\in r(\xp)} s(u) \right)$$ 

@@ -28,7 +28,7 @@ Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systemat
 We unify the generation for different use cases, which bridges the scalability and diversity.
 We only distinguish the generated ones through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 
-Some concurrent work share similar ideas as ours, building counterfactual generators on top of language models.
+Some concurrent work similarly build counterfactual generators on top of language models.
 GYC~\cite{madaan2020generate} adjusts controlled text generation methods (which would generate arbitrary texts), and modifies $x$ in the latent space, whereas MiCE~\cite{ross2020explaining} finetunes T5.
 Still, they both focus on model evaluation or explanation, and therefore optimize the generation --- where and how to perturb --- for \emph{flipping the class label}, which may have limited scalability (\eg MiCE builds a generator for each individual task.)
 We instead finetune \sysname on general-purpose datasets, design \sysname's controls to be task-agnostic, and use them for broadening the coverage on perturbation patterns.
