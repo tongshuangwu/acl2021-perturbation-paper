@@ -3,14 +3,14 @@
 \small
 \centering
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lrrrrrrrrr}
+\begin{tabular}{@{}lrrrrrrrrr@{}}
 \toprule
 \textbf{Dataset} & \textbf{\ctrltag{negation}} & \textbf{\ctrltag{quantifier}} & \textbf{\ctrltag{leixcal}} & \textbf{\ctrltag{resemantic}} & \textbf{\ctrltag{insert}} & \textbf{\ctrltag{delete}} & \textbf{\ctrltag{restructure}} & \textbf{\ctrltag{shuffle}} & \emph{\ctrltag{global}} \\ 
 \midrule
         CAD &      3,456 &         457 &    10,650 &        4,634 &    2,169 &    2,162 &          234 &       84 &    3,756 \\
    Contrast &       336 &         436 &     1,607 &        1,291 &     589 &     586 &          275 &      149 &     877 \\
        HANS &        50 &           0 &        0 &           0 &    3,926 &    3,926 &          494 &     1,602 &       2 \\
-    ParaNMT-50M &      2,797 &         825 &    10,000 &       10000 &    6,442 &    6,205 &         5,136 &     1,417 &   10,000 \\
+    ParaNMT &      2,797 &         825 &    10,000 &       10000 &    6,442 &    6,205 &         5,136 &     1,417 &   10,000 \\
        PAWS &        81 &        1,815 &    10,000 &       10000 &    3,630 &    3,403 &         4,551 &    10,000 &   10,000 \\
  WinoGrande &      3,011 &          94 &    10,000 &        6,927 &     120 &     124 &          453 &       65 &    3184 \\
     \emph{Crawled} &         0 &           0 &     5,000 &           0 &    5,000 &    5,000 &            0 &      108 &    5,000 \\
@@ -20,14 +20,177 @@
 \end{tabular}
 \caption{The datasets used for finetuning the GPT-2 generation model, and the \tagstr distributions.}
 \label{table:gpt_train_stats}
-\vspace{10pt}
+\vspace{-10pt}
+\end{table*}
 
 
-%\begin{table*}[t]
+
+\section{GPT-2 as Counterfactual Generator}
+\label{appendix:train_data}
+
+\subsection{Training data collection}
+
+
+We combine the following NLP datasets for finetuning \sysname.
+To achieve a more balanced distribution, for each dataset, we extract \tagstrs from all the data pairs available, and randomly sample up to 10,000 instances per \tagstr.
+The distribution is shown in Table~\ref{table:gpt_train_stats}.
+
+\paragraph{Contrast set}
+Authors of 10 existing NLP dataset each manually perturbed 100--1,000 instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance~\cite{gardner2020contrast}.
+The perturbation patterns vary based on the tasks and the annotators, allowing us to learn diverse strategies.
+To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though \qqp would be a potentially interesting dataset for training \sysname, we omitted it so \qqp can be used in our evaluation.}
+%\wts{Re-train the model with other contrast sets.}
+
+
+\paragraph{Counterfactually-augmented data (CAD)}
+To augment the training data, \citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k counterfactuals on 1.7k original instances) and SNLI (6.6k counterfactuals on 1.67k original).
+Similar to the contrast set, CAD's perturbation patterns vary based on the task, but can especially contribute to \ctrltag{negation}.
+We split the movie review paragraphs into paired sentences, to match the sentence length of other datasets.
+
+
+\paragraph{WinoGrande} is a large-scale dataset of 44k instances for testing common sense problems~\cite{sakaguchi2019winogrande}.
+The dataset contains nearly identical sentences that differ only by one trigger word (\eg one noun), which flips the correct answer choice for certain questions.
+The dataset is most suitable for learning lexical exchanges.
+
+\paragraph{ParaNMT-50M} contains 50 million English-English sentential paraphrase pairs, covering various domains and styles of text, as well as different sentence structures~\cite{wieting2017paranmt}. 
+
+\paragraph{PAWS} contains 108k paraphrasing and non-paraphrasing pairs with high lexical overlaps. 
+\citet{zhang2019paws} created such challenging pairs through controlled word swapping and back translation.
+As a result, the dataset demonstrates the \ctrltag{shuffle} and \ctrltag{restructure} strategies.
+
+
+\paragraph{HANS} is a controlled evaluation dataset designed for testing decision boundaries of NLI models~\cite{mccoy2019right}. 
+The dataset contains 10k pairs of premises and hypotheses created based on 10 heavily fallible syntactic templates, and therefore compensates rarer structural changes that may be missed by PAWS.
+
+
+\paragraph{Crawled} 
+We additionally crawl naturally occurring sentence pairs from non-paired datasets like SQuAD~\cite{rajpurkar-etal-2016-squad} to boost some specific patterns and increase lexical diversity. 
+We estimate \emph{close} pairs using edit distance, and broadly included pairs as long as the editing is less than 60\%.
+This inevitably includes cases that should not be considered counterfactuals,\eg \exinline{how do I not be} and \exinline{how do I recover it} are incorrectly considered \ctrltag{negation} pairs. 
+We only include them for the most determined patterns, \ie \ctrltag{lexical}, \ctrltag{insert}, \ctrltag{delete}, and \ctrltag{shuffle}.
+Among them, we further filter the pairs using \tagstrs (see the section below).
+%Still, unrelated examples 
+
+
+\subsection{Training Prompts \& Parameters}
+
+Given a sentence pair, we use the two sentences interchangeably as $x$ and $\xp$ to learn the counterfactuals both ways.
+For a $(x, \xp)$, we compute its primary \tagstr based on linguistic features like part-of-speech tagging or dependency trees, and blank out the changed subtrees in $\xp$.
+For example, \ctrltag{negation} occurs when we observe changes on negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlaps between tokens deleted and added.
+When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
+In Figure~\ref{fig:blank}A, we use the \tagstrshort \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
+If we cannot identify the \tagstr for a $(x, \xp)$ or if the editing distance is too large, we denote it with \ctrltag{global} and use it as a negative training sample.
+Importantly, to allow flexible blanking at the generation time, we generate multiple training prompts from one $(x, \xp)$, with different blanking strategies: (1) just the changed tokens, (2) the associated parsing structures, (3) the merged changes, and (4) the entire sentence.
+As a result, we form up to four unique training prompts given one $(x, \xp)$ pair (some examples are in Figure~\ref{fig:blank}).
+
+%max_log_prob_diff
+
+With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
+We use the data to finetune an off-the-shelf GPT-2 model from \citet{Wolf2019HuggingFacesTS}, but any LM can potentially be used.
+%\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
+We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
+
+
+\subsection{Intrinsic Evaluations}
+\label{appendix:intrinsic}
+
+
+
+
+
+
+\subsubsection{Controllability with Ablation Studies}
+\label{appendix:ablation_control}
+
+We finetune another GPT-2 model with training prompts that \emph{do not} contain \tagstrs (called \emph{\sysname-a}), and quantify the impact of the \tagstrshorts through an ablation study.
+For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 250 prompts (from 100 unique original sentences).
+For each prompt, we generate counterfactuals through beam search (beam $=10$), and recompute the \tagstrshorts on the top three returns.
+We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
+The success rate increases by $28.4\% \pm 18.2\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\%, from 40.4\% to 48.4\%) to \ctrltag{insert} (64.1\%, from 13.5\% to 78.6\%).
+%\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
+%\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
+
+There are three common failure cases for the \tagstrshorts:
+%Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
+(1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
+(2) $x$ does not have a corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
+(3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
+In the ablation study, we filtered out prompts that fell under cases 1 and 2.
+
+
+
+
+
+
+
+\begin{table}[tb]
+\small
+    \centering
+    %\setlength{\tabcolsep}{1.3pt}
+    \begin{tabular}{lccc}
+    \toprule
+    \multirow{2}{*}{Model} & Diversity & \multicolumn{2}{c}{Closeness} \\
+    \cmidrule(lr){2-2}
+    \cmidrule(lr){3-4}
+    & Self-BLEU $\uparrow$ & Semantic $\downarrow$ & Tree edit $\downarrow$ \\
+    % \cmidrule{2-4}
+    \midrule
+    \emph{\sysname} & \textbf{0.82} & \textbf{0.37} & \textbf{2.02} \\
+    Masked-LM & 0.66 & \textbf{0.27} & \textbf{1.89} \\
+    PPLM-BoW & \textbf{0.82} & 0.65 & 7.65 \\
+    \bottomrule
+    \end{tabular}
+    \vspace{-2.5mm}
+    \caption{The intrinsic metrics comparing \sysname with Masked-LM and PPLM-BoW. 
+    $\uparrow$ (or $\downarrow$) indicates whether the metric should be maximized (or minimized).
+    As expected, \sysname counterfactuals are \emph{closer} to the original instance than PPLM-BoW, and more \emph{diverse} than the Masked-LM ones.}
+    \vspace{-3mm}
+    \label{table:intrinsic}
+\end{table}
+
+\subsubsection{Closeness, Diversity, Fluency}
+
+Similar to \citet{madaan2020generate}, we verify that the \sysname generations are fluent (``plausible'' in their case) through human evaluations (\S\ref{subsec:label_efficiency}).
+We also quantify the diversity and closeness by comparing it with baseline models.
+
+For a given $x$ and its generated counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{malandrakis-etal-2019-controlled, zhu2018texygen} within the generated counterfactual set $\hat{\xset}$.
+The higher the BLEU, the more lexically different the generated phrases are to each other (Note that this only reflects one form of $\relation{\xp}$ relationship that is task-agnostic, and is not the only possible measurement for diversity). 
+Meanwhile, \emph{closeness} is measured using both the average semantic and syntactic distance between $x$ and every $\xp \in \hat{\xset}$.
+We compute the semantic distance using a pretrained sentence similarity model~\cite{reimers-2019-sentence-bert}, and the syntactic one using the tree edit distance~\cite{zhang1989simple}.
+
+
+We use similar baselines as \citet{madaan2020generate}: 
+(1) \emph{Masked-LM}, where we blank certain parts of $x$ (by randomly placing up to three \texttt{[MASK]} tokens), and ask RoBERTa to fill in the blank.
+We rely on the CheckList implementation~\cite{checklist:acl20}, as it allows filling in multiple blanks at once through beam search. 
+
+(2) \emph{PPLM-BoW}~\cite{Dathathri2020Plug}, a model that uses bag-of-words to control the generation.
+We use the first two words of $x$ as the input context (prompt), limit the length of the generation to be similar to $x$, and apply their default condition ``positive words.''
+As the model generates \emph{arbitrary text} that do not depend on $x$, we agree with \citet{madaan2020generate} that PPLM-BoW should not satisfy the \emph{closeness} requirement.
+
+We randomly select 120 instances from three classification tasks, \qqp, \nli, and \sst (40 per task), and generate 10 counterfactuals per $x$ using each of the three generators.
+The averaged metrics are in Table~\ref{table:intrinsic}.
+\sysname achieves compatible diversity with PPLM-BoW (self-BLEU score), and compatible \emph{closeness} with Masked-LM, achieving a balance between both.
+
+
+Ideally, we would also like to compare \sysname with our concurrent work GYC~\cite{madaan2020generate} and MiCE~\cite{ross2020explaining}.
+Inspired by style transfer~\cite{yang2018unsupervised} and controlled text generation, GYC performs the perturbation on the latent space of the input $x$.
+Meanwhile, MiCE uses a two-step framework to generate conterfactual explanations, with the generator being T5~\cite{JMLR:v21:20-074} finetuned on the task-specific dataset.
+As mentioned in \S\ref{sec:relate}, both generators focus on flipping the class label of a given $x$.
+Unfortunately, both require extensive implementation or finetuning, and has yet to be opensourced.
+
+%Still, we believe that our infilling (\texttt{BLANK}) structure will improve the \emph{closeness} over the unconstrained GYC (called content and syntactic preservation in their case).
+%We also hypothesize that \sysname has better (or at least compatible) diversity than GYC. 
+%Per their intended use case --- model testing and debiasing --- the control functions in GYC are driven by the predictor-of-interest (\eg sentiment classifier, NER tagger). 
+%As a result, most of the GYC changes seem to focus on features deemed important by the classifier (\eg \exinline{I am very disappointed with the service} is changed by \swap{disappointed}{pleased}, \swap{disappointed}{happy}, \swap{disappointed with}{pleased to get a good}).
+
+
+
+
+\begin{table*}[t]
 \small
 \centering
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{c p{0.77\linewidth}}
+\begin{tabular}{@{}l p{0.77\linewidth}@{}}
 \toprule
 \textbf{Application} & \textbf{Strategies} \\ 
 \midrule
@@ -55,13 +218,16 @@ Challenge sets  &
     Templates~\cite{Geiger2019PosingFG, kaushik2019learning, nie2019analyzing, mccoy2019right}
 \\\midrule
 Model analysis & 
+    Lexical~\cite{garg2019counterfactual}\newline
     Template~\cite{Goodwin2020ProbingLS}\newline
-    Perturbation functions~\cite{wu2019errudite, bowman-etal-2015-large, checklist:acl20}
+    Perturbation functions~\cite{wu2019errudite, bowman-etal-2015-large, checklist:acl20}\newline
+    Controlled text generation~\cite{madaan2020generate}
 \\\midrule
 Explanations & 
     Lexical~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual} \newline
     % probably also lexical
-    Lexical (through masking)~\cite{ramon2019counterfactual, ribeiro2018anchors}
+    Lexical (through masking)~\cite{ramon2019counterfactual, ribeiro2018anchors}\newline
+    Language model~\cite{ross2020explaining}
 \\
 \bottomrule
 \end{tabular}
@@ -75,158 +241,7 @@ Explanations &
 \end{table*}
 %\end{comment}
 
-\section{GPT-2 as Counterfactual Generator}
-\label{appendix:train_data}
-
-\subsection{Training data collection}
-
-
-We combined the following NLP datasets in finetuning our GPT-2 perturbation model.
-To achieve a more balanced distribution, for each dataset, we extract \tagstrs from all the data pairs available, and randomly sample up to 10k instances per \tagstr.
-The distribution is shown in Table~\ref{table:gpt_train_stats}.
-
-\paragraph{Contrast set}
-Authors of 10 existing NLP dataset each manually perturbed 100-1,000 instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance~\cite{gardner2020contrast}.
-The perturbation patterns vary based on the tasks and the annotators, allowing us to learn diverse perturbation strategies.
-To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though QQP would be a potentially interesting dataset for training \sysname, we omitted it so QQP can be used in our evaluation.}
-%\wts{Re-train the model with other contrast sets.}
-
-
-\paragraph{Counterfactually-augmented data (CAD)}
-To augment the training data, \citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k counterfactuals on 1.7k original instances) and SNLI (6.6k counterfactuals on 1.67k original).
-Similar to the contrast set, CAD's perturbation patterns vary based on the task, but can especially contribute to \ctrltag{negation}.
-We split the movie review paragraphs into paired sentences, to match the sentence length of other datasets.
-
-
-\paragraph{WinoGrande} is a large-scale dataset of 44k problems for testing common sense problems~\cite{sakaguchi2019winogrande}.
-The dataset contains nearly identical sentences that differ only by one trigger word (\eg one noun), which flips the correct answer choice for certain questions.
-The dataset is most suitable for lexical tokens that are suitable for similar use cases.
-
-\paragraph{ParaNMT-50M} contains 50 million English-English sentential paraphrase pairs, covering various domains and styles of text, as well as different sentence structures~\citet{wieting2017paranmt}. 
-
-\paragraph{PAWS} contains paraphrase and non-paraphrase pairs with high lexical overlap. 
-\citet{zhang2019paws} created 108k challenging pairs by controlled word swapping and back translation.
-As a result, the dataset demonstrates the \ctrltag{shuffle} and \ctrltag{restructure} strategy.
-
-
-\paragraph{HANS} is a controlled evaluation dataset designed for testing decision boundaries of NLI models~\cite{mccoy2019right}. 
-The dataset contains 10k pairs of premises and hypotheses created based on 10 heavily fallible syntactic templates, and therefore compensates rarer structural changes that may be missed by PAWS.
-
-
-\paragraph{Crawled} 
-We additionally crawled some sentence pairs from non-paired datasets like SQuAD~\cite{rajpurkar-etal-2016-squad} to boost some specific patterns and increase lexical diversity. 
-We estimated \emph{close} pairs using edit distance, and broadly included pairs as long as the editing is less than 60\%.
-This inevitably includes cases that should not be considered counterfactuals, and we further filter them using \tagstrs (see the section below).
-We noticed that it inevitably paired up some unrelated examples (\eg \exinline{how do I not be} and \exinline{how do I recover it} are incorrectly considered \ctrltag{negation} pairs.)
-We only included them for the most determined patterns, \ie \ctrltag{lexical}, \ctrltag{insert}, \ctrltag{delete}, and \ctrltag{shuffle}.
-
-
-\subsection{Training Prompts \& Parameters}
-
-Given a pair, we use the two sentences interchangeably as $x$ and $\xp$ to learn the counterfactuals both ways.
-We compute its primary \tagstr based on linguistic features like part-of-speech tagging or dependency trees, and blank out the changed subphrases in $\xp$.
-For example, \ctrltag{negation} occurs when we observe changes on negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlaps between tokens deleted and added.
-When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
-In Figure~\ref{fig:blank}, we use the \tagstrshort \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
-If we cannot identify the \tagstr for a pair or if the editing distance is too large, we denote it with \ctrltag{global} and use them as negative samples.
-Importantly, to allow flexible blanking at the generation time, instead of merely blanking the edited spans, we also extend the blank to cover their associated parsing structures, etc.
-As a result, we form up to four unique training prompts given one $(x, \xp)$ pair (Figure~\ref{fig:blank}).
-
-%max_log_prob_diff
-
-With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
-We use the data to finetune an off-the-shelf GPT-2 model from \citet{Wolf2019HuggingFacesTS}, but any LM can potentially be used.
-%\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
-We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
-
-
-\subsection{Intrinsic Evaluations}
-\label{appendix:intrinsic}
-\subsubsection{Closeness, Diversity, Realistic}
-
-Similar to \citet{madaan2020generate}, we verify that \sysname generations are realistic through human evaluations (\S\ref{subsec:label_efficiency}).
-We also quantify the diversity and closeness by comparing it to baseline models.
-
-For a given $x$ and its generated counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{malandrakis-etal-2019-controlled, zhu2018texygen} within the generated counterfactual set $\hat{\xset}$.
-The higher the BLEU, the more lexically different the generated phrases are to each other.
-Note that this only reflects one form of $\relation{\xp}$ relationship that is task-agnostic. 
-Meanwhile, \emph{closeness} is measured using both the average semantic and syntactic distance between $x$ and every $\xp \in \hat{\xset}$.
-We compute the semantic distance using a pretrained sentence similarity model~\cite{reimers-2019-sentence-bert}, and the syntactic one using the tree edit distance~\cite{zhang1989simple}.
-
-
-We use similar baselines as \citet{madaan2020generate}: 
-(1) \emph{Masked-LM}, where we similarly blank certain parts of $x$ (by randomly placing up to three \texttt{[MASK]} tokens), and ask RoBERTa to fill in the blank.
-We rely on the CheckList implementation~\cite{checklist:acl20}, as it allows filling in multiple blanks at once through beam search. 
-
-(2) \emph{PPLM-BoW}~\cite{Dathathri2020Plug}, a model that uses a bag-of-words to control the generation.
-As the model generates \emph{arbitrary text} that do not depend on $x$, we agree with \citet{madaan2020generate} that PPLM-BoW should not satisfy the \emph{closeness} requirement.
-We use the first two words of $x$ as the input context (prompt), limit the length of the generation to be similar to $x$, and apply their default condition ``positive words.''
-
-We randomly select 120 instances from three classification tasks, \qqp, \nli, and \sst (40 per task), and generate 10 counterfactuals per $x$ using each of the three models.
-The averaged metrics are in Table~\ref{table:intrinsic}.
-\sysname achieves compatible diversity with PPLM-BoW (self-BLEU score), and compatible \emph{closeness} with Masked-LM, achieving a balance between both.
-
-\begin{table}[tb]
-\small
-    \centering
-    %\setlength{\tabcolsep}{1.3pt}
-    \begin{tabular}{lccc}
-    \toprule
-    \multirow{2}{*}{Model} & Diversity & \multicolumn{2}{c}{Closeness} \\
-    \cmidrule(lr){2-2}
-    \cmidrule(lr){3-4}
-    & Self-BLEU $\uparrow$ & Semantic $\downarrow$ & Tree edit $\downarrow$ \\
-    % \cmidrule{2-4}
-    \midrule
-    \sysname & \text{0.82} & 0.37 & 2.02 \\
-    Masked-LM & 0.66 & \textbf{0.27} & \textbf{1.89} \\
-    PPLM-BoW & \textbf{0.82} & 0.65 & 7.65 \\
-    \bottomrule
-    \end{tabular}
-    \vspace{-2.5mm}
-    \caption{The intrinsic metrics comparing \sysname with Masked-LM and PPLM-BoW. As expected, \sysname counterfactuals are \emph{closer} to the original instance than PPLM-BoW, and more \emph{diverse} than the Masked-LM ones.}
-    \vspace{-3mm}
-    \label{table:intrinsic}
-\end{table}
-
-Ideally, we would also like to compare \sysname with GYC~\citet{madaan2020generate}, a parallel work that became available less than one month before ours.
-Inspired by style transfer~\cite{yang2018unsupervised} and controlled text generation, GYC performs the perturbation on the latent space of the input $x$.
-Unfortunately, GYC requires extensive implemention, and has yet to be opensourced.
-
-Still, we believe that our infilling (\texttt{BLANK}) structure will improve the \emph{closeness} over the unconstrained GYC (called content and syntactic preservation in their case).
-We also hypothesize that \sysname has better (or at least compatible) diversity than GYC. 
-Per their intended use case --- model testing and debiasing --- the control functions in GYC are driven by the predictor-of-interest (\eg sentiment classifier, NER tagger). 
-As a result, most of the GYC changes seem to focus on features deemed important by the classifier (\eg \exinline{I am very disappointed with the service} is changed by \swap{disappointed}{pleased}, \swap{disappointed}{happy}, \swap{disappointed with}{pleased to get a good}).
-
-
-
-
-\subsubsection{Controllability with Ablation Studies}
-\label{appendix:ablation_control}
-
-We finetune another GPT-2 model with training prompts that \emph{do not} contain the \tagstrshorts (called \emph{\sysname-a}), and quantify the impact of \tagstrs through an ablation study.
-For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on \tofix{250} prompts (from 100 unique original sentences).
-For each prompt, we generate counterfactuals through beam search (beam $=10$), and recompute the \tagstrshorts on the top three returns.
-We deem the control successful if at least one of the three recomputed \tagstrshort matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
-The success rate increases by $28.4\% \pm 18.2\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\%, from 40.4\% to 48.4\%) to \ctrltag{insert} (64.1\%, from 13.5\% to 78.6\%).
-%\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
-%\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
-
-There are three common failure cases for the \tagstrshorts:
-%Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
-(1) The dual manipulation from the \tagstrs and the blanks conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
-(2) $x$ does not have a corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
-(3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
-In the ablation study, we filtered out prompts that fell under cases 1 and 2.
-
-
-
-
-
-
-
 \section{Survey of Perturbation Applications}
 \label{appendix:paper_survey}
 
-
-Table~\ref{table:perturb_application} summarizes the perturbation applications and their generation strategies.
+Table~\ref{table:perturb_application} summarizes existing applications of the counterfactuals, with their generation strategies.

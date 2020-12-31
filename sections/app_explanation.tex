@@ -2,24 +2,27 @@
 \label{appendix:explanation}
 
 
-\subsection{Ranking Details}
+\subsection{Selection Methods}
 \label{appendix:exp_rank}
 
 \paragraph{SHAP complement as local explanation}
-Because the SHAP weights reflect the average effect of masking a token $t$, instead of finding just one abnormal counterfactual, we focus on \emph{word features that are abnormal on average:} 
-it is abnormal if there is a mismatch between the importance of the changed word features and the model behavior, in light of \emph{all counterfactuals} that have those features.
+Because the SHAP weights reflect the average effect of masking a token $t$, instead of finding just one abnormal counterfactual, we focus on \emph{word features that are abnormal on average}, \ie there is a mismatch between the importance of the changed word features and the model behavior, averaged over \emph{all counterfactuals} that have those features.
 
-In this case, the expected change in prediction of perturbing a token $t$ is the SHAP weight on it $\hat{d}_f(t, x) = w(t)$; 
-For example, in Figure~\ref{fig:explanation}, $w(t=\text{{depression}})=0.276$.
-The actual prediction change is the weighted average of $|f_p(x)-f_p(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), with the weight being the number of words modified in $\xp$. 
-Intuitively, the more words changed in $\xp$, the less effect each word has; In Figure~\ref{fig:explanation}, we regard ``depression'' to be responsible for half of the impact on changing \swap{in depression}{suicidal}.
-More formally, for a given $x$ and its $\xp$-s, we use $r(\xp)$ to denote the set of words replaced or deleted from $x$ in $\relation{\xp}$.
-We group the counterfactuals based on their affected words $G_t = \{\xp\ |\ t \in r(\xp)\}$. $d_f(t, x)$ then becomes:
-$$d_f(t, x) = \frac{1}{|G_t|+1} \left(w(t) + \sum_{\xp \in G_t} \frac{|f_p(x)-f_p(\xp)|}{|r(\xp)|}\right)$$
-We add the additional SHAP weight $w(t)$ as a smoothing factor to punish dominating outlier $\xp$.
+In this case, the expected change in prediction of perturbing a token $t$ is the SHAP importance on it $\E[\dist(t, x)] = s(t)$; 
+For example, in Figure~\ref{fig:explanation}, $s(t=\text{``depression''})=0.276$.
 
-We first find the abnormal tokens $t_l = \argmax \Delta d_f(t, x)$ and $t_s = \argmin d_f(t, x)$, and use the most extreme cases within the groups of $G_{t_l}$ and $G_{t_s}$ as the concrete counterfactual explanations, based on their prediction change $d(\xp, x) = |f_p(x)-f_p(\xp)|$, and the aggregated SHAP weights of all the changed tokens:
-$$\xp_l = \argmax_{\xp \in G_{t_l}} \left( |f_p(x)-f_p(\xp)| - \sum_{u\in r(\xp)} w(u) \right)$$ 
+The actual prediction change is the weighted average of $|\fp(x)-\fp(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), with the weight corresponding to the number of words modified in $\xp$: If $e(\xp)$ denotes the set of edited words (replaced or deleted from $x$ in $\relation{\xp}$), then $w(\xp) = 1/|e(\xp)|$.
+Intuitively, the more words changed in $\xp$, the less effect each word has; In Figure~\ref{fig:explanation}D, we regard ``depression'' to be responsible for half of the impact on changing \swap{in depression}{suicidal}.
+
+We group the counterfactuals based on their affected words $G_t = \{\xp\ |\ t \in e(\xp)\}$. $\dist(t, x)$ then becomes:
+$$\dist(t, x) = \frac{1}{|G_t|+1} \left(s(t) + \sum_{\xp \in G_t} w(t)\cdot |\fp(x)-\fp(\xp)|\right)$$
+We add the additional SHAP weight $s(t)$ as a smoothing factor to punish dominating outlier $\xp$.
+Then the gap between the expectation and the reality is (similar to \S\ref{subsec:local_explain}):
+$$\Delta\dist(t, x) = \dist(t, x)-\E[\dist(t, x)]$$
+We first find the abnormal tokens: (1) $t$ with small SHAP weight, but $\xp$ that change $t$ experience large prediction change on average: $t_L = \argmax_{t\in x} \Delta\dist(t, x)$, and (2) $t$ with large SHAP weight, but $\xp$ with $t$ changed usually have intact prediction: $t_U = \argmin_{t\in x} \Delta\dist(t, x)$.
+
+Then, we use the most extreme cases within the groups of $G_{t_L}$ and $G_{t_U}$ as the concrete counterfactual explanations, based on their prediction change $|\fp(x)-\fp(\xp)|$, and the aggregated SHAP weights of all the changed tokens:
+$$\xp_L = \argmax_{\xp \in G_{t_L}} \left( |f_p(x)-f_p(\xp)| - \sum_{u\in r(\xp)} s(u) \right)$$ 
 
 
 
@@ -30,8 +33,10 @@ To enable the grouping, we first featurize each counterfactual $\xp$ with respec
 (3) its added phrases \fexpto{not}, \fexpto{children}, and 
 (4) the combined template \fexptemp{\swap{kids}{children}}.
 For tokens involving multiple changes, we featurize both the primary and the combined changes, and so the example in Figure~\ref{fig:blank} also have additional features like \texttt{\fexptag{negation} \& \fexptag{lexical}}.
+These features form the relationship $\relation{\xp}$ in use.
 
-For each feature $h$ we compute the its prediction change rate over all the counterfactuals $(x, \xp) \in G_{h}$ that have the said feature, and compute the probability of the predicted label changes: $Pr(y_1, y_2) = |G_h^{y_1\veryshortarrow y_2}|/|G_h|$, where $ G_h^{y_1\veryshortarrow y_2} = \{ (x, \xp)\ |\ (x, \xp) \in G_h, f(x)=y_1, f(\xp) = y_2 \}$.
+For each feature $h \in \relation{\xp}$, we build a group of counterfactuals that contain $h$ (of course, these also include their corresponding $x$): $G_h = \{ \xp\ |\ h\in \relation{\xp} \}$.
+We compute the probability of the predicted label changes all the $\xp \in G_{h}$: $Pr(y_1, y_2) = |G_h^{y_1\veryshortarrow y_2}|/|G_h|$, where $ G_h^{y_1\veryshortarrow y_2} = \{ (x, \xp)\ |\ (x, \xp) \in G_h, f(x)=y_1, f(\xp) = y_2 \}$.
 The abnormality of a feature $h$ is represented by the entropy of the prediction change:
 $$I_h = -\sum_{y_1 \in Y, y_2 \in Y} Pr(y_1, y_2) \cdot \log Pr(y_1, y_2)$$
 We find the abormal feature with $\hat{h} = \argmin I_h$.
@@ -41,6 +46,6 @@ We find the abormal feature with $\hat{h} = \argmin I_h$.
 \subsection{User Study Details}
 \label{appendix:exp_user_study}
 
-The instruction is in Figure~\ref{fig:explanation_instruction}, and Figure~\ref{fig:explanation_ui} shows the sample interface for one round. 
-Participants start by just seeing the reference example and the model query box on the left hand side.
-When they choose to start the task or after they've exhausted their ten query chances, the query box is disabled, the tasks on the right is displayed, and the participants complete the tasks.
+The instruction for the user study in \S\ref{subsec:exp_user_study} is in Figure~\ref{fig:explanation_instruction}, and Figure~\ref{fig:explanation_ui} shows the sample interface for one round. 
+Participants started by just seeing the reference example and the model query box on the left hand side.
+When they chose to start the task or after they had exhausted their ten query chances, the query box was disabled, the tasks on the right were displayed, and the participants complete the tasks.

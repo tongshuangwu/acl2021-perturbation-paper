@@ -1,37 +1,37 @@
 \section{Related Work}
 \label{sec:relate}
 
-\textbf{The applications of counterfactuals.}
+\paragraph{The applications of counterfactuals.}
 Counterfactuals in NLP are most broadly used for model training, evaluation, and explanation.
-In training, counterfactuals usually augment the training data to improve model robustness~\cite{garg2019counterfactual, Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU} and generalizability.
+In training, they usually augment the training data to improve model robustness~\cite{garg2019counterfactual, Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU} and generalizability.
 \citet{kaushik2019learning} and \citet{teney2020learning} showed that counterfactual augmentations help mitigate the weights of spurious features.
 %\citet{teney2020learning} further proposed to treat instances in pairs to emphasize the difference in the training process. 
 %Our data can also support such experiments.
 Evaluation focuses on similar aspects as training, mostly through adversarial attacks~\cite{Song2020UniversalAA}, contrast sets~\cite{kaushik2019learning} and challenge sets~\cite{Geiger2019PosingFG, liu-etal-2019-inoculation}.
-We show the automatically generated counterfactuals are also useful for training and evaluation.
+We show the \sysname generated counterfactuals are also useful in such cases.
 
 Counterfactuals also naturally support model explanations, as ``explanations are sought in response to particular counterfactual cases or foils''~\cite{miller}.
-Popular feature importance attribution methods like SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI} all retrieve token importance through masking, which can be viewed as a form of (incomplete) counterfactual.
-Some work also explores directly presenting simple counterfactual examples~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual}.
-We explore the ranking of such examples, and combine them with existing feature attribution methods.
+Popular feature importance attribution methods~\cite{NIPS2017_7062, Ribeiro2016WhySI} all retrieve token importance through masking, which can be viewed as a form of (incomplete) counterfactual.
+Some work also explores directly presenting simple counterfactual examples~\cite{ross2020explaining, vig2020causal, kang2020counterfactual}, yet they lose the overview in feature attributions.
+We explore the selection of such examples, and combine them with existing feature attribution methods.
 %Perturbation is also used for explanations, but the use is much less prominent compared to structured data.
 %While counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
 
-\noindent\textbf{Counterfactual generation.}
-Existing generation methods are usually for particular applications.
+\paragraph{Counterfactual generation.}
+As in \S\ref{appendix:paper_survey}, existing generation methods are usually for particular applications.
 Most automated ones are for adversarial examples. 
-They enumerate through candidate word replacements~\cite{alzantot2018generating, garg2020bae, alzantot2018generating, andreas2019good} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors.
+They enumerate through candidate word replacements~\cite{alzantot2018generating, garg2020bae} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors.
 The exhaustive search is hard for people to scale to~\cite{ribeiro2018sear}.
-On the other hand, those evaluating and improving model decision boundaries lean towards manual rewrites and perturbation functions~\cite{checklist:acl20}.
-Such methods cover more diverse patterns, but the process is costly, and relies heavily on human creativity and domain expertise.
+On the other hand, those evaluating and improving model decision boundaries rely on manual efforts~\cite{checklist:acl20}, which cover more diverse patterns, but become more costly.
 Moreover, though human annotators also share strategies like negation, subject-object swapping~\cite{kaushik2019learning, gardner2020contrast}, the strategies have yet to be captured for targeted use.
-Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable on a small amount of data (\eg \citet{li2020linguistically} covered 20\% NLI data.)
-
-Closest to ours, a concurrent work called GYC~\cite{madaan2020generate} also generates diverse and plausible counterfactuals~\cite{Dathathri2020Plug}, on top of GPT-2.
-However, inspired by controlled text generation, their \emph{controls} are strictly driven by the known classifier at hand (\eg a sentiment classifier is required to establish the sentiment change in $\relation{\xp}$), limiting the use case to specific models, and the place-to-perturb to ``important features'' (\eg GYC would likely focus on ``great'' in Figure~\ref{fig:teaser}).
-We unify the generation for different use cases and enable task-agnostic controls, which bridges the scalability and diversity.
+Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable to a small subset of data~\cite{li2020linguistically}.
+We unify the generation for different use cases, which bridges the scalability and diversity.
 We only distinguish the generated ones through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 
+Some concurrent work share similar ideas as ours, building counterfactual generators on top of language models.
+GYC~\cite{madaan2020generate} adjusts controlled text generation methods (which would generate arbitrary texts), and modifies $x$ in the latent space, whereas MiCE~\cite{ross2020explaining} finetunes T5.
+Still, they both focus on model evaluation or explanation, and therefore optimize the generation --- where and how to perturb --- for \emph{flipping the class label}, which may have limited scalability (\eg MiCE builds a generator for each individual task.)
+We instead finetune \sysname on general-purpose datasets, design \sysname's controls to be task-agnostic, and use them for broadening the coverage on perturbation patterns.
 
 
 

@@ -15,7 +15,7 @@ d. we apply the model to training, eval, explanations. summary of results. Impor
 \vspace{-15pt}
 \caption{
 Overview: given an original sentiment analysis instance $x$ (A), \sysname generates (B) a large number of $\xp$, which are then (C) independently selected for downstream use cases.
-For example, in (D), we select $\xp$ as counterfactual explanations, based on whether they complement the feature attributions: though both ``great'' and ``kids'' are deemed important, the selected $\xp$ show that perturbing them may not affect the prediction $f(x)=f(\xp)=$\emph{positive}, revealing model errors.
+For example, in (D), we select $\xp$ as counterfactual explanations, based on whether they complement the feature attributions: though both ``great'' and ``kids'' are deemed important, the selected $\xp$ show that perturbing them may not affect the prediction $f(x)=f(\xp)=\text{\emph{positive}}$, revealing model errors.
 }
 \vspace{-15pt}
 \label{fig:teaser}
@@ -27,60 +27,52 @@ For example, in Figure~\ref{fig:teaser}, \exinline{It is great for kids} is pert
 
 %\hao{suggestion: it could be great if you can highlight the high cost of existing approaches by being more specific on, e.g., the cost of human annotation and cite some works backing it up. something like the human annotation in xxx costs xxx money/time would be very convincing. }
 Applications of counterfactual reasoning to Natural Language Processing (NLP) generally specify the relationship $x \veryshortarrow \xp$, and then create $\xp$ according to the relationship.
-As a result, the generation methods are heavily constrained by the application, each of which having their own limitations.
+As a result, generation methods are heavily constrained by the application, each having their own limitations.
 For example, a minimal edit of a sentence $x$ that results in a different label is useful for model training and evaluation.
 Such $\xp$ are usually gathered with human efforts, \ie human annotators manually create counterfactuals~\cite{gardner2020contrast} or perturbation functions that generate counterfactuals~\cite{wu2019errudite}.
 These are costly to generate --- taking 4-5 minutes per counterfactual~\cite{kaushik2019learning} --- and may miss important patterns due to their reliance on human intuition (\eg humans may cover \swap{great}{not great}, but can easily miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B).
 %Though it is cheaper to automate the process with parsing templates~\cite{li2020linguistically}, the templates usually have limited coverage on either the patterns-to-perturb, or the applicable data points.
 Adversarial examples are a different form of counterfactual reasoning: $x$ and $\xp$ have different model predictions \emph{despite} being minimally edited and semantically equivalent --- the latter limiting most perturbations to be automated word replacements or other forms of paraphrasing~\cite{iyyer2018adversarial, ribeiro2018semantically}.
 
-However, we observe that the generation methods do not have to be isolated, as various applications share similar requirements on $x\veryshortarrow\xp$ (\eg minimal edits).
+However, we observe that generation methods do not have to be isolated, as various applications share similar requirements on $x\veryshortarrow\xp$ (\eg minimal edits).
 In fact, the exhaustive search of automated methods can cover the training and evaluation more comprehensively, and non-paraphrasing changes like \emph{add negation} are valuable adversarials for tasks like named entity recognition. 
 %\hao{might be good to clarify that these two are not mutually-exclusive: adversarial examples should sometimes be close to the original}
 
-
 In this work, we formalize the task of \emph{automatic counterfactual generation}, which disentangles the generation from the application (\S\ref{sec:general_purpose}).
-It goes through two stages:
 First, in generation, given an input $x$, we produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with reasonable but \emph{application-agnostic} relationships $x \veryshortarrow \xp_i$ (Figure~\ref{fig:teaser}B).
-We require the counterfactuals to be \emph{plausible}, \emph{diverse}, and \emph{close to $x$}.
+We require the counterfactuals to be \emph{fluent}, \emph{diverse}, and \emph{close to $x$}.
 Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for the applications of interest (Figure~\ref{fig:teaser}C).
-
-We frame the generation step as text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \sysname using datasets of $(x, \xp)$ pairs. 
+We frame the generation step as text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using datasets of $(x, \xp)$ pairs. 
 We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B). 
 
 %\hao{suggestions: merge the following paragraphs (which are tedious to read), trim the less interesting details, and highlight the results that are exciting.}
-We demonstrate the effectiveness in facilitating counterfactual training and evaluation (\S\ref{sec:app_label}). 
-By asking humans to \emph{label} a set of \emph{diverse} counterfactuals, we produce high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the cost compared to creating them from scratch \cite{gardner2020contrast, kaushik2019learning}.
-We similarly produce raining data that improves model generalization in three classification tasks, when compared to adding the same amount of non-counterfactual data.
+We propose simple yet effective selection strategies, and show that a single \sysname model can support multiple downstream applications:
+First, it can \emph{facilitate counterfactual training and evaluation} (\S\ref{sec:app_label}). 
+By asking humans to \emph{label} a set of \emph{diverse} counterfactuals, we produce high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the annotation effort compared to creating them from scratch~\cite{kaushik2019learning}.
+We similarly produce training data that improves model generalization in three classification tasks. %, when compared to adding the same amount of non-counterfactual data.
 
-% (on Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), we observe that asking humans to validate \emph{diverse} counterfactuals is enough to produce high-quality contrast sets~\cite{gardner2020contrast} and training data that improves generalization accuracy (measured by out-of-domain datasets, challenge sets, contrast sets, and CheckLists~\cite{checklist:acl20}).
-
-% We \emph{propose appropriate selection strategies}, and demonstrate \sysname in three scenarios that require counterfactual reasoning: \emph{training, evaluation, and explanation}.
-% For training and evaluation (on Sentiment Analysis \sst, Natural Language Inference \nli, and Duplicate Question Detection \qqp), we observe that asking humans to validate \emph{diverse} counterfactuals is enough to produce high-quality contrast sets~\cite{gardner2020contrast}, and training data that improves generalization accuracy (measured by out-of-domain datasets, challenge sets, contrast sets, and CheckLists~\cite{checklist:acl20}).
-% Compared to the more difficult task of \emph{creating} counterfactuals, the validation is \emph{at least} 40\% more effective in terms of creation time.
-%, even after aggressive filtering.
-% (30 seconds for validating three $\xp$ around one $x$) 
-
-We also demonstrate how \sysname can produce \emph{black-box counterfactual explanations} (\S\ref{sec:app_explain}).
+Second, \sysname helps produce \emph{black-box counterfactual explanations} (\S\ref{sec:app_explain})
 %Such explanations have been elusive in NLP, despite evidence from social science research~\cite{miller} indicating that they may be more intuitive, or may complement feature attribution or attention maps.
 % We prioritize counterfactuals with \emph{abnormal} model behaviors, \ie the actual changes in prediction do not match the expectation.
 %(measured by sentence similarity or perturbed feature weights.)
-We select \sysname counterfactuals \emph{that potentially highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
+%We select \sysname counterfactuals \emph{that potentially highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
 %An example would be Figure~\ref{fig:teaser}D: the model incorrectly predicts \emph{positive} after \swap{kids}{no one} in Figure~\ref{fig:teaser}D, even though ``kids'' is supposed to be important.
-In user study, we observed that expert users only did slightly better than random at predicting what a model would do on \sysname counterfactuals (accuracy: $55 \pm 6\%$), even after seeing feature weights and inspecting the model with their own counterfactuals.
-In fact, \sysname finds more bugs within spots where humans considered inspected.
-This indicates that such explanations would complement feature attribution explanations and counterfactual analysis methods, echoing evidence from social science~\cite{miller}.
+In a user study, expert users only did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals that are selected to \emph{highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
+In fact, the explanations found more bugs within spots where users considered inspected after viewing feature weights and manually performing counterfactual analysis.
+This indicates that such explanations would complement existing explanation and analysis methods, echoing evidence from social science~\cite{miller}.
 
 
 In summary, we:
 \begin{compactenum}
-\item  Formalize the general purpose counterfactual generation task, and frame it as text generation. In doing so, we separate the generation step from selections, bypassing constraints induced by applications at generation time.
+\item  Formalize the general-purpose counterfactual generation task. 
+By separating the generation from the use cases, we generate fluent and diverse counterfactuals that bypass application-specific constraints.
 %. \hao{maybe emphasize the benefits of this}
-\item Finetune GPT-2 into a generator called \sysname, by collecting paired sentences and utilizing infilling language models with \tagstrs. 
-\sysname generates plausible and diverse counterfactuals, with control over where perturbations happen and what they do.
-The model is available at \modelurl, and we plan to opensource the implementations for selection strategies.
-\item Apply \sysname to \emph{training, evaluation, and explanation of black box NLP models}, using various selection strategies.
-\sysname effectively helps collect data that can be used to evaluate and improve model generalization, and complements existing using feature attribution explanations.
+\item Finetune a generator called \sysname, by collecting paired sentences and utilizing infilling language models with \tagstrs. 
+%\sysname generates plausible and diverse counterfactuals, with control over where perturbations happen and what they do.
+The model is available at \modelurl.
+%, and we plan to opensource the selection strategies.
+\item Apply \sysname to \emph{training, evaluation, and explanation of NLP models}, using various selection strategies (which we plan to opensource).
+\sysname effectively helps collect training and evaluation data, and complements feature attribution explanations.
 \end{compactenum}
 
 

@@ -52,14 +52,16 @@ Adversarial training 		& \cmark & \qmark \\
 
 
 \textbf{Definition.}
-Given an instance $x \in \xset$, a counterfactual generator $g$ should produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with varying relationships $x \rightarrow \xp$ (referred as $\relation{\xp_i}$ for simplicity).
+Given an instance $x \in \xset$, a generator $g$ should produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with varying relationships $x \rightarrow \xp_i$ (referred as $\relation{\xp_i}$ for simplicity).
 % Each $\xp_i$ perturbs $x$ with certain strategies like negations, syntactic restructuring, etc., and the edited spans are instantiations of the strategies.
-For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser} are both instances of the \ctrltag{negation} relationship.
-Considering the \emph{label} relationship, both instances \emph{flip the groundtruth}, but the \emph{model prediction is intact} on the latter\footnote{All examples shown are actual generations of \sysname.}.
+For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser}B are both instances of the \ctrltag{negation} relationship.
+%Considering the \emph{label} relationship, both instances \emph{flip the groundtruth}, but the \emph{model prediction is intact} on the latter\footnote{All examples shown are actual generations of \sysname.}.
 Another example of a lower level relationship would be \emph{the word ``kids'' is replaced}, \eg \swap{kids}{no one} and \swap{kids}{adults}.
 
-As illustrated in \S\ref{sec:desiderata} below, we summarize from social science research that the $\hat{\xset}$ should cover (1) \emph{diverse} $\xp$, and each $\xp$ should be (2) \emph{fluent} and (3) \emph{close} to $x$, regardless of the applications; Whereas the relevant relationship $\relation{\xp}$ would vary with applications.
-The three desiderate inspire our modeling in \S\ref{subsec:nlg}, including the training prompt design, datasets, and filtering strategies.
+As illustrated in \S\ref{sec:desiderata}, we summarize from social science research that, each $\xp$ should (1) be \emph{close} to $x$ and (2) maintain \emph{fluency}.
+Together, they should form (3) a \emph{diverse} $\hat{\xset}$.
+The three desiderata is applicable \emph{regardless of} the use cases, while the relationship $\relation{\xp}$ would \emph{vary with} use cases.
+They inspire our modeling in \S\ref{subsec:nlg}, including the training prompt design, datasets, and filtering strategies.
 
 
 % on a particular instance
@@ -73,15 +75,15 @@ The three desiderate inspire our modeling in \S\ref{subsec:nlg}, including the t
 
 %Desired counterfactuals are usually~\cite{morris2020textattack}:
 \textbf{Individual counterfactuals.} 
-A counterfactual $\xp$ should be \emph{close} to $x$, preferably only involving the minimal changes necessary for establishing a certain effect while leaving the rest of the instance intact~\cite{pearl2018causal}, allowing users to make causality assessments from $\relation{\xp}$. 
+A counterfactual $\xp$ should be (1) \emph{close} to $x$, preferably only involving the minimal changes necessary for establishing a certain effect while leaving the rest of the instance intact~\cite{pearl2018causal}, allowing users to make causality assessments from $\relation{\xp}$. 
 If we add negation \emph{and} remove a clause from a particular $x$ simultaneously, it is unclear which change should the resulting behavior be attributed to. 
 It has long been observed that humans strongly favor counterfactuals that are closer to the original instance~\cite{kahneman}, even when the same variable is acted upon.
-NLP research usually estimate \emph{closeness} using the semantic and syntactic distance between $x$ and $\xp$~\cite{morris2020textattack, madaan2020generate}.
+NLP research usually estimates \emph{closeness} using the semantic and syntactic distance between $x$ and $\xp$~\cite{morris2020textattack, madaan2020generate}.
 
 However, $\xp$ also needs to be realistic, \ie the counterfactual scenario should be one that could have easily happened, without rare assumptions or coincidences~\cite{kahneman}. 
-In NLP, this translates to \emph{fluent} counterfactuals that are grammatically correct~\cite{morris2020textattack} and semantically meaningful (\eg \exinline{It's scary for water} is grammatically correct but not meaningful.) 
+In NLP, this translates to (2) \emph{fluent} counterfactuals that are grammatically correct~\cite{morris2020textattack} and semantically meaningful (\eg \exinline{It's scary for water} is grammatically correct but not meaningful.) 
 
-\textbf{Sets of counterfactuals.} There can be infinite numbers of ``what-ifs''~\cite{pearl2018causal, kahneman}, especially as we allow $\xp$ to deviate from $x$. Since our goal is to produce a general-purpose set of counterfactuals, we expect the set to be \emph{diverse} in terms of relationships between $x$ and $\xp$.
+\textbf{Sets of counterfactuals.} There can be infinite numbers of ``what-ifs''~\cite{pearl2018causal, kahneman}, especially as we allow $\xp$ to deviate from $x$. Since our goal is to produce a general-purpose set of counterfactuals, we expect the set to be (3) \emph{diverse} in terms of relationships between $x$ and $\xp$.
 However, when the targeted relationship is unclear, an approximation could be the similarity of counterfactuals \emph{to each other} (using \eg self-BLEU~\cite{Hu2017TowardCG}).
 %, and also to contain various instantiations of the same relationship.
 
@@ -117,34 +119,34 @@ However, when the targeted relationship is unclear, an approximation could be th
     & \cite{zhang2019paws}
 \\ \midrule
 \ctrltag{lexical}
-    & \tagdefine{Changing just one word or noun chunks without breaking the POS tags.} \newline
+    & \tagdefine{To change just one word or noun chunks without breaking the POS tags.} \newline
       A dog is \swap{embraced}{attacked} by the woman.
     & \cite{sakaguchi2019winogrande}
 \\ \midrule
 \ctrltag{resemantic}
-    & \tagdefine{Replacing short phrases or clauses without affecting the parsing tree.}\newline
+    & \tagdefine{To replace short phrases or clauses without affecting the parsing tree.}\newline
       A dog is \swap{embraced by the woman}{wrapped in a blanket}.
-    & \cite{sakaguchi2019winogrande}
+    & \cite{wieting2017paranmt}
 \\ \midrule
 \ctrltag{insert}
-    & \tagdefine{Adding constraints without affecting the parsing structure of other parts.} \newline
+    & \tagdefine{To add constraints without affecting the parsing structure of other parts.} \newline
       A dog is embraced by the \add{little} woman.
     & \cite{mccoy2019right}
 \\ \midrule
 \ctrltag{delete}
-    & \tagdefine{Removing constraints without affecting the parsing structure of other parts.} \newline
+    & \tagdefine{To remove constraints without affecting the parsing structure of other parts.} \newline
     A dog is embraced \remove{by the woman}.
     & \cite{mccoy2019right}
 \\ \midrule
 \ctrltag{restructure}
-    & \tagdefine{Altering the dependency tree structure, \eg changing from passive to positive.} \newline
+    & \tagdefine{To alter the dependency tree structure, \eg changing from passive to positive.} \newline
     A dog is \swap{embraced by}{hugging} the woman.
     & \cite{wieting2017paranmt}
 \\
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{A list of \tagstrs used for semantically driving the counterfactual generation, their corresponding examples, and the representative training datasets for the corresponding patterns. More examples are in \S\ref{appendix:example}.}
+\caption{A list of \tagstrs used for semantically driving the counterfactual generation in \sysname, their examples, and the representative training datasets for the corresponding patterns. More examples are in \S\ref{appendix:example}.}
 %\wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
 \label{table:ctrltag}
 \vspace{-10pt}
@@ -156,10 +158,10 @@ However, when the targeted relationship is unclear, an approximation could be th
 \includegraphics[trim={0 20cm 30cm 0cm}, clip, width=1\columnwidth]{figures/blank.pdf}
 \vspace{-15pt}
 \caption{
-(A) Generating the training text from a sentence pair $(x, \xp)$.
-We extract the \tagstrs and convert $\xp$ (\exinline{It is not great for children.}) to the infilling structure, and then concatenate $x$, the \tagstrshort, and the blanked $\xp$ with special tokens.
-(B) Each pair results in multiple training texts: Besides just the changed tokens, we also generate prompts by blanking the subtrees that contain the change, and the entire sentence.
-At \emph{generation} time, \sysname accepts prompts that just include $x$, or additionally with the \tagstrshort or the blank placement.
+Forming the training text.
+(A) Given a pair $(x, \xp)$, we extract the \tagstrs and convert $\xp$=\exinline{It is not great for children} to the infilling structure by blanking the changed tokens, and then concatenate $x$, the \tagstrshort, and the blanked $\xp$ with special tokens.
+(B) We get multiple training texts per pair, by blanking $\xp$ subtrees that contain the change, or the entire sentence.
+At \emph{generation} time, \sysname accepts prompts that just include $x$, or with the \tagstrshort and the \texttt{BLANK} placement.
 }
 \vspace{-10pt}
 \label{fig:blank}
