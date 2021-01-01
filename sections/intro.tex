@@ -43,7 +43,7 @@ First, in generation, given an input $x$, we produce a set of counterfactuals $\
 We require the counterfactuals to be \emph{fluent}, \emph{diverse}, and \emph{close to $x$}.
 Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for the applications of interest (Figure~\ref{fig:teaser}C).
 We frame the generation step as text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using datasets of $(x, \xp)$ pairs. 
-We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B). 
+We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).% --- the control is the backbone of various downstream applications. 
 
 %\hao{suggestions: merge the following paragraphs (which are tedious to read), trim the less interesting details, and highlight the results that are exciting.}
 We propose simple yet effective selection strategies, and show that a single \sysname model can support multiple downstream applications:
@@ -59,20 +59,18 @@ Second, \sysname helps produce \emph{black-box counterfactual explanations} (\S\
 %An example would be Figure~\ref{fig:teaser}D: the model incorrectly predicts \emph{positive} after \swap{kids}{no one} in Figure~\ref{fig:teaser}D, even though ``kids'' is supposed to be important.
 In a user study, expert users only did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals that are selected to \emph{highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
 In fact, the explanations found more bugs within spots where users considered inspected after viewing feature weights and manually performing counterfactual analysis.
-This indicates that such explanations would complement existing explanation and analysis methods, echoing evidence from social science~\cite{miller}.
+This indicates that such counterfactuals can complement existing explanation and analysis methods, echoing evidence from social science~\cite{miller}. In summary, we:
 
-
-In summary, we:
 \begin{compactenum}
 \item  Formalize the general-purpose counterfactual generation task. 
-By separating the generation from the use cases, we generate fluent and diverse counterfactuals that bypass application-specific constraints.
+By \emph{separating the generation from the use cases}, we generate fluent and diverse counterfactuals that bypass application-specific constraints.
 %. \hao{maybe emphasize the benefits of this}
-\item Finetune a generator called \sysname, by collecting paired sentences and utilizing infilling language models with \tagstrs. 
+\item Finetune a generator called \sysname, by collecting paired sentences and enhancing controls with infilling structures and \tagstrs --- the control is \emph{the backbone of} various downstream applications.
 %\sysname generates plausible and diverse counterfactuals, with control over where perturbations happen and what they do.
-The model is available at \modelurl.
+The model is at \modelurl.
 %, and we plan to opensource the selection strategies.
-\item Apply \sysname to \emph{training, evaluation, and explanation of NLP models}, using various selection strategies (which we plan to opensource).
-\sysname effectively helps collect training and evaluation data, and complements feature attribution explanations.
+\item Apply \sysname to \emph{model training, evaluation, and explanation}, using various selection methods (which we will opensource).
+\sysname helps collect high-quality training and evaluation data with 40\% less annotation effort, and find model bugs that on top of feature attribution explanations and counterfactual analysis.
 \end{compactenum}
 
 

@@ -22,17 +22,19 @@ As in \S\ref{appendix:paper_survey}, existing generation methods are usually for
 Most automated ones are for adversarial examples. 
 They enumerate through candidate word replacements~\cite{alzantot2018generating, garg2020bae} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors.
 The exhaustive search is hard for people to scale to~\cite{ribeiro2018sear}.
-On the other hand, those evaluating and improving model decision boundaries rely on manual efforts~\cite{checklist:acl20}, which cover more diverse patterns, but become more costly.
+On the other hand, those evaluating and improving model decision boundaries rely on manual efforts~\cite{checklist:acl20}, which cover more diverse patterns, but at a higher cost.
 Moreover, though human annotators also share strategies like negation, subject-object swapping~\cite{kaushik2019learning, gardner2020contrast}, the strategies have yet to be captured for targeted use.
 Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable to a small subset of data~\cite{li2020linguistically}.
 We unify the generation for different use cases, which bridges the scalability and diversity.
 We only distinguish the generated ones through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
 
-Some concurrent work similarly build counterfactual generators on top of language models.
-GYC~\cite{madaan2020generate} adjusts controlled text generation methods (which would generate arbitrary texts), and modifies $x$ in the latent space, whereas MiCE~\cite{ross2020explaining} finetunes T5.
-Still, they both focus on model evaluation or explanation, and therefore optimize the generation --- where and how to perturb --- for \emph{flipping the class label}, which may have limited scalability (\eg MiCE builds a generator for each individual task.)
-We instead finetune \sysname on general-purpose datasets, design \sysname's controls to be task-agnostic, and use them for broadening the coverage on perturbation patterns.
-
+Some concurrent work is similar to ours, using language models to generate counterfactual sentences. 
+GYC~\cite{madaan2020generate} adjusts controlled text generation methods and modifies $x$ in the latent space, whereas MiCE~\cite{ross2020explaining} finetunes T5.
+Both target at generating counterfactuals that \emph{flip the class label}, which can be useful, but 
+neither approach emphasizes generality, with GYC focusing on evaluation and MiCE aimed at explanation.
+%Still, they both focus on model evaluation or explanation, and therefore control the generation to \emph{flip the class label}, which may have limited scalability (\eg MiCE builds a generator for each individual task.)
+We instead finetune \sysname on general-purpose datasets, design \sysname's controls to be task-agnostic, and use them for broadening the coverage on a large variety of perturbation patterns.
+As we demonstrate later in \S\ref{sec:app_label} and \S\ref{sec:app_explain}, such controls additionally support application that require specifications on where and how to perturb.
 
 
 

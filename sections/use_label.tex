@@ -109,7 +109,7 @@ With $n=20,000$ and $m=1,911$, \maug reduced the failure rates on 11 tests (out 
 The model improves consistently on most related cases, but possibly overfits on \texttt{more/less}.
 }
 \label{table:aug_qqp}
-\vspace{-5pt}
+\vspace{-10pt}
 \end{table}}
 
 
@@ -169,7 +169,7 @@ For example, if \exinline{a \swap{man}{woman} walks} is already in $\mathbf{L}$,
 
 \textbf{Procedure.}
 We crowd label the counterfactuals on Amazon Mechanical Turk. 
-For each round, the annotator is given the original $x$ and its groundtruth as references\footnote{For \qqp and \nli, we only perturbed \emph{duplicate} and \emph{entailment} examples, as others are significantly harder to flips (called \emph{asymmetric counterfactuals}~\cite{garg2019counterfactual}).}, and is asked to label three counterfactuals by (1) the class label and (2) fluency (\emph{``likely written by a native English speaker''}). 
+For each round, the annotator is given the original $x$ and its groundtruth as references\footnote{For \qqp and \nli, we only perturbed \emph{duplicate} and \emph{entailment} examples, as others are significantly harder to flip (called \emph{asymmetric counterfactuals}~\cite{garg2019counterfactual}).}, and is asked to label three counterfactuals by (1) the class label and (2) fluency (\emph{``likely written by a native English speaker''}). 
 We carefully remove noisy workers using hidden \emph{gold rounds}, as well as filters on label distributions and completion time.
 We also remove noisy labels through majority votes.
 More details are in \S\ref{appendix:label_instruct}. 
@@ -226,8 +226,8 @@ Even in the most extreme (and very rare) case where we only keep 100 labeled $\x
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{Perturbations as contrasts sets, with accuracies on the original development set, the examples used for perturbations (\emph{Orig. set}), the perturbed-to contrast sets (\emph{Contrast set}), and the consistency between them.}
-\vspace{-10pt}
+\caption{Counterfactuals as contrasts sets, revealing model insufficiency. The table contains accuracies on the development set, the original $x$ (\emph{Orig. set}), the contrast sets, and the consistency between them.}
+\vspace{-15pt}
 \label{table:contrast_set_result}
 \end{table}
 %\end{comment}
