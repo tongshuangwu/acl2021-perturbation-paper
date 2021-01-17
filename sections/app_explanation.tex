@@ -25,27 +25,10 @@ Then, we use the most extreme cases within the groups of $G_{t_L}$ and $G_{t_U}$
 $$\xp_L = \argmax_{\xp \in G_{t_L}} \left( |f_p(x)-f_p(\xp)| - \sum_{u\in r(\xp)} s(u) \right)$$ 
 
 
-
-\paragraph{Global explanation}
-To enable the grouping, we first featurize each counterfactual $\xp$ with respect to its original instance $x$, using 
-(1) its \tagstr (\fexptag{negation} for the example in Figure~\ref{fig:blank}), 
-(2) its remove phrases \fexpfrom{kids}, 
-(3) its added phrases \fexpto{not}, \fexpto{children}, and 
-(4) the combined template \fexptemp{\swap{kids}{children}}.
-For tokens involving multiple changes, we featurize both the primary and the combined changes, and so the example in Figure~\ref{fig:blank} also have additional features like \texttt{\fexptag{negation} \& \fexptag{lexical}}.
-These features form the relationship $\relation{\xp}$ in use.
-
-For each feature $h \in \relation{\xp}$, we build a group of counterfactuals that contain $h$ (of course, these also include their corresponding $x$): $G_h = \{ \xp\ |\ h\in \relation{\xp} \}$.
-We compute the probability of the predicted label changes all the $\xp \in G_{h}$: $Pr(y_1, y_2) = |G_h^{y_1\veryshortarrow y_2}|/|G_h|$, where $ G_h^{y_1\veryshortarrow y_2} = \{ (x, \xp)\ |\ (x, \xp) \in G_h, f(x)=y_1, f(\xp) = y_2 \}$.
-The abnormality of a feature $h$ is represented by the entropy of the prediction change:
-$$I_h = -\sum_{y_1 \in Y, y_2 \in Y} Pr(y_1, y_2) \cdot \log Pr(y_1, y_2)$$
-We find the abormal feature with $\hat{h} = \argmin I_h$.
-
-
-
 \subsection{User Study Details}
 \label{appendix:exp_user_study}
 
-The instruction for the user study in \S\ref{subsec:exp_user_study} is in Figure~\ref{fig:explanation_instruction}, and Figure~\ref{fig:explanation_ui} shows the sample interface for one round. 
+%The instruction for the user study in \S\ref{subsec:exp_user_study} is in Figure~\ref{fig:explanation_instruction}, and 
+Figure~\ref{fig:explanation_ui} shows the sample interface for one round. 
 Participants started by just seeing the reference example and the model query box on the left hand side.
 When they chose to start the task or after they had exhausted their ten query chances, the query box was disabled, the tasks on the right were displayed, and the participants complete the tasks.
