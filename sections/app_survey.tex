@@ -1,0 +1,61 @@
+
+
+\begin{table*}[t]
+\small
+\centering
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}l p{0.77\linewidth}@{}}
+\toprule
+\textbf{Application} & \textbf{Strategies} \\ 
+\midrule
+Data augmentation & 
+    Lexical~\cite{Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU}\newline
+    Paraphrasing~\cite{iyyer2018adversarial} \newline
+    Perturbation functions~\cite{ratner2017snorkel}
+\\\midrule
+Counterfactual data aug. & 
+    Manual~\cite{kaushik2019learning}
+    Lexical~\cite{garg2019counterfactual}
+\\\midrule
+Adversarial attack & 
+    Lexical~\cite{alzantot2018generating, garg2020bae, li-etal-2020-bert-attack, morris2020textattack, tan2020s, jin2020bert, ebrahimi2017hotflip, Zhang2019GeneratingFA, Jia2019CertifiedRT} \newline
+    Template~\cite{jiang2019avoiding}\newline
+    Insert~\cite{Song2020UniversalAA}
+\\\midrule
+Contrast set & 
+    Manual~\cite{gardner2020contrast} \newline
+    Templates~\cite{li2020linguistically}
+\\\midrule
+Challenge sets  & 
+    Lexical (heuristic)~\cite{kaushik2019learning, naik2018stress} \newline
+    Paraphrasing~\cite{Kavumba2019WhenCP} \newline
+    Templates~\cite{Geiger2019PosingFG, kaushik2019learning, nie2019analyzing, mccoy2019right}
+\\\midrule
+Model analysis & 
+    Lexical~\cite{garg2019counterfactual}\newline
+    Template~\cite{Goodwin2020ProbingLS}\newline
+    Perturbation functions~\cite{wu2019errudite, bowman-etal-2015-large, checklist:acl20}\newline
+    Controlled text generation~\cite{madaan2020generate}
+\\\midrule
+Explanations & 
+    Lexical~\cite{hase2020evaluating, vig2020causal, kang2020counterfactual} \newline
+    % probably also lexical
+    Lexical (through masking)~\cite{ramon2019counterfactual, ribeiro2018anchors}\newline
+    Language model~\cite{ross2020explaining}
+\\
+\bottomrule
+\end{tabular}
+\vspace{-5pt}
+
+\caption{A short survey on counterfactual application papers, and their generation strategies.}
+\label{table:perturb_application}
+%\end{table*}
+\vspace{-10pt}
+
+\end{table*}
+%\end{comment}
+
+\section{Survey of Perturbation Applications}
+\label{appendix:paper_survey}
+
+Table~\ref{table:perturb_application} summarizes existing applications of the counterfactuals, with their generation strategies.

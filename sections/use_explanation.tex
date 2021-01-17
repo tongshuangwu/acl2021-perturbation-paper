@@ -41,12 +41,6 @@ Counterfactual explanations have been elusive in NLP, despite evidence from soci
 Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively shows that the BERT \qqp model considers ``help'' trivial: 
 \swap{help}{find} in \emph{Q2} does not change the prediction.
 
-
-% seems like C is the example to highlight, no? 
-
-Here, we first select counterfactuals to serve as local explanations in \S\ref{subsec:local_explain}, and evaluate their effectiveness in \S\ref{subsec:exp_user_study}.
-We discuss the use of $\xp$ beyond local explanations in \S\ref{subsec:exp_more}.
-
 %\wts{Finding bugs missed by the feature attribution, and concretizing the opaque weights using readable examples.}
 \subsection{Selection: Abnormalities as Explanations}
 \label{subsec:local_explain}
@@ -142,37 +136,3 @@ In other words, \emph{\cshap found more bugs within spots where humans considere
 \noindent\textbf{Takeaway.}
 \sysname counterfactuals complement feature attribution methods and counterfactual analysis, as effectively as hiring a second expert for the analysis (but much cheaper).
 In particular, they highlight erroneous spots where humans may be misled by their own analysis.
-
-\subsection{Beyond Local Explanations}
-\label{subsec:exp_more}
-
-\paragraph{Interactive explanations: user-selected abnormalities.}
-%\paragraph{Interactive explanation.}
-Automated selections focus on general abnormality, but users should be able to point towards the part \emph{they} do not understand~\cite{miller}.
-%Furthermore, the method should allow explanations as a dialog. 
-The targeted perturbation seamlessly supports such interactive explanation.
-For example, an analyst can follow up on Figure~\ref{fig:explanation}C by \texttt{BLANK}ing ``friend'' in Q2, and observe the model's unstable behaviors: it predicts \emph{Non-duplicate} when \remove{friend} is changed to \add{woman}, \add{kid}, \add{professional}, but remains \emph{Duplicate} when the noun is \add{man}, \add{student}.
-
-
-\paragraph{Global Explanations: Recurring edits with unclear impact.}
-\label{subsec:global_exp}
-%\paragraph{Global explanations: impacts of same changes.}
-\emph{Global} explanations provide systematic understandings beyond individual instances --- yet another important aspect of model understanding~\cite{miller}.
-We define global abnormality as \emph{perturbation patterns whose impacts on the prediction are hard to generalize}.
-To locate them, we group counterfactuals based on their $\relation{\xp}$, which includes 
-\{\ tokens removed from $x$, added to $\xp$, and the corresponding \tagstr.\ \}
-Then, we select groups with unstable prediction changes, quantified as large entropy on $f(x) \veryshortarrow f(\xp)$ for its $\xp$.
-For example, one global abnormality for the \nli RoBERTa model in \S\ref{subsec:contrast_set} is \swap{two}{three} in the hypothesis.
-Out of the 253 $\xp$ whose original $f(x)=$ \emph{entailment}, $138$ flipped to \emph{contradiction}, $22$ to \emph{neutral}, yet $93$ was intact, resulting in entropy $I=0.91$.
-We observe that most cases flipped to \emph{contradiction} have the explicit word ``two'' in the premise, whereas the prediction-intact ones suggest that the model struggles with counting:
-
-\ebox{
-\textbf{P}: Two women having drinks at the bar.\\
-\textbf{H}: \swap{Two}{Three} women are at a bar.\\
-\textbf{$\mathbf{f(x)\rightarrow f(\xp)}$}: \swap{entailment}{contradiction}\\
---\\
-\textbf{P}: A boy and a girl gaze in a clothing store window.\\
-\textbf{H}: \swap{Two}{Three} kids are looking in a store window.\\
-\textbf{$\mathbf{f(x)\rightarrow f(\xp)}$}: \swap{entailment}{entailment}
-}
-

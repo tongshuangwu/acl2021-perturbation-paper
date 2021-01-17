@@ -183,20 +183,7 @@
 
 % teal, cyan
 \title{\sysname: Automated, General-purpose Counterfactual Generation}
-\begin{comment}
-\author{
-Tongshuang Wu \\
-  University of Washington \\
-  \texttt{wtshuang@uw.edu} \\\And
-Marco Tulio Ribeiro \\
-  Microsoft Research \\
-  \texttt{marcotcr@gmail.com} \\\And
-Jeffrey Heer \\
-  \texttt{jheer@uw.edu} \\\And
-Jeffrey Heer \\
-  \texttt{jheer@uw.edu} \\
-}
-\end{comment}
+
 
 \author{
 \makecell{
@@ -238,11 +225,13 @@ When used to generate explanations, \sysname helps augment feature attribution m
 
 \input{sections/intro}
 %\input{sections/_intro_backup}
-\input{sections/relate}
 \input{sections/model}
+
 \input{sections/use_label}
 \input{sections/use_explanation}
+\input{sections/use_err_analysis}
 
+\input{sections/relate}
 \input{sections/discussion}
 \input{sections/ack}
 \bibliography{ref}
@@ -253,9 +242,12 @@ When used to generate explanations, \sysname helps augment feature attribution m
 
 \appendix
 \input{sections/app_train_datasets}
+%\input{sections/app_survey}
 
 \input{sections/app_augmentation}
 \input{sections/app_explanation}
+\input{sections/app_err_analysis}
+
 \balance
 \input{sections/app_examples}
 

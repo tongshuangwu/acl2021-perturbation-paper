@@ -43,23 +43,27 @@ First, in generation, given an input $x$, we produce a set of counterfactuals $\
 We require the counterfactuals to be \emph{fluent}, \emph{diverse}, and \emph{close to $x$}.
 Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for the applications of interest (Figure~\ref{fig:teaser}C).
 We frame the generation step as text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using datasets of $(x, \xp)$ pairs. 
-We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).% --- the control is the backbone of various downstream applications. 
+We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).
+By scaling up the generation beyond human intuitions and simple paraphrasing, \sysname helps more effectively allocate human efforts to the \emph{verification, labeling, and analyses on the counterfactual instances.}
 
 %\hao{suggestions: merge the following paragraphs (which are tedious to read), trim the less interesting details, and highlight the results that are exciting.}
-We propose simple yet effective selection strategies, and show that a single \sysname model can support multiple downstream applications:
-First, it can \emph{facilitate counterfactual training and evaluation} (\S\ref{sec:app_label}). 
+We propose simple yet effective selection strategies, and show that a single \sysname model can team up with humans to support multiple downstream applications:
+(1) it can \emph{facilitate counterfactual training and evaluation} (\S\ref{sec:app_label}). 
+\wts{Add the range of the number here.}
 By asking humans to \emph{label} a set of \emph{unique} counterfactuals, we produce high-quality contrast sets~\cite{gardner2020contrast} at a fraction of the annotation effort compared to creating them from scratch~\cite{kaushik2019learning}.
 We similarly produce training data that improves model generalization in three classification tasks. %, when compared to adding the same amount of non-counterfactual data.
-
-Second, \sysname helps produce \emph{black-box counterfactual explanations} (\S\ref{sec:app_explain})
+(2) \sysname supports \emph{producing black-box counterfactual explanations} (\S\ref{sec:app_explain}), as in Figure~\ref{fig:teaser}D.
 %Such explanations have been elusive in NLP, despite evidence from social science research~\cite{miller} indicating that they may be more intuitive, or may complement feature attribution or attention maps.
 % We prioritize counterfactuals with \emph{abnormal} model behaviors, \ie the actual changes in prediction do not match the expectation.
 %(measured by sentence similarity or perturbed feature weights.)
 %We select \sysname counterfactuals \emph{that potentially highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
 %An example would be Figure~\ref{fig:teaser}D: the model incorrectly predicts \emph{positive} after \swap{kids}{no one} in Figure~\ref{fig:teaser}D, even though ``kids'' is supposed to be important.
-In a user study, expert users only did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals that are selected to \emph{highlight mistaken model predictions}, as in Figure~\ref{fig:teaser}D.
-In fact, the explanations found more bugs within spots where users considered inspected after viewing feature weights and manually performing counterfactual analysis.
-This indicates that such counterfactuals can complement existing explanation and analysis methods, echoing evidence from social science~\cite{miller}. In summary, we:
+In a user study, expert users only did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals that are selected to \emph{highlight mistaken model predictions}, even after inspecting the models based on state-of-the-art explanation methods.
+% In fact, the explanations found more bugs within spots where users considered inspected after
+(3) \sysname also helps \emph{support more systematic error analysis} by highlighting inspection spots easily missed by human analysts. 
+These indicate that such counterfactuals can complement existing explanation and analysis methods, echoing evidence from social science~\cite{miller}. 
+
+In summary, we:
 
 \begin{compactenum}
 \item  Formalize the general-purpose counterfactual generation task. 
@@ -72,6 +76,7 @@ The model is at \modelurl.
 \item Apply \sysname to \emph{model training, evaluation, and explanation}, using various selection methods (which we will opensource).
 \sysname helps collect high-quality training and evaluation data with 40\% less annotation effort, and find model bugs that on top of feature attribution explanations and counterfactual analysis.
 \end{compactenum}
+\wts{Maybe can delete if we run out of space.}
 
 
 % we observe that \sysname explanations can complement popular feature attribution methods and highlight their blind spots.
