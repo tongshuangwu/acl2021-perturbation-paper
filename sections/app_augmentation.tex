@@ -1,5 +1,5 @@
 
-%\begin{comment}
+\begin{comment}
 \begin{figure*}
 \centering
 \includegraphics[width=0.9\textwidth]{figures/mturk_instruction.pdf}
@@ -13,14 +13,14 @@ Instructions are similar for \qqp and \sst, except for the label definitions and
 \label{fig:mturk_instruction}
 
 \end{figure*}
-%\end{comment}
+\end{comment}
 
 
 
 \section{Additional Details to Train \& Eval \S\ref{sec:app_label}}
 \label{appendix:app_label}
 
-%\begin{comment}
+\begin{comment}
 \subsection{Tasks \& Data}
 \label{appendix:app_label_data}
 %We examine both evaluation and augmentation with three classification tasks: 
@@ -36,7 +36,7 @@ We augment the data based on \dnli~\cite{bowman-etal-2015-large}.
  
 \textbf{Duplicate Question Detection (\qqp)} analyzes whether two questions are duplicates of each other (\ie, if you have the answer to one question, whether you can infer the answer for the other one.) 
 We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question pairs from the community question-answering website Quora.
-%\end{comment}
+\end{comment}
 
 
 \begin{comment}
@@ -50,7 +50,7 @@ We generate prompts using all the combinations of \tagstrs and blanked sentences
 Then, we sample counterfactuals \emph{with diverse patterns} to cover more variations around local decision boundaries.
 Specifically, we measure the similarity between counterfactuals based on weighted overlaps between their \tagstrs (denoted as $s(\xp)$), the text tokens removed ($r(\xp)$) and added ($a(\xp)$). 
 %For example, \ctrltag{[lexical]} \swap{man}{woman} is more similar to \ctrltag{[lexical]} \swap{man}{person} than \ctrltag{[quantifier]} \swap{man}{two men}.
-%The similarity computation is in \S\ref{appendix:perturb_similarity}. 
+%The similarity computation is in Appendix~\ref{appendix:perturb_similarity}. 
 %\wts{Need to write this part.} 
 Formally, the distance between two counterfactuals is ($a_1$ is an abbreviation for $a(\xp_1)$):
 $$d(\xp_1, \xp_2) = \alpha\cdot\mathbb{1}(s_1 = s_2) + \beta\cdot\mathbb{1}(r_1 = r_2) + \gamma\cdot\mathbb{1}(a_1=a_2)$$
@@ -70,7 +70,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
 
 
-%\begin{comment}
+\begin{comment}
 \begin{figure*}[ht]
 \centering
 \includegraphics[width=1\textwidth]{figures/explanation_instruction}
@@ -79,7 +79,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \vspace{-10pt}
 \label{fig:explanation_instruction}
 \end{figure*}
-%\end{comment}
+\end{comment}
 
 \begin{figure*}[ht]
 \centering
@@ -132,12 +132,12 @@ We selected the epoch that had the highest accuracy on the corresponding validat
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
 
 
-%\begin{comment}
+\begin{comment}
 \subsection{Criteria for CheckList Tests}
 \label{appendix:checklist}
 \wts{Maybe remove.}
 As a behavioral testing framework, CheckList defines multiple tests, and measures models' linguistic capabilities using the failure rates of each test.
 We define a test to have failed if the failure rate is over $20\%$.
 Because failure rates are more sensitive than the accuracy, we say a model capability is affected, if the failure rate of a test changes (increases or decreases) more then 5\% (\eg failure rates going from 20\% to 21\% is insignificant), and the delta accounts for 10\% (\eg failure rates decreasing 8\% from 100\% to 92\% does not count.)
-%\end{comment}
+\end{comment}
 

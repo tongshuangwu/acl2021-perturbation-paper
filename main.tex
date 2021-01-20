@@ -13,7 +13,7 @@
 %% and that of ACL 08 by Joakim Nivre and Noah Smith
 
 \documentclass[11pt,a4paper]{article}
-\usepackage[hyperref]{acl2020}
+\usepackage[hyperref]{acl2021}
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{stfloats}
@@ -44,7 +44,7 @@
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 
 
-\aclfinalcopy % Uncomment this line for the final submission
+%\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
 
 %\setlength\titlebox{5cm}
@@ -136,6 +136,7 @@
 % constants
 \newcommand{\sysname}{\textsc{Polyjuice}\xspace}
 \newcommand{\modelurl}{\url{https://huggingface.co/uw-hai/polyjuice}}
+\renewcommand{\modelurl}{\texttt{[URL omitted.]}}
 
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
 \newcommand{\tagstr}{control code\xspace}
@@ -208,12 +209,15 @@ $^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\
 \begin{document}
 \maketitle
 \begin{abstract}
-Counterfactual examples have been shown to be useful for many applications, including calibrating, evaluating, and explaining model decision boundaries. However, previous methods for generating such counterfactual examples have been tightly tailored to a specific application, used  a limited range of linguistic patterns, or are hard to scale. 
+Counterfactual examples have been shown to be useful for many applications, including calibrating, evaluating, and explaining model decision boundaries. 
+However, previous methods for generating such counterfactuals have been tightly tailored to a specific application, used a limited range of linguistic patterns, or are hard to scale. 
 We propose to disentangle counterfactual generation from its use cases, \ie gather general-purpose counterfactuals first, and then select them for specific applications. 
 We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator, \sysname, which produces fluent and diverse counterfactuals. 
 Our method also allows control over where perturbations happen and what they do. 
-We show \sysname supports multiple use cases: by generating diverse counterfactuals for humans to label, \sysname helps produce high-quality datasets for model training and evaluation, requiring 40\% less human effort. 
-When used to generate explanations, \sysname helps augment feature attribution methods to reveal models' erroneous behaviors.
+We show \sysname supports multiple use cases: 
+When creating datasets for model training and evaluation, \sysname helps to save up to 75\% annotation efforts over manual creation.
+When used to produce explanations and for error analysis, \sysname reveals the models' erroneous behaviors that are easily missed by human analysts.
+
  %
 %Existing methods generate counterfactual examples for specific applications, even though most of the examples can be broadly used for calibrating, evaluating, and explaining model decision boundaries. 
 %Constrained by their use cases, the methods each have a limited linguistic pattern coverage or are hard to scale. 
@@ -224,7 +228,6 @@ When used to generate explanations, \sysname helps augment feature attribution m
 \end{abstract}
 
 \input{sections/intro}
-%\input{sections/_intro_backup}
 \input{sections/model}
 
 \input{sections/use_label}
@@ -233,7 +236,7 @@ When used to generate explanations, \sysname helps augment feature attribution m
 
 \input{sections/relate}
 \input{sections/discussion}
-\input{sections/ack}
+%\input{sections/ack}
 \bibliography{ref}
 \bibliographystyle{acl_natbib}
 
@@ -248,7 +251,7 @@ When used to generate explanations, \sysname helps augment feature attribution m
 \input{sections/app_explanation}
 \input{sections/app_err_analysis}
 
-\balance
-\input{sections/app_examples}
+%\balance
+%\input{sections/app_examples}
 
 \end{document}

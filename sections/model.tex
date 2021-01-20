@@ -2,106 +2,10 @@
 \label{sec:general_purpose}
 
 
-%\hao{a road map here would help}
-\begin{comment}
-* Define the task
-- Some math
-- Several different application domains
-    - augmentation
-    - adversarial attack
-    - extend data
-    - counterfactual explanation
-- Importance of where to change and how to change
-
-* How to train
-- Compute control tags
-- Special tokens
-
-* Use existing datasets
-- Why each dataset 
-- Data distribution [maybe appendix]
-
-* Training hyperparameters
-
-* Evaluations
-- Filtering
-- Diversity
-\end{comment}
-
-\begin{comment}
-% Originally wanted a table to summarize 
-\begin{table}
-\small
-\centering
-\begin{tabular}{r c c}
-\toprule
-
-Application & \textbf{$y = \yp$} & $f(x)=f(\xp)$ \\ 
-\midrule
-Adversarial training 		& \cmark & \qmark \\
-Data augmentation  			& \qmark & \qmark \\
-Perturbation explanation 	& \qmark & \qmark \\
-Adversarial training 		& \cmark & \qmark \\
-\bottomrule
-\end{tabular}
-
-\caption{The datasets used for finetuning the GPT-2 perturbation model, and the \tagstr distributions.}
-\label{table:gpt_train_stats}
-\end{table}
-\end{comment}
-
-
-% on a particular instance
-% 
-\subsection{Definition and Desiderata}
-\label{sec:desiderata}
-
-
-\textbf{Definition.}
-Given an instance $x \in \xset$, a generator $g$ should produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with various relationships $x \rightarrow \xp_i$ (referred as $\relation{\xp_i}$ for simplicity).
-% Each $\xp_i$ perturbs $x$ with certain strategies like negations, syntactic restructuring, etc., and the edited spans are instantiations of the strategies.
-For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser}B are both instances of the \ctrltag{negation} relationship.
-As we will see in \S\ref{sec:app_label}--\S\ref{sec:app_err_analysis}, in different applications, we care about different $\relation{\xp}$.
-For sentiment analysis tasks, the two negation changes also invoke a \emph{label flipping} relationship, with both counterfactuals becoming negative sentences after the perturbation; however, this relationship does not necessarily hold for a different task.
-Regardless of the use case, we prefer counterfactuals with the following four desiderata, \ie closeness, fluency, diversity, and controllability.
-They inspire our modeling in \S\ref{subsec:nlg}.
-
-% Knowledge of such relationships aid downstream filtering and ranking.
-% $\relation{\xp}$ then forms certain relationships that are useful for downstream filtering (\eg perturbation strategy, the added and removed tokens, the impacts on groundtruth label, model prediction, etc.)
-%The perturbation follow certain \emph{strategies} $s$ (e.g., negations~\cite{kaushik2019learning}, word substitution~\cite{li-etal-2020-bert-attack}, syntactical restructing~\cite{iyyer2018adversarial}).
-
-%Desired counterfactuals are usually~\cite{morris2020textattack}:
-\textbf{Individual counterfactuals.} 
-A counterfactual $\xp$ should be (1) \emph{close} to $x$, preferably only involving the minimal changes necessary for establishing a certain effect while leaving the rest of the instance intact~\cite{pearl2018causal}, allowing users to make causality assessments from $\relation{\xp}$. 
-%If we add negation \emph{and} remove a clause from a particular $x$ simultaneously, it is unclear which change should the resulting behavior be attributed to. 
-It has long been observed that humans strongly favor counterfactuals that are closer to the original instance~\cite{kahneman}.
-%, even when the same variable is acted upon.
-%Following common practice in NLP research, we estimate \emph{closeness} using the semantic and syntactic distance between $x$ and $\xp$~\cite{morris2020textattack, madaan2020generate}.
-
-However, $\xp$ also needs to be \emph{fluent}, \ie grammatically correct~\cite{morris2020textattack} and semantically meaningful (\eg \exinline{It's scary for water} is not meaningful.)
-This estimates the likelihood of a sentence occurring in reality; as \citet{kahneman} stated, the counterfactual scenario should be one that could have easily happened, without rare assumptions or coincidences. 
-%In NLP, this translates to sentences that are likely to be written.
-
-
-%However, $\xp$ also needs to be realistic, \ie the counterfactual scenario should be one that could have easily happened, without rare assumptions or coincidences~\cite{kahneman}. 
-%In NLP, this translates to sentences that are likely to be written, \ie (2) \emph{fluent} counterfactuals that are grammatically correct~\cite{morris2020textattack} and semantically meaningful (\eg \exinline{It's scary for water} is grammatically correct but not meaningful.) 
-
-\textbf{Sets of counterfactuals.} There can be infinite numbers of ``what-ifs''~\cite{pearl2018causal, kahneman}. %especially as we allow $\xp$ to deviate from $x$. 
-Since our goal is to produce a general-purpose set of counterfactuals, we expect the set to be (3) \emph{diverse} in terms of relationships between $x$ and $\xp$.
-%However, when the targeted relationship is unclear, an approximation could be the similarity of counterfactuals \emph{to each other} (using \eg self-BLEU~\cite{Hu2017TowardCG}).
-%, and also to contain various instantiations of the same relationship.
-
-Meanwhile, it is also essential to collect counterfactuals with (4) \emph{controlled} $\relation{\xp}$ relationship, such that the counterfactuals can support a wide range of specific applications, \eg counterfactual explanations on the salient features (\S\ref{sec:app_explain}), counterfactual analysis where we group $\xp$ based on how they are perturbed both semantically and syntactically (\S\ref{sec:app_err_analysis}), etc.
-Controllability reflects the ``focus rule''~\cite{kahneman}, \ie counterfactuals vary with the object of concern and attention.
-%Additionally, augmentations usually prioritize (3) \emph{diversity} --- a group of $x$s are preturbed using various strategies, and various initiations under the same strategy, such that they provide different constraints on finetuning decision boundaries.
-%On the other hand, evaluations and explanations require more (4) \emph{controlled} perturbations for systematic and targeted inspections.
-%The diversity and the controllability are two competing factors, and prior work focusing on certain applications follow one of two extremes.
-%Those that thrive in diversity are either too uncontrolled (\eg text generation~\cite{iyyer2018adversarial}) or hard to scale (\eg manual rewrites~\cite{kaushik2019learning, gardner2020contrast}), whereas those that rely on templates or heuristic rules usually only cover limited linguistic patterns~\cite{li2020linguistically}.
-
-
 
 \newcommand{\tagdefine}[1]{\emph{{\color{darkgray}#1} }}
 %\renewcommand{\arraystretch}{1.1}
+\newcommand{\TagTable}{
 \begin{table*}
 \small
 \centering
@@ -150,11 +54,57 @@ Controllability reflects the ``focus rule''~\cite{kahneman}, \ie counterfactuals
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{A list of \tagstrs used for semantically driving the counterfactual generation in \sysname, their examples, and the representative training datasets for the corresponding patterns. More examples are in \S\ref{appendix:example}.}
+\caption{A list of \tagstrs used for semantically driving the counterfactual generation in \sysname, their examples, and the representative training datasets for the corresponding patterns. %More examples are in Appendix~\ref{appendix:example}.
+}
 %\wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
 \label{table:ctrltag}
 \vspace{-10pt}
 \end{table*}
+}
+% on a particular instance
+% 
+\subsection{Definition and Desiderata}
+\label{sec:desiderata}
+
+
+Given an instance $x \in \xset$, a generator $g$ should produce a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with various relationships $x \veryshortarrow \xp_i$ (referred as $\relation{\xp_i}$ for simplicity).
+% Each $\xp_i$ perturbs $x$ with certain strategies like negations, syntactic restructuring, etc., and the edited spans are instantiations of the strategies.
+For example, \swap{great}{not great}, \swap{kids}{no one} in Figure~\ref{fig:teaser}B are both instances of the \ctrltag{negation} relationship.
+The importance of certain $\relation{\xp}$ changes along with applications.
+The two negation changes also invoke a \emph{label flipping relationship} for sentiment analysis, with both counterfactuals becoming negative sentences; however, this relationship does not necessarily hold for another task.
+However, \emph{independent of the application}, we prefer $\xp$ with the following four desiderata, \ie closeness, fluency, diversity, and controllability:
+%which inspire our modeling in \S\ref{subsec:nlg}:
+% Knowledge of such relationships aid downstream filtering and ranking.
+% $\relation{\xp}$ then forms certain relationships that are useful for downstream filtering (\eg perturbation strategy, the added and removed tokens, the impacts on groundtruth label, model prediction, etc.)
+%The perturbation follow certain \emph{strategies} $s$ (e.g., negations~\cite{kaushik2019learning}, word substitution~\cite{li-etal-2020-bert-attack}, syntactical restructing~\cite{iyyer2018adversarial}).
+
+%Desired counterfactuals are usually~\cite{morris2020textattack}:
+Considering \emph{individual counterfactuals}, a $\xp$ should be (1) \textbf{close} to $x$, preferably only involving the minimal changes necessary for establishing a certain effect while leaving the rest of the instance intact~\cite{pearl2018causal}, such that users can make causality assessments from $\relation{\xp}$. 
+%If we add negation \emph{and} remove a clause from a particular $x$ simultaneously, it is unclear which change should the resulting behavior be attributed to. 
+It has long been observed that humans strongly favor counterfactuals that are closer to the original instance~\cite{kahneman}.
+%, even when the same variable is acted upon.
+%Following common practice in NLP research, we estimate \emph{closeness} using the semantic and syntactic distance between $x$ and $\xp$~\cite{morris2020textattack, madaan2020generate}.
+However, $\xp$ also needs to be (2) \textbf{fluent}, \ie grammatically correct~\cite{morris2020textattack} and semantically meaningful (\eg \exinline{It's scary for water} is not meaningful.)
+This estimates the likelihood of a sentence occurring in reality; as \citet{kahneman} stated, the counterfactual scenario should be one that could have easily happened without rare assumptions. 
+%In NLP, this translates to sentences that are likely to be written.
+
+
+%However, $\xp$ also needs to be realistic, \ie the counterfactual scenario should be one that could have easily happened, without rare assumptions or coincidences~\cite{kahneman}. 
+%In NLP, this translates to sentences that are likely to be written, \ie (2) \emph{fluent} counterfactuals that are grammatically correct~\cite{morris2020textattack} and semantically meaningful (\eg \exinline{It's scary for water} is grammatically correct but not meaningful.) 
+
+We also consider \emph{sets of counterfactuals}, as there can be infinite numbers of ``what-ifs''~\cite{pearl2018causal}. %especially as we allow $\xp$ to deviate from $x$. 
+Since our goal is to produce a general-purpose set of counterfactuals, we expect the set to be (3) \textbf{diverse} in terms of relationships between $x$ and $\xp$.
+%However, when the targeted relationship is unclear, an approximation could be the similarity of counterfactuals \emph{to each other} (using \eg self-BLEU~\cite{Hu2017TowardCG}).
+%, and also to contain various instantiations of the same relationship.
+Meanwhile, we also expect to collect sets with (4) \textbf{controlled} $\relation{\xp}$ relationship.
+The control is essential to support a wide range of specific applications, \eg counterfactual explanations on salient features (\S\ref{sec:app_explain}), error analyses that group semantically or syntactically related $\xp$ (\S\ref{sec:app_err_analysis}), etc.
+It reflects the ``focus rule''~\cite{kahneman}: counterfactuals would vary with the object of attention.
+%Additionally, augmentations usually prioritize (3) \emph{diversity} --- a group of $x$s are preturbed using various strategies, and various initiations under the same strategy, such that they provide different constraints on finetuning decision boundaries.
+%On the other hand, evaluations and explanations require more (4) \emph{controlled} perturbations for systematic and targeted inspections.
+%The diversity and the controllability are two competing factors, and prior work focusing on certain applications follow one of two extremes.
+%Those that thrive in diversity are either too uncontrolled (\eg text generation~\cite{iyyer2018adversarial}) or hard to scale (\eg manual rewrites~\cite{kaushik2019learning, gardner2020contrast}), whereas those that rely on templates or heuristic rules usually only cover limited linguistic patterns~\cite{li2020linguistically}.
+
+
 
 
 
@@ -162,82 +112,21 @@ Controllability reflects the ``focus rule''~\cite{kahneman}, \ie counterfactuals
 \label{subsec:nlg}
 
 We frame counterfactual generation as a text generation task using language models (LMs).
-As we demonstrate in an intrinsic evaluation (\S\ref{appendix:intrinsic}), large pre-trained LMs like GPT-2~\cite{radford2019language} are capable of generating \emph{fluent} text, and are more flexible than word substitutions~\cite{garg2019counterfactual} and templates~\cite{ribeiro2018sear}, allowing for non-trivial countrefactuals, and thereby increase the semantic and syntactic \emph{diversity}. 
-
-
-\paragraph{Overview of the generation prompt format.}
-At generation time, \sysname takes in the following information as the prompt (we later detail how such we insert such information into GPT-2 through finetuning): 
-(1) To generate $\xp$ that are \emph{close} to an original instance $x$ (rather than arbitrary text), the generation prompt \emph{always} starts with $x$, followed by a special token that denotes the beginning of the counterfactuals.
-%As in Figure \ref{fig:blank}A, when the prompt includes both the \tagstrshort and the blanks, \sysname only fills in the blank according to the \tagstrshort (\exinline{not \texttt{[ANSWER]} children \texttt{[ANSWER]}.})
-(2) Optionally, the generation can also be conditioned on \emph{\tagstrs} and \emph{blank tokens}, \eg \exinline{$x$ \texttt{$x$ <|perturb|>} it is \texttt{[BLANK] great fro }}
-
-to control both where in $x$ the perturbation happens, and the type of change.
-As in Figure \ref{fig:blank}A, \sysname only fills in the blank according to the \tagstrshort (\exinline{not \texttt{[ANSWER]} children \texttt{[ANSWER]}.})
-
-When we exclusively input \texttt{$x$ <|perturb|>} as the prompt, 
-
-
-when the prompt exclusively depends on the original sentence (\exinline{$x$ \texttt{<|perturb|>}}), \sysname selects the \tagstr and the location of \texttt{[BLANK]} tokens (\exinline{\ctrltag{[code]} $\xp$}).
-If otherwise
-
-As Figure \ref{fig:blank} indicates, we can control the counterfactual generation conditioning exclusively on $x$ (in which case \sysname selects the \tagstr and the location of \texttt{[BLANK]} tokens), conditioning on $x$ and the \tagstr, or specifying both the \tagstrshort and where the perturbations happen.
+Large pre-trained LMs like GPT-2~\cite{radford2019language} are capable of generating \emph{fluent} text.
+They also increase the semantic and syntactic \emph{diversity}, by allowing for non-trivial countrefactuals that are more flexible than word substitutions~\cite{garg2019counterfactual} and templates~\cite{ribeiro2018sear}. 
 
 
 
-
-In Figure~\ref{fig:blank}A, when the prompt is \exinline{$x$ \texttt{<|perturb|>}}, the generation is \exinline{\ctrltag{[code]} $\xp$}.
-
-(2) To denote the beginning of the 
-and $\xp$ contains \texttt{[BLANK]} tokens where perturbations are to be applied (Figure~\ref{fig:blank}). 
-
-\paragraph{Finetuning on paired sentences, for \emph{closeness}.}
-We rely on six existing datasets of paired sentences, each of which contains counterfactuals with a subset of $\relation{\xp}$ relationships of interest (see Table~\ref{table:ctrltag}). 
-To increase diversity, we additionally find naturally occurring pairs in non-paired datasets like SQAuD~\cite{rajpurkar-etal-2016-squad}, using heuristics on the editing distance. 
-A combination of these datasets yields a finetuned model that can produce \emph{diverse} counterfactuals.
-For each paired $(x, \xp)$, we create various training prompts as in Figure~\ref{fig:blank}.
-
-
-
-\paragraph{Controlling counterfactual generation.}
-To achieve control over $\relation{\xp}$, we need to be able to control both where in $x$ the perturbation happens, and the type of change. To address the former, 
-we extend the Infilling by Language Modeling (ILM) framework~\cite{donahue2020enabling}, 
-
-such that $x$ is always part of the prompt, and $\xp$ contains \texttt{[BLANK]} tokens where perturbations are to be applied (Figure~\ref{fig:blank}). 
-
-ILM allows for perturbations of any length (additions and deletions) beyond single word substitutions, \eg Figure~\ref{fig:blank}B.
-
-To control the type of perturbations, we additionally condition the generation on special \tagstrs~\cite{raffel2019exploring, Dathathri2020Plug}, \eg \ctrltag{negation} in Figure \ref{fig:blank}A.
-Inspired by prior work categorizing manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}, we design 8 \tagstrshorts (Table~\ref{table:ctrltag}) that distinguish lexical, syntactic, and semantic perturbations. 
-We verify through an ablation study in \S\ref{appendix:ablation_control} that training \sysname with \tagstrs greatly improves the success rate when generating counterfactuals that have these properties (by $29\% \pm 18\%$). 
-
-
-
-
-
-
-
-
-
-
-
-
-
-We detail how we finetune GPT-2 to generate $\xp$ that are \emph{close} to an original instance $x$ (rather than arbitrary text).
-Importantly, we present a novel method for \emph{controlling} the $\relation{\xp}$ relationship. 
-%, which is essential for supporting a wide range of applications, \eg counterfactual analysis where we group $\xp$ based on how they are perturbed both semantically and syntactically, counterfactual explanations on the salient features, etc.
-% Here, instead of their common use case, \ie generating the remaining paragraphs, 
-% Pre-trained on a large number of web pages curated and filtered by humans, LMs like GPT-2~\cite{radford2019language} naturally generate more \emph{fluent} and \emph{diverse} counterfactuals compared to templates~\cite{ribeiro2018sear} or perturbation functions~\cite{wu2019errudite}.
-% We use the original sentence $x$ as the prompt, and finetune off-the-shelf LMs to generate $\xp$: \exinline{$x$ \perturbtoken $\xp$ \stoptoken}.
 
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 18.8cm 31cm 0cm}, clip, width=1\columnwidth]{figures/blank.pdf}
 \vspace{-15pt}
 \caption{  
-(A) The text format for \sysname, which concatenates the original $x$, the \tagstr, and the $\xp$, which is converted to the infilling structure from \exinline{It is not great for children}.
-At \emph{generation} time, \sysname accepts prompts that just include $x$, or with the \tagstrshort and the \texttt{BLANK} placement.
+(A) The text format for \sysname, which concatenates the original $x$, the \tagstr, and the $\xp$ (converted to the infilling structure from \exinline{It is not great for children}).
+At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 1), or with the \tagstrshort and the \texttt{BLANK}s (Line 2--3).
 During training, the \tagstrshorts and blanks are automatically extracted.
-(B) The blanking structure can flexibly cover just the $\xp$ subtrees that contain the change, or the entire sentence.
+(B) The blanking structure can flexibly cover just the $\xp$ subtrees that contain the change, or the entire sentence, such that Line 3--4 in (A) can be replaced by Line 6--7 or 8--9.
 %We get multiple training texts per pair, by blanking $\xp$ subtrees that contain the change, or the entire sentence.
 }
 \vspace{-10pt}
@@ -245,82 +134,54 @@ During training, the \tagstrshorts and blanks are automatically extracted.
 \end{figure}
 
 
-\paragraph{Controlling counterfactual generation.}
-To achieve control over $\relation{\xp}$, we need to be able to control both where in $x$ the perturbation happens, and the type of change. To address the former, 
-we extend the Infilling by Language Modeling (ILM) framework~\cite{donahue2020enabling}, such that $x$ is always part of the prompt, and $\xp$ contains \texttt{[BLANK]} tokens where perturbations are to be applied (Figure~\ref{fig:blank}). 
-ILM allows for perturbations of any length (additions and deletions) beyond single word substitutions, \eg Figure~\ref{fig:blank}B.
 
-To control the type of perturbations, we additionally condition the generation on special \tagstrs~\cite{raffel2019exploring, Dathathri2020Plug}, \eg \ctrltag{negation} in Figure \ref{fig:blank}A.
-Inspired by prior work categorizing manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}, we design 8 \tagstrshorts (Table~\ref{table:ctrltag}) that distinguish lexical, syntactic, and semantic perturbations. 
-We verify through an ablation study in \S\ref{appendix:ablation_control} that training \sysname with \tagstrs greatly improves the success rate when generating counterfactuals that have these properties (by $29\% \pm 18\%$). 
+\paragraph{Overview: the text prompt format.}
+As shown in Figure~\ref{fig:blank}A, at generation time, the input prompt to \sysname \emph{always} starts with $x$, followed by a special token (Line 1).
+This ensures that the generated $\xp$ are conditioned on, and \emph{close to} an original $x$, rather than arbitrary text.
+The generation can also be conditioned on \emph{\tagstrs} (Line 2), which encodes the type of change, and \texttt{BLANK} \emph{tokens} (Line 3), which encodes where the change happens.
+These two encodings help achieve control over $\relation{\xp}$, such that \sysname only needs to fill in the blanks sequentially according to the controls (Line 4).
+Note that the control conditions are optional.
+When we exclusively condition the generation on $x$ (Line 1), \sysname can generate Line 2--3 on its own by selecting the \tagstr and the location of blanks.
+Next, we detail how we finetune GPT-2 to insert such formats.
 
-As Figure \ref{fig:blank} indicates, we can control the counterfactual generation conditioning exclusively on $x$ (in which case \sysname selects the \tagstr and the location of \texttt{[BLANK]} tokens), conditioning on $x$ and the \tagstr, or specifying both the \tagstrshort and where the perturbations happen.
+\TagTable
 
-% To specify the perturbation strategy, we condition the generation on special \tagstrs (similar to \citet{raffel2019exploring, Dathathri2020Plug}).
-% The 8 \tagstrs in Table~\ref{table:ctrltag} are summarized from 33 papers on textual counterfactual applications.
-% We design them to distinguish the information change, with \eg \ctrltag{negation} constraining on concrete behaviors, and \ctrltag{lexical} loosely denoting changes on unigrams or prepositions.
-% We further maximize the syntactic differences (\eg \ctrltag{resemantic}, \ctrltag{insert}, or \ctrltag{restructure}), such that the controls are more explicit to follow for the model than semantic-oriented ones (synonyms, antonyms, paraphrases).
-% For a given pair $s(x, \xp)$, we compute the primary \tagstrshort based on linguistic features like part-of-speech tags or dependency trees.
-% As in Figure~\ref{fig:blank}, we put \tagstrs before the blanked $\xp$ to prioritize \emph{how} over \emph{where}, such that when given a \tagstr, the model can determine the appropriate changing places, and generate the blanked prompt on its own. 
-
+\paragraph{\emph{Closeness} and \emph{Controllability}: Using \tagstrs and infilling structures.}
+To build the close mapping between $x$ and $\xp$, we finetune GPT-2 on paired sentences, and create various training prompts from each paired $(x, \xp)$.
+To control where in $x$ the perturbation happens, we extend the Infilling by Language Modeling (ILM) framework~\cite{donahue2020enabling}, such that $\xp$ contains \texttt{[BLANK]} tokens where perturbations are to be applied (Figure~\ref{fig:blank}A, Line 3). 
+To allow flexible blanking, we also vary the location of \texttt{[BLANK]}s according to the example's parse tree.
+As shown in Figure~\ref{fig:blank}B, Line 6--9, such flexible placement allows for perturbations of any length (additions and deletions) beyond single word substitutions.
 
 
-% We further modify the training prompts to allow targeted perturbations, as in Figure~\ref{fig:blank}.
-% Besides boosting diversity on top of LMs, the targeted perturbations enable new forms of downstream applications like interactive explanation~\cite{miller} and slice-based data augmentation~\cite{chen2019slice}.
+Moreover, to control the type of perturbations, we design special \tagstrs~\cite{raffel2019exploring, Dathathri2020Plug}, \eg \ctrltag{negation} in Figure \ref{fig:blank}A, Line 2.
+Inspired by prior work categorizing manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}, we define 8 \tagstrshorts (Table~\ref{table:ctrltag}) that distinguish lexical, syntactic, and semantic perturbations.
+We compute the primary \tagstrshort based on linguistic features such as part-of-speech tags or dependency trees, and verify through an ablation study in Appendix~\ref{appendix:ablation_control} that training \sysname with \tagstrs greatly improves the success rate when generating counterfactuals that have these properties (by $29\% \pm 18\%$).
 
-% \emph{Where-to-perturb, with \texttt{[BLANK]}}.
-% To perturb specific parts of $x$, We borrow the blank fill-in structure~\cite{donahue2020enabling}, \ie targeted subphrases are replaced with special \texttt{[BLANK]} tokens, and the actual content (``answers'' to blanks) are concatenated to the end. 
-% To allow flexible blanking at the generation time, we extend the blank in training prompts to cover the associated parsing structures of edited spans.
-%As a result, we form up to four unique training prompts given one $(x, \xp)$ pair.
-
-% \emph{How-to-perturb, with \tagstrs}.
-% To specify the perturbation strategy, we condition the generation on special \tagstrs (similar to \citet{raffel2019exploring, Dathathri2020Plug}).
-% The 8 \tagstrs in Table~\ref{table:ctrltag} are summarized from 33 papers on textual counterfactual applications.
-% We design them to distinguish the information change, with \eg \ctrltag{negation} constraining on concrete behaviors, and \ctrltag{lexical} loosely denoting changes on unigrams or prepositions.
-% We further maximize the syntactic differences (\eg \ctrltag{resemantic}, \ctrltag{insert}, or \ctrltag{restructure}), such that the controls are more explicit to follow for the model than semantic-oriented ones (synonyms, antonyms, paraphrases).
-% For a given pair $s(x, \xp)$, we compute the primary \tagstrshort based on linguistic features like part-of-speech tags or dependency trees.
-% As in Figure~\ref{fig:blank}, we put \tagstrs before the blanked $\xp$ to prioritize \emph{how} over \emph{where}, such that when given a \tagstr, the model can determine the appropriate changing places, and generate the blanked prompt on its own. 
-%However, in cases where it is more essential to inspect particular subphrases, it is possible to reverse the order.
-%, so we can provide the blanked prompts, and let the model figure out the \emph{how}.
-%It is also possible to swap the order of the blanked $\xp$ and the \tagstrs. 
-
-%, we found WordNet~\cite{miller1998wordnet} or sentence similarity based tagging are inaccurate, and the pattern was tricky to learn for the LM model.
-%The \tagstrs distinguish the information change: the syntax-preserving ones add (\ctrltag{insert}), remove (\ctrltag{delete}), or change constraints, and the constraints vary from sparse (\ctrltag{resemantic} is more loose than \ctrltag{lexical}) to specific and finer-grained (\ctrltag{negation}, \ctrltag{quantifier}).
-%Remaining \ctrltag{shuffle} and \ctrltag{restructure}, on the other hand, focuses on syntactic understanding when we have high lexical overlap.
-
-%\wts{Add some more explanation on the design rationale. It is a more syntactic style change, and we try to minimize the overlaps between words; But we leave out the semantic ones because they overlap too much. arguably lexical and resemantic are similar, but we separate them because editing distance and because too many prior work do lexical change that it deserves a separate category.}
-
-\paragraph{Finetuning dataset.}
-We rely on six existing datasets of paired sentences, each of which contains counterfactuals with a subset of $\relation{\xp}$ relationships of interest (see Table~\ref{table:ctrltag}). 
+\paragraph{\emph{Diversity}: Combining multiple paired sentences.}
+We rely on six existing datasets of paired sentences, each of which contains counterfactuals with a subset of the \tagstrs of interest (see Table~\ref{table:ctrltag}). 
 To increase diversity, we additionally find naturally occurring pairs in non-paired datasets like SQAuD~\cite{rajpurkar-etal-2016-squad}, using heuristics on the editing distance. 
-A combination of these datasets yields a finetuned model that can produce \emph{diverse} counterfactuals.
-For each paired $(x, \xp)$, we create various training prompts as in Figure~\ref{fig:blank}.
-We vary the location of \texttt{[BLANK]}s according to the example's parse tree, and compute the primary \tagstrshort based on linguistic features such as part-of-speech tags or dependency trees.
 We use the pairs as negative samples if the change is too extensive.
+A combination of these datasets yields a model that can produce \emph{diverse} counterfactuals.
+
 We form $657,144$ training prompts from $191,415$ sentence pairs. 
-More dataset details and \tagstrshort statistics are in \S\ref{appendix:train_data}.
-
-% For a given pair $s(x, \xp)$, we compute the primary \tagstrshort based on linguistic features like part-of-speech tags or dependency trees.
-
-% While we do not have a single training set for counterfactual generation, multiple existing datasets contain pair sentences that can be seen as \emph{close} counterfactuals of each other. 
-% We combined six such datasets.
-% They all contain natural sentences (\eg WinoGrande~\cite{sakaguchi2019winogrande} for Commonsense tasks, PAWS~\cite{zhang2019paws} for paraphrasing) such that the finetuned model still maintain \emph{fluent} generation.
-% Moreover, they each expresses a subset of the strategies, and therefore achieves fair coverage on all \tagstrs when combined.
-% In total, we collected 657,144 training prompts from 191,415 sentence pairs.
-% We list the representative datasets in Table~\ref{table:ctrltag}, and describe the datasets and the finetuning details in \S\ref{appendix:train_data}.
+More training prompt details and \tagstrshort statistics are in Appendix~\ref{appendix:train_data}.
+As we demonstrate in an intrinsic evaluation (Appendix~\ref{appendix:intrinsic}), \sysname generates $\xp$ that are closer to $x$ than standard generative models, and more diverse than off-the-shelf masked language models.
 
 
-\paragraph{Filtering for fluency.}
-Certain combinations of \tagstrs and \texttt{[BLANK]} tokens cause \sysname to generate ungrammatical or nonsensical counterfactuals. 
-Similar to the language model constraints used by \citet{morris2020textattack}, we score both $x$ and $\xp$ using unfinetuned GPT-2, and filter out $\xp$ if its log-probability (either on the full sentence or on the perturbed chunks) decreases more than 10 points relative to $x$.
+
+
+
+\paragraph{\emph{Fluency}: Through post-hoc filtering.}
+Certain combinations of \tagstrs and \texttt{BLANK}s cause \sysname to generate ungrammatical or nonsensical counterfactuals. 
+Similar to \citet{morris2020textattack}, we score both $x$ and $\xp$ using unfinetuned GPT-2, and filter out $\xp$ if its log-probability (either on the full sentence or on the perturbed chunks) decreases more than 10 points relative to $x$.
 We verify the impact of the filtering through human evaluation, as part of the labeling task in \S\ref{sec:app_label}.
 As shown in \S\ref{subsec:label_efficiency}, it removes a large portion of unrealistic counterfactuals, leaving a minimal number of invalid instances for the humans to verify in each application.
 
 %(though their other constraints may also be useful.)
 
 
-\paragraph{Using counterfactuals.}
-\sysname is general-purpose and task-agnostic, and generates a variety of counterfactuals given one $x$. The most natural way to use \sysname is to generate $\hat{\xset}$ without constraints, and then select the counterfactuals in  $\hat{\xset}$ according to what is most appropriate for the task at hand (we provide examples of selection strategies for labeling and explanations in \S\ref{sec:app_label} and \S\ref{sec:app_explain}). However, users can also make use of the various control mechanisms, \eg generating counterfactuals by perturbing only specific subtrees of interest (an example is given in \S\ref{subsec:gen_counterfactual_for_labeling}).
+%\paragraph{Using counterfactuals.}
+%\sysname is general-purpose and task-agnostic, and generates a variety of counterfactuals given one $x$. The most natural way to use \sysname is to generate $\hat{\xset}$ without constraints, and then select the counterfactuals in  $\hat{\xset}$ according to what is most appropriate for the task at hand (we provide examples of selection strategies for labeling and explanations in \S\ref{sec:app_label} and \S\ref{sec:app_explain}). However, users can also make use of the various control mechanisms, \eg generating counterfactuals by perturbing only specific subtrees of interest (an example is given in \S\ref{subsec:gen_counterfactual_for_labeling}).
 
 
 % As a general-purpose and task-agnostic model, our generator does not distinguish counterfactual applications.
