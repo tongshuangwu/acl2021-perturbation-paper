@@ -35,35 +35,35 @@ We combine the following NLP datasets for finetuning \sysname.
 To achieve a more balanced distribution, for each dataset, we extract \tagstrs from all the data pairs available, and randomly sample up to 10,000 instances per \tagstr.
 The distribution is shown in Table~\ref{table:gpt_train_stats}.
 
-\paragraph{Contrast set}
+\textbf{Contrast set.}
 Authors of 10 existing NLP dataset each manually perturbed 100--1,000 instances in small but meaningful ways that change the gold label, so to inspect a model's decision boundary around a local instance~\cite{gardner2020contrast}.
 The perturbation patterns vary based on the tasks and the annotators, allowing us to learn diverse strategies.
 To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though \qqp would be a potentially interesting dataset for training \sysname, we omitted it so \qqp can be used in our evaluation.}
 %\wts{Re-train the model with other contrast sets.}
 
 
-\paragraph{Counterfactually-augmented data (CAD)}
+\textbf{Counterfactually-augmented data (CAD).}
 To augment the training data, \citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k counterfactuals on 1.7k original instances) and SNLI (6.6k counterfactuals on 1.67k original).
 Similar to the contrast set, CAD's perturbation patterns vary based on the task, but can especially contribute to \ctrltag{negation}.
 We split the movie review paragraphs into paired sentences, to match the sentence length of other datasets.
 
 
-\paragraph{WinoGrande} is a large-scale dataset of 44k instances for testing common sense problems~\cite{sakaguchi2019winogrande}.
+\textbf{WinoGrande} is a large-scale dataset of 44k instances for testing common sense problems~\cite{sakaguchi2019winogrande}.
 The dataset contains nearly identical sentences that differ only by one trigger word (\eg one noun), which flips the correct answer choice for certain questions.
 The dataset is most suitable for learning lexical exchanges.
 
-\paragraph{ParaNMT-50M} contains 50 million English-English sentential paraphrase pairs, covering various domains and styles of text, as well as different sentence structures~\cite{wieting2017paranmt}. 
+\textbf{ParaNMT-50M} contains 50 million English-English sentential paraphrase pairs, covering various domains and styles of text, as well as different sentence structures~\cite{wieting2017paranmt}. 
 
-\paragraph{PAWS} contains 108k paraphrasing and non-paraphrasing pairs with high lexical overlaps. 
+\textbf{PAWS} contains 108k paraphrasing and non-paraphrasing pairs with high lexical overlaps. 
 \citet{zhang2019paws} created such challenging pairs through controlled word swapping and back translation.
 As a result, the dataset demonstrates the \ctrltag{shuffle} and \ctrltag{restructure} strategies.
 
 
-\paragraph{HANS} is a controlled evaluation dataset designed for testing decision boundaries of NLI models~\cite{mccoy2019right}. 
+\textbf{HANS} is a controlled evaluation dataset designed for testing decision boundaries of NLI models~\cite{mccoy2019right}. 
 The dataset contains 10k pairs of premises and hypotheses created based on 10 heavily fallible syntactic templates, and therefore compensates rarer structural changes that may be missed by PAWS.
 
 
-\paragraph{Crawled} 
+\textbf{Crawled} 
 We additionally crawl naturally occurring sentence pairs from non-paired datasets like SQuAD~\cite{rajpurkar-etal-2016-squad} to boost some specific patterns and increase lexical diversity. 
 We estimate \emph{close} pairs using edit distance, and broadly included pairs as long as the editing is less than 60\%.
 This inevitably includes cases that should not be considered counterfactuals,\eg \exinline{how do I not be} and \exinline{how do I recover it} are incorrectly considered \ctrltag{negation} pairs. 
@@ -88,7 +88,8 @@ As a result, we form up to four unique training prompts given one $(x, \xp)$ pai
 With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
 We use the data to finetune an off-the-shelf GPT-2 model from \citet{Wolf2019HuggingFacesTS}, but any LM can potentially be used.
 %\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
-We finetuned the model for 3 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
+We finetuned the model for up to 10 epochs, with an initial learning rate 5e-5, a batch size of 16 and a sequence length of 120.
+We select the best epoch based on the evaluation loss on a holdout set of size 5,000.
 
 
 \subsection{Intrinsic Evaluations}
