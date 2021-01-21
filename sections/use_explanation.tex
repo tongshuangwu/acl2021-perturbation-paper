@@ -43,31 +43,27 @@ depicts a surprising flipped prediction ($\neq)$.
 
 \footnotetext{From BERT \qqp model: \url{https://huggingface.co/textattack/bert-base-uncased-QQP}}
 
-Counterfactual explanations have been elusive in NLP, despite evidence from social science research indicating that they may be more intuitive than feature attribution methods~\cite{miller}.
+Counterfactual explanations have been elusive in NLP, despite being more intuitive than feature attribution methods~\cite{miller}.
 Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively shows that the BERT \qqp model considers ``help'' trivial: 
 \swap{help}{find} in \emph{Q2} does not change the prediction.
-
-
-Because a complete explanation is overwhelming, \citet{miller} concluded that people usually only expect explanations on contrastive cases that they consider \emph{abnormal}.
-We similarly select abnormal counterfactuals as explanations.
-In other words, the relationship $\relation{\xp}$ used for selection is the disagreement between \emph{the expected and the actual change of model prediction.}
+However, conversely, the concrete counterfactuals can be overwhelming, and therefore are less suitable for providing overviews.
+Here, we combine the benefits of the two methods, by \emph{augmenting} feature attribution methods (\eg SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI}) with \emph{abnormal} counterfactuals, which are observed to be more salient~\cite{miller}.
+The relationship $\relation{\xp}$ we use for capturing abnormality is the disagreement between \emph{the expected and the actual change of model prediction.}
 
 Given a model $f$, we define the actual prediction change as $\dist(\xp, x)=|\fp(\xp)-\fp(x)|$, where $\fp(x)$ denotes the prediction probability of $f$ on $x$.
-Meanwhile, the \emph{human expectation} on the prediction change is $\E[\dist(\xp, x)]$, which we measure using the importance (weights) of the perturbed tokens in $x$, estimated by SHAP~\cite{NIPS2017_7062} (details in Appendix~\ref{appendix:exp_rank}).
+Meanwhile, the \emph{expectation} on the prediction change is $\E[\dist(\xp, x)]$, which is the importance (weights) of the perturbed tokens in $x$, estimated by SHAP (details in Appendix~\ref{appendix:exp_rank}).
 The mismatch between the reality and the expectation is then:
 $$\Delta\dist(\xp, x) = \dist(\xp, x)-\E[\dist(\xp, x)]$$
 We select two \emph{expectation violation} counterfactuals:
-(1) large prediction change from trivial perturbations (small expectations), \ie $\argmax_{\xp} \Delta\dist(\xp, x)$.
+(1) unexpected large prediction change from trivial perturbations, \ie $\argmax_{\xp} \Delta\dist(\xp, x)$.
 In Figure~\ref{fig:explanation}C, \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is trivial according to SHAP; 
 (2) unaffected predictions from large changes, \ie $\argmax_{\xp} -\Delta\dist(\xp, x)$. 
 In Figure~\ref{fig:explanation}D, changing the important \remove{in depression} still results in \emph{Duplicate}.
 
-The counterfactuals and SHAP can compensate each other. 
-On the one hand, feature attribution methods provide overviews of feature weights (like in Figure~\ref{fig:explanation}A) that are not available in pure counterfactual explanations.
-On the other hand, the selected abnormal $\xp$ highlight a usually overlooked nuance in feature attribution: SHAP or LIME~\cite{Ribeiro2016WhySI} estimate weights by \emph{masking} words, and therefore cannot always reflect how models would react to replacements or additions.
+Besides intuitiveness, the selected abnormal $\xp$ additionally highlight a usually overlooked nuance: feature attribution methods estimate weights by \emph{masking} words, and therefore cannot always reflect how models would react to replacements or additions.
 Together, we expect them to better calibrate users' trust in the explainer and the predictor.
 
-That said, $\E[\boldsymbol{\cdot}]$ can take various forms.
+Note that $\E[\boldsymbol{\cdot}]$ is not necessarily limited to feature attribution.
 If we instead use the cosine distance in the latent space~\cite{reimers-2019-sentence-bert}, we may select standalone explanations.
 We defer the exploration to future work.
 
