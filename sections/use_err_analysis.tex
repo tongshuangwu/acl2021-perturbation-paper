@@ -1,6 +1,22 @@
 \section{Application 3: Systematic Analysis}
 \label{sec:app_err_analysis}
 
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 13cm 33cm 0cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
+\vspace{-15pt}
+\caption{
+(A) A \qqp instance with its prediction\footnotemark showing 98.2\% confidence that the two sentences are duplicative ($=$), as well as the SHAP feature weights.
+%Counterfactual explanations complement SHAP with concrete, readable examples, \eg (C) depicts a surprising flipped prediction ($\neq)$ that was missed by SHAP.
+Counterfactual explanations complement SHAP with concrete, readable examples, and alert abnormalities missed by SHAP. \eg (C)
+depicts a surprising flipped prediction ($\neq)$.
+}
+\vspace{-10pt}
+\label{fig:err_analysis}
+\end{figure}
+
+
 Previous applications focus on a selected subset of $\xp$, but the access to the entire pool is also important.
 For example, to follow up on the abnormal case in Figure~\ref{fig:explanation}C, an analyst can interactively \texttt{BLANK} ``friend'' in Q2 and observe the model's unstable behavior: it predicts \emph{Non-duplicate} when \remove{friend} is changed to \add{woman}, \add{professional}, but remains \emph{Duplicate} at \add{man}, \add{student}.
 In fact, \sysname's ability to generate \emph{multiple} counterfactuals per $x$ is especially useful for systematic error analysis~\cite{wu2019errudite}.
@@ -24,7 +40,7 @@ We therefore hypothesize:
 \emph{The model has more nuanced responses to different kinds of negations}, overfitting to some patterns more than others.
 
 \ebox{
-\textbf{H$\mathbf{(\xp_2)}$}: Someone is\add{n't} wearing a blue shirt. \\
+\textbf{H$\mathbf{(\xp_2)}$}: Someone is\add{n't} wearing and  a blue shirt. \\
 $\mathbf{f(\xp_2)}$: contradiction (50.0\%)\\
 \textbf{H$\mathbf{(\xp_1)}$}: Someone is \add{not} wearing a blue shirt. \\
 $\mathbf{f(\xp_1)}$: neutral (55.9\%)
