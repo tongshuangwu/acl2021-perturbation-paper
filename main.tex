@@ -216,7 +216,7 @@ We frame the automated counterfactual generation as text generation, and finetun
 Our method also allows control over where perturbations happen and what they do. 
 We show \sysname supports multiple use cases: 
 When creating datasets for model training and evaluation, \sysname helps to save up to 75\% annotation efforts over manual creation.
-When used to produce explanations and for error analysis, \sysname reveals the models' erroneous behaviors that are easily missed by human analysts.
+When used to produce explanations and for error analysis, \sysname reveals erroneous model behaviors that are easily missed by human analysts.
 
  %
 %Existing methods generate counterfactual examples for specific applications, even though most of the examples can be broadly used for calibrating, evaluating, and explaining model decision boundaries. 
@@ -224,7 +224,7 @@ When used to produce explanations and for error analysis, \sysname reveals the m
 %We propose to disentangle the generation from the use cases, \ie, gather general-purpose counterfactuals first, and then select them for specific applications. 
 %We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator, \sysname, which produces fluent and diverse counterfactuals. 
 %It also allows control over where perturbations happen and what they do. With effective selections, we show \sysname supports multiple use cases: by generating diverse counterfactuals for humans to label, \sysname helps produce high-quality datasets for model training and evaluation, with at least 40\% less human effort. 
-%As counterfactual explanations, \sysname helps reveal models' erroneous behaviors on top of popular feature attribution methods. 
+%As counterfactual explanations, \sysname helps reveal erroneous model behaviors on top of popular feature attribution methods. 
 \end{abstract}
 
 \input{sections/intro}
