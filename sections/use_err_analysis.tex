@@ -4,13 +4,13 @@
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 1cm 33cm 0cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
+\includegraphics[trim={0 12.5cm 33cm 0cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
 \vspace{-15pt}
 \caption{
 (A) A \nli case with a correct \emph{Neutral} prediction.
 Through strict \tagstrs and blanks shown in the figure, \sysname generates two $\xp$ that negate the hypothesis sentence \emph{H}, which result in different predictions.
-(B) By extracting and selecting representative templates from different $\xp$, we can systematically compare a model's response to certain perturbation patterns, \eg the model flips to predict \emph{Contradiction} much more on \swap{\texttt{DET}}{no}.
-(C) Another blank placement that leads to analyses on \emph{quantifiers}.
+(B) By extracting and selecting representative templates from different $\xp$, we can systematically compare a model's response to certain perturbation patterns, \eg the prediction flips from \emph{N}eutral$\veryshortarrow$\emph{C}ontradiction for 92.8\% times on \swap{\texttt{DET}}{no}.
+%(C) Another blank placement that leads to analyses on \emph{quantifiers}.
 }
 \vspace{-10pt}
 \label{fig:err_analysis}
@@ -42,9 +42,9 @@ However, the model does responds much more aggressively to \swap{\texttt{DET}}{n
 \emph{Drill-down through interactive blanking.}
 If \add{not} and \add{n't} are generally stable, what causes the difference in Figure~\ref{fig:err_analysis}A?
 We can drill down add blanks to the negated hypothesis.
-For example, inspired by the returns from \exinline{\texttt{[BLANK]} is\add{n't}/\add{not} looking out the window.}, we find changing \swap{woman} to \add{girl}, \add{boy}, and \add{man} in both the \emph{P} and the \emph{H} would all eliminate the difference, whereas \add{person} cannot.
+For example, inspired by the returns from \exinline{\texttt{[BLANK]} is\add{n't}/\add{not} looking out the window.}, we find changing \remove{woman} to \add{girl}, \add{boy}, and \add{man} in both the \emph{P} and the \emph{H} would all eliminate the difference, whereas \add{person} cannot.
 Intrigued by the impact of subjects, we also apply a similar blanking to the original \emph{H}.
-The wild predictions in Figure~\ref{fig:err_analysis}C lead us to further hypothesize that the model does not understanding quantifiers, which we verify in Appendix~\ref{appendix:err_analysis_quantifier_case}.
+The wild predictions in Figure~\ref{fig:err_analysis}C lead us to further hypothesize that the model does not understand quantifiers, which we verify in Appendix~\ref{appendix:err_analysis_quantifier_case}.
 
 
 \paragraph{Takeaways.}

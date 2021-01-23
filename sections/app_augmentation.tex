@@ -125,7 +125,7 @@ One of the authors labeled a subset of 100 counterfactuals on 100 original examp
 
 %\paragraph{Model.}
 We finetuned \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
-For each given $(m,n)$, we created three different samples of training data, and Table~\ref{table:aug_sst}--\ref{table:aug_qqp} report the average and the variance of the samples.
+For each given $(m,n)$, we created three different samples of training data, and Table~\ref{table:aug_sst}--\ref{table:aug_nli} report the average and the variance of the samples.
 Each sample was further averaged over four random seeds.
 For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
 We selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and counterfactual examples.)

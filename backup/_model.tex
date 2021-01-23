@@ -1,0 +1,74 @@
+
+\begin{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Modeling through Text Generation}
+\label{subsec:nlg}
+
+We frame counterfactual generation as a text generation task using language models (LMs).
+Large pre-trained LMs like GPT-2~\cite{radford2019language} are capable of generating \emph{fluent} text.
+They also increase the semantic and syntactic \emph{diversity}, by allowing for non-trivial counterfactuals with more flexibility than word substitutions~\cite{garg2019counterfactual} and templates~\cite{ribeiro2018sear}. 
+
+
+
+
+\paragraph{The text prompt format.}
+As shown in Figure~\ref{fig:blank}A, the input prompt to \sysname starts with $x$ followed by a special token (Line 1), which ensures that $\xp$ are conditioned on, and \emph{close} to $x$, rather than arbitrary text.
+The generation can also be conditioned on \emph{\tagstrs} (Line 2) encoding the type of change, and \texttt{BLANK} \emph{tokens} (Line 3) specifying where changes happen.
+These two encodings help achieve control over $\relation{\xp}$, such that \sysname fills in the blanks sequentially according to the controls (Line 4).
+Note that the control conditions are optional.
+When we exclusively condition the generation on $x$ (Line 1), \sysname can generate Line 2--3 on its own by sampling the \tagstr and the location of blanks.
+% Next, we detail how we finetune GPT-2 to insert such formats.
+
+
+\paragraph{\emph{Closeness} and \emph{Controllability}: Using \tagstrs and infilling structures.}
+To build the close mapping between $x$ and $\xp$, we finetune GPT-2 on paired sentences, and create various training prompts from each paired $(x, \xp)$.
+To control where in $x$ the perturbation happens, we extend the Infilling by Language Modeling (ILM) framework~\cite{donahue2020enabling}, such that $\xp$ contains \texttt{[BLANK]} tokens where perturbations are to be applied (Figure~\ref{fig:blank}A, Line 3). 
+To allow flexible blanking, we also vary the location of \texttt{[BLANK]}s according to the example's parse tree.
+As shown in Figure~\ref{fig:blank}B, Lines 6--9, such flexible placement allows for perturbations of any length (additions and deletions) beyond single word substitutions.
+
+
+Moreover, to control the type of perturbations, we design special \tagstrs~\cite{raffel2019exploring, Dathathri2020Plug}, \eg \ctrltag{negation} in Figure \ref{fig:blank}A, Line 2.
+Inspired by prior work categorizing manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}, we define 8 \tagstrshorts (Table~\ref{table:ctrltag}) that distinguish lexical, syntactic, and semantic perturbations.
+We compute the primary \tagstrshort based on linguistic features such as part-of-speech tags or dependency trees, and verify through an ablation study in Appendix~\ref{appendix:ablation_control} that training \sysname with \tagstrs greatly improves the success rate when generating counterfactuals that have these properties by 8\%--64\%.
+
+\paragraph{\emph{Diversity}: Combining multiple paired sentences.}
+We rely on six existing datasets of paired sentences, each containing counterfactuals with a subset of the \tagstrs of interest (see Table~\ref{table:ctrltag}). 
+To increase diversity, we additionally find naturally occurring pairs in non-paired datasets like SQAuD~\cite{rajpurkar-etal-2016-squad}, using heuristics on the editing distance. 
+%We use the pairs as negative samples if the change is too extensive.
+A combination of these datasets yields a model that can produce \emph{diverse} counterfactuals.
+
+We form $657,144$ training prompts from $191,415$ sentence pairs. 
+More training prompt details and \tagstrshort statistics are in Appendix~\ref{appendix:train_data}.
+Similar to \citet{madaan2020generate}, we quantitatively compare \sysname generations with baseline models.
+As Appendix~\ref{appendix:intrinsic} summarizes, \sysname generates $\xp$ that are closer to $x$ than a standard generative model~\cite{Dathathri2020Plug} (\ie with much smaller syntactic editing distance~\cite{zhang1989simple}), and more diverse than off-the-shelf masked models like RoBERTa~\cite{liu2019roberta} (quantified using self-BLEU~\cite{zhu2018texygen}).
+
+
+
+
+\paragraph{\emph{Fluency}: Through post-hoc filtering.}
+Certain combinations of \tagstrs and \texttt{BLANK}s cause \sysname to generate ungrammatical or nonsensical counterfactuals 40\% of the time.
+Similar to \citep{morris2020textattack}, we score both $x$ and $\xp$ using non-finetuned GPT-2, and filter out $\xp$ if its log-probability (either on the full sentence or on the perturbed chunks) decreases more than 10 points relative to $x$.
+Because our applications in \S\ref{sec:app_label}--\S\ref{sec:app_err_analysis} all involve human teammates double checking the generation from \sysname, we intentionally select this loose threshold to present more \emph{diverse} counterfactuals. 
+As further illustrated in \S\ref{subsec:label_efficiency}, we verify through human evaluation that the filtering improves the portion of fluent generations to 70\%--80\%, which we deem reasonable for the human to further inspect.
+If used in a purely automated setting (\eg adversarial training), we can use filters or other constraints~\cite{morris2020textattack} to improve fluency (and/or semantic equivalence), at the cost of diversity --- rarer and more surprising changes may be blocked even if they are fluent. 
+
+
+%(though their other constraints may also be useful.)
+
+
+%\paragraph{Using counterfactuals.}
+%\sysname is general-purpose and task-agnostic, and generates a variety of counterfactuals given one $x$. The most natural way to use \sysname is to generate $\hat{\xset}$ without constraints, and then select the counterfactuals in  $\hat{\xset}$ according to what is most appropriate for the task at hand (we provide examples of selection strategies for labeling and explanations in \S\ref{sec:app_label} and \S\ref{sec:app_explain}). However, users can also make use of the various control mechanisms, \eg generating counterfactuals by perturbing only specific subtrees of interest (an example is given in \S\ref{subsec:gen_counterfactual_for_labeling}).
+
+
+% As a general-purpose and task-agnostic model, our generator does not distinguish counterfactual applications.
+% Rather, it (targetedly) generates a large amount of counterfactuals with different combinations of \tagstrs and blanks, and the generated $\hat{\xset}$ should be further selected or ranked based on the relationship $\relation{\xp}$.
+% For example, we find adversarial examples with common filtering constraints (\eg sentence semantic similarity~\cite{morris2020textattack}).
+% We demonstrate different selections in \S\ref{sec:app_label} and \S\ref{sec:app_explain}.
+
+
+%pr["pr_sent"]<=10 and pr["pr_phrase"] <=10
+%Perplexity is instantiating; Language modeling as an approximation because it measures real world distribution.
+
+
+\end{comment}

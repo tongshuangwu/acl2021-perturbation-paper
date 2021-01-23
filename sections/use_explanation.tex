@@ -28,9 +28,9 @@
 \includegraphics[trim={0 21cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
 \vspace{-15pt}
 \caption{
-(A) A \qqp instance with its prediction\footnotemark showing 98.2\% confidence that the two sentences are duplicative ($=$), as well as the SHAP feature weights.
+(A) A \qqp instance with its prediction\footnotemark{} showing 98.2\% confidence that the two sentences are duplicative ($=$), as well as the SHAP weights.
 %Counterfactual explanations complement SHAP with concrete, readable examples, \eg (C) depicts a surprising flipped prediction ($\neq)$ that was missed by SHAP.
-Counterfactual explanations complement SHAP with concrete, readable examples, and alert abnormalities missed by SHAP. \eg (C)
+Counterfactual explanations complement SHAP with concrete examples, and alert abnormalities missed by SHAP. \eg (C)
 depicts a surprising flipped prediction ($\neq)$.
 }
 \vspace{-10pt}
@@ -71,12 +71,15 @@ We defer the exploration to future work.
 \subsection{Experiment: Counterfactual Simulation}
 \label{subsec:exp_user_study}
 
-We conduct a user study to verify whether our local counterfactual explanations can complement SHAP.
+To verify whether our counterfactual explanations can complement SHAP, we conduct a user study on counterfactual simulation~\cite{hase2020evaluating}, \ie participants predict a model's behavior on $\xp$.
+Intuitively, the more they simulate incorrectly, the more information they grasp \emph{if we show the $\xp$}.
+
+%We conduct a user study to verify whether our counterfactual explanations can complement SHAP.
 %, as the setup nicely combines the overview provided by SHAP, and the decision boundaries it omits.
 %\footnote{We defer more sophisticated designs and evaluations for interactive and global explanation to future work.}
 %, where participants are asked to predict model's behavior on the given variations of a base example.
-The study takes the form of counterfactual simulation~\cite{hase2020evaluating}, with participants predicting a model's behavior on $\xp$.
-Intuitively, the more they simulate incorrectly, the more information they grasp \emph{if we show the counterfactuals}.
+%The study takes the form of counterfactual simulation~\cite{hase2020evaluating}, with participants predicting a model's behavior on $\xp$.
+%Intuitively, the more they simulate incorrectly, the more information they grasp \emph{if we show the counterfactuals}.
 
 \paragraph{Procedure.}
 We recruited 13 graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate the aforementioned \qqp model for 20 rounds.
@@ -129,6 +132,7 @@ The number dropped to $15\%$ for the \chuman condition.
 In other words, \emph{\cshap found more bugs within spots where humans considered inspected.}
 %\hao{this is very interesting. close by summarizing the conclusion?}
 
-\noindent\textbf{Takeaway.}
+
+\paragraph{Takeaways.}
 \sysname counterfactuals complement feature attribution methods and counterfactual analysis, as effectively as hiring a second expert for the analysis (but much cheaper).
 In particular, they highlight erroneous spots where humans may be misled by their own analysis.
