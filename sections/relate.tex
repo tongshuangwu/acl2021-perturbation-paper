@@ -12,58 +12,14 @@ We achieve a middle ground, and show that the team of \sysname generator and hum
 On the other hand, multiple prior work automatically generates counterfactuals that flip the model predictions.
 These methods are used for counterfactual explanations.
 For example, \citet{kang2020counterfactual} guided word replacement with model prediction probabilities.
-Our concurrent work, GYC~\cite{madaan2020generate} and MiCE~\cite{ross2020explaining} further enable phrase replacement through language models.
+Our concurrent work, GYC~\cite{madaan2020generate} and MiCE~\cite{ross2020explaining} further enable phrase replacement through language models (GPT-2 or t5).
 However, these methods leave out prediction-persistent explanations, which are also important as shown in \S\ref{sec:app_explain}.
 If collected with additional constraints on semantic persistence~\cite{morris2020textattack, alzantot-etal-2018-generating}, the prediction-flipping counterfactuals become adversarial examples.
-Despite the apparent similarities between explanations and adversarials, to the best of our knowledge, adversarial generation is still mostly through word replacement~\cite{alzantot2018generating, garg2020bae, li2020contextualized} or paraphrasing~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled}, and has yet to take advantage of language models like t5 and GPT-2 (as in MiCE and GYC).
+Despite the apparent similarities between explanations and adversarials, to the best of our knowledge, adversarial generation is still mostly through word replacement~\cite{alzantot2018generating, garg2020bae, li2020contextualized} or paraphrasing~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled}, and has yet to take advantage of language models.
 Given the shared properties, a general-purpose model like \sysname may be more reasonable than methods tailored to specific applications.
 
-Moreover, the emphasis on \emph{labels} greatly compresses a large set of diverse changes (\eg negations and antonym replacements both flip labels in sentiment analysis), and therefore hinders the definition and query of desired counterfactuals.
-We instead design the \sysname's controls to be task (label)-agnostic and finer-grained.
-Such controls additionally support application that require specifications on where and how to perturb, \eg open-ended error analysis~\cite{wu2019errudite} where contrasting similar counterfactuals is essential (\S\ref{sec:app_err_analysis}).
-
-\begin{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\paragraph{The applications of counterfactuals.}
-Counterfactuals in NLP are most broadly used for model training and evaluation.
-In training, they usually augment the training data to improve model robustness~\cite{garg2019counterfactual, Wu2019ConditionalBC, Wei2019EDAED, Kumar2020DataAU} and generalizability.
-\citet{kaushik2019learning} and \citet{teney2020learning} showed that counterfactual augmentations help mitigate the weights of spurious features.
-%\citet{teney2020learning} further proposed to treat instances in pairs to emphasize the difference in the training process. 
-%Our data can also support such experiments.
-Evaluation focuses on similar aspects as training, mostly through adversarial attacks~\cite{Song2020UniversalAA}, contrast sets~\cite{kaushik2019learning} and challenge sets~\cite{Geiger2019PosingFG, liu-etal-2019-inoculation}.
-We show that \sysname generated counterfactuals are also useful in such cases.
-
-Counterfactuals also naturally support model explanations, as ``explanations are sought in response to particular counterfactual cases or foils''~\cite{miller}.
-However, counterfactual explanations are much less common in NLP.
-%Popular feature importance attribution methods~\cite{NIPS2017_7062, Ribeiro2016WhySI} all retrieve token importance through masking, which can be viewed as a form of (incomplete) counterfactual.
-Some recent work explores this direction~\cite{ross2020explaining, vig2020causal, kang2020counterfactual}, yet the changes are usually trivial or not informative.
-We seek to produce counterfactual explanations that can compensate existing explanation and analysis methods.
-%Perturbation is also used for explanations, but the use is much less prominent compared to structured data.
-%While counterfactual explanations have been widely advocated in structured data, the use of it in text is not yet clear. Some papers tried generation, but didn't articulate the use. %We follow the structure of X to have both counter-factual and semi-factual. 
-
-\paragraph{Counterfactual generation.}
-Existing generation methods are usually for particular applications.
-Most automated ones are for adversarial examples. 
-They enumerate through candidate word replacements~\cite{alzantot2018generating, garg2020bae} or paraphrases~\cite{iyyer2018adversarial, malandrakis-etal-2019-controlled} that can maintain semantic meanings while exposing model errors, but only cover limited perturbation patterns.
-%The exhaustive search is hard for people to scale to~\cite{ribeiro2018sear}.
-On the other hand, those evaluating and improving model decision boundaries rely on manual efforts~\cite{checklist:acl20}, which cover more diverse patterns, but at a higher cost.
-Moreover, though human annotators also share strategies like negation, subject-object swapping~\cite{kaushik2019learning, gardner2020contrast}, the strategies have yet to be captured for targeted use.
-Template-based methods~\cite{mccoy2019right, nie2019analyzing} are more systematic and cost-effective, but usually are only applicable to a small subset of data~\cite{li2020linguistically}.
-We unify the generation for different use cases, which bridges the scalability and diversity.
-We only distinguish the generated ones through posterior constraints~\cite{morris2020textattack, alzantot-etal-2018-generating}.
-
-Some concurrent work is similar to ours, using language models to generate counterfactual sentences. 
-GYC~\cite{madaan2020generate} adjusts controlled text generation methods and modifies $x$ in the latent space,  whereas MiCE~\cite{ross2020explaining} finetunes T5.
-Both target at generating counterfactuals that \emph{flip the class label}, which can be useful in their use cases (GYC focusing on evaluation and MiCE aimed at explanation);
-However, as there are enormous ways to flip a label, it is hard to nail down the desired perturbation from a single label signal.
-We instead design the \sysname's controls to be task-agnostic and finer-grained in terms of sentence structure.
-%neither approach emphasizes generality, with GYC focusing on evaluation and MiCE aimed at explanation.
-%Still, they both focus on model evaluation or explanation, and therefore control the generation to \emph{flip the class label}, which may have limited scalability (\eg MiCE builds a generator for each individual task.)
-%We instead finetune \sysname on general-purpose datasets, design \sysname's controls to be task-agnostic, and use them for broadening the coverage on a large variety of perturbation patterns.
-Such controls additionally support application that require specifications on where and how to perturb.
-\end{comment}
-
-
+Moreover, the emphasis on \emph{labels} compresses a large set of diverse changes (\eg negations and antonym replacements both flip labels in sentiment analysis), and therefore hinders the definition and query on desired counterfactuals.
+We instead design \sysname's controls to be task (label)-agnostic and finer-grained.
+Such controls additionally support applications that require specifications on where and how to perturb, \eg open-ended error analysis~\cite{wu2019errudite} where contrasting similar counterfactuals is essential (\S\ref{sec:app_err_analysis}).
 
 

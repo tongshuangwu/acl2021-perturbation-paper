@@ -6,18 +6,21 @@
 \label{appendix:exp_rank}
 
 \paragraph{SHAP complement as local explanation}
-Because the SHAP weights reflect the average effect of masking a token $t$, instead of finding just one abnormal counterfactual, we focus on \emph{word features that are abnormal on average}, \ie there is a mismatch between the importance of the changed word features and the model behavior, averaged over \emph{all counterfactuals} that have those features.
+Because the SHAP weights reflect the average effect of masking a token $t$, 
+%instead of finding just one abnormal counterfactual, 
+we also focus on \emph{word features that are abnormal on average}.
 
-In this case, the expected change in prediction of perturbing a token $t$ is the SHAP importance on it $\E[\dist(t, x)] = s(t)$; 
-For example, in Figure~\ref{fig:explanation}, $s(t=\text{``depression''})=0.276$.
+More concretely, we define the expected change in prediction of perturbing a token $t$ to be the SHAP importance on it $\E[\dist(t, x)] = s(t)$.
+In Figure~\ref{fig:explanation}, $s(t\text{=\remove{depression}})=0.276$.
+The actual prediction change is the weighted average of $|\fp(x)-\fp(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), where
+$\fp(x)$ denotes the prediction probability of $f$ on $x$.
+The weight corresponds to the number of words modified in $\xp$: If $e(\xp)$ denotes the set of edited words (replaced or deleted from $x$ in $\relation{\xp}$), then $w(\xp) = 1/|e(\xp)|$.
+Intuitively, the more words changed in $\xp$, the less impact each word has; In Figure~\ref{fig:explanation}D, we regard ``depression'' to be responsible for half of the impact in \swap{in depression}{suicidal}.
 
-The actual prediction change is the weighted average of $|\fp(x)-\fp(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), with the weight corresponding to the number of words modified in $\xp$: If $e(\xp)$ denotes the set of edited words (replaced or deleted from $x$ in $\relation{\xp}$), then $w(\xp) = 1/|e(\xp)|$.
-Intuitively, the more words changed in $\xp$, the less effect each word has; In Figure~\ref{fig:explanation}D, we regard ``depression'' to be responsible for half of the impact on changing \swap{in depression}{suicidal}.
-
-We group the counterfactuals based on their affected words $G_t = \{\xp\ |\ t \in e(\xp)\}$. $\dist(t, x)$ then becomes:
+We group the $\xp$ based on their affected words $G_t = \{\xp\ |\ t \in e(\xp)\}$. $\dist(t, x)$ then becomes:
 $$\dist(t, x) = \frac{1}{|G_t|+1} \left(s(t) + \sum_{\xp \in G_t} w(t)\cdot |\fp(x)-\fp(\xp)|\right)$$
-We add the additional SHAP weight $s(t)$ as a smoothing factor to punish dominating outlier $\xp$.
-Then the gap between the expectation and the reality is (similar to \S\ref{subsec:local_explain}):
+The additional SHAP weight $s(t)$ acts as a smoothing factor to punish dominating outlier $\xp$.
+Then the gap between the expectation and the reality is:
 $$\Delta\dist(t, x) = \dist(t, x)-\E[\dist(t, x)]$$
 We first find the abnormal tokens: (1) $t$ with small SHAP weight, but $\xp$ that change $t$ experience large prediction change on average: $t_L = \argmax_{t\in x} \Delta\dist(t, x)$, and (2) $t$ with large SHAP weight, but $\xp$ with $t$ changed usually have intact prediction: $t_U = \argmax_{t\in x} -\Delta\dist(t, x)$.
 

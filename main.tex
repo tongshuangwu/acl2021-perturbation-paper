@@ -64,11 +64,9 @@
 \DeclareMathOperator*{\R}{r}
 \newcommand{\relation}[1]{\R(#1)}
 
-\newcommand{\colbox}[2]{
-\begingroup
-  \setlength{\fboxsep}{0pt}%  
-  \colorbox{#1}{#2\/}%\reducedstrut
-\endgroup}
+\setlength{\fboxsep}{0pt}
+
+\newcommand{\colbox}[2]{\colorbox{#1}{#2}}
 
  
 \newcommand{\veryshortarrow}[1][3pt]{\mathrel{%
@@ -81,11 +79,11 @@
 \definecolor{cdelback}{rgb}{1, 0.94, 0.92}
 \definecolor{cdel}{rgb}{0.83, 0.32, 0.16}
 \def \arrow{$\veryshortarrow$}
-\newcommand{\add}[1]{\colbox{caddback}{{\color{cadd}#1\xspace}}} %
+\newcommand{\add}[1]{\colbox{caddback}{\color{cadd}#1\xspace}} %
 \newcommand{\remove}[1]{\colbox{cdelback}{{\color{cdel}#1\xspace}}}%
-\newcommand{\swap}[2]{\remove{#1} \arrow\add{#2}}
-\newcommand{\changed}[2]{{#1}\arrow ~\add{#2}}
+\newcommand{\swap}[2]{\remove{#1}~\arrow~\add{#2}}
 \newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
+%\renewcommand{\add}[1]{{\color{cadd}#1\xspace}} %
 
 
 \newcommand{\ensuretext}[1]{#1}
@@ -170,7 +168,7 @@
 % annotations
 \newcommand{\note}[2]{\xspace{\color{#1}[ #2 ]}\xspace}
 %\newcommand{\note}[2]{}
-\newcommand{\wts}[1]{\note{violet}{Sherry: #1}}
+\newcommand{\wts}[1]{\note{violet}{S: #1}}
 \newcommand{\xp}{\hat{x}}
 \newcommand{\yp}{\hat{y}}
 \newcommand{\xset}{\mathbf{X}}
@@ -183,7 +181,8 @@
 
 
 % teal, cyan
-\title{\sysname: Automated, General-purpose Counterfactual Generation}
+%\title{\sysname: General-purpose Counterfactual Generation}
+\title{\sysname: General-purpose Counterfactual Generation \wts{or: Generating Counterfactuals \\for Improving, Explaining, and Analyzing Models}}
 
 
 \author{
@@ -236,6 +235,7 @@ When used to produce explanations and for error analysis, \sysname reveals erron
 
 \input{sections/relate}
 \input{sections/discussion}
+\input{sections/ethical}
 %\input{sections/ack}
 \bibliography{ref}
 \bibliographystyle{acl_natbib}

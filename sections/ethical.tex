@@ -1,0 +1,15 @@
+
+\section{Ethical Consideration}
+\wts{This is an extra discussion section that's recommended, and can go beyond 8 pages: https://2021.aclweb.org/ethics/Ethics-FAQ/}
+
+Our work includes crowdlabeling counterfactuals, whose detailed procedures are in Appendix~\ref{appendix:label_instruct}.
+The base tasks and datasets are standard and do not include sensitive or personal information, and therefore we do not foresee ethical issues. 
+As for model training, the most expensive experiment is on finetuning GPT-2 into \sysname, which took around 8 hours (Appendix~\ref{appendix:train_data}).
+To reduce the cost, we may consider optimizing the finetuning dataset to reduce repetitive senten pairs, and thereby train \sysname with fewer shots.
+
+More critically, \sysname may be misused in the semi-automatic settings. 
+As discussed in \S\ref{sec:discuss}, \sysname inherits some biases from its training datasets.
+However, as it generates multiple counterfactuals, humans may assume that \sysname comprehensively cover \emph{all} the counterfactuals possible, and develop over-reliance~\cite{bansal2021does}.
+The over-reliance may hinder humans' counterfactual coverage during labeling or analysis.
+We plan to highlight the limitations along with the model deployment. 
+In future work, we also plan to design interactive interfaces that help humans to properly collaborate with \sysname.

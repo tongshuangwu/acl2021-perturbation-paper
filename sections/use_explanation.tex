@@ -44,27 +44,27 @@ depicts a surprising flipped prediction ($\neq)$.
 \footnotetext{From BERT \qqp model: \url{https://huggingface.co/textattack/bert-base-uncased-QQP}}
 
 Counterfactual explanations have been elusive in NLP, despite being more intuitive than feature attribution methods~\cite{miller}.
-Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively shows that the BERT \qqp model considers ``help'' trivial: 
-\swap{help}{find} in \emph{Q2} does not change the prediction.
-However, conversely, the concrete counterfactuals can be overwhelming, and therefore are less suitable for providing overviews.
+Compared to the opaque feature weights in Figure~\ref{fig:explanation}A, Figure~\ref{fig:explanation}B more intuitively shows that the BERT \qqp model considers \remove{help} trivial: 
+changing it to \add{find} does not change the prediction.
+Meanwhile, the concrete counterfactuals can be overwhelming, and therefore are less suitable for providing overviews.
 Here, we combine the benefits of the two methods, by \emph{augmenting} feature attribution methods (\eg SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI}) with \emph{abnormal} counterfactuals, which are observed to be more salient~\cite{miller}.
-The relationship $\relation{\xp}$ we use for capturing abnormality is the disagreement between \emph{the expected and the actual change of model prediction.}
 
-Given a model $f$, we define the actual prediction change as $\dist(\xp, x)=|\fp(\xp)-\fp(x)|$, where $\fp(x)$ denotes the prediction probability of $f$ on $x$.
-Meanwhile, the \emph{expectation} on the prediction change is $\E[\dist(\xp, x)]$, which is the importance (weights) of the perturbed tokens in $x$, estimated by SHAP (details in Appendix~\ref{appendix:exp_rank}).
-The mismatch between the reality and the expectation is then:
+Given a model $f$, the relationship $\relation{\xp}$ we use for capturing abnormality is the disagreement (distance) between \emph{the actual change of model prediction $\dist(\xp, x)$, and the expected change $\E[\dist(\xp, x)]$}:
 $$\Delta\dist(\xp, x) = \dist(\xp, x)-\E[\dist(\xp, x)]$$
-We select two \emph{expectation violation} counterfactuals:
-(1) unexpected large prediction change from trivial perturbations, \ie $\argmax_{\xp} \Delta\dist(\xp, x)$.
-In Figure~\ref{fig:explanation}C, \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' is trivial according to SHAP; 
-(2) unaffected predictions from large changes, \ie $\argmax_{\xp} -\Delta\dist(\xp, x)$. 
+
+We quantify $\dist(\xp, x)$ based on the the prediction probability of $f$ on $x$ and $\xp$.
+$\E[\dist(\xp, x)]$ is defined as the estimated importance (SHAP weights) of the perturbed tokens in $x$ (details in Appendix~\ref{appendix:exp_rank}).
+We select two \emph{expectation violation} counterfactuals: %according to $\Delta\dist(\xp, x)$.
+(1) \emph{unexpected prediction flipping}, when the perturbation is trivial ($\argmax_{\xp} \Delta\dist(\xp, x)$).
+In Figure~\ref{fig:explanation}C, \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' has low weight.
+(2) \emph{unexpected prediction preserving}, when the perturbation is aggressive. ($\argmax_{\xp} -\Delta\dist(\xp, x)$).
 In Figure~\ref{fig:explanation}D, changing the important \remove{in depression} still results in \emph{Duplicate}.
 
-Besides intuitiveness, the selected abnormal $\xp$ additionally highlight a usually overlooked nuance: feature attribution methods estimate weights by \emph{masking} words, and therefore cannot always reflect how models would react to replacements or additions.
-Together, we expect them to better calibrate users' trust in the explainer and the predictor.
+The abnormal $\xp$ additionally highlight a usually overlooked nuance: feature attribution methods estimate weights by \emph{masking} words, and therefore may not reflect models' reactions to substitutions or additions.
+Together, we expect them to more comprehensively present the predictor.
 
-Note that $\E[\boldsymbol{\cdot}]$ is not necessarily limited to feature attribution.
-If we instead use the cosine distance in the latent space~\cite{reimers-2019-sentence-bert}, we may select standalone explanations.
+The abnormality selection can also be generalized beyond feature attribution.
+We can select standalone explanations, if we instead use the distance in the latent space~\cite{reimers-2019-sentence-bert} as $\E[\boldsymbol{\cdot}]$.
 We defer the exploration to future work.
 
 
@@ -82,12 +82,12 @@ Intuitively, the more they simulate incorrectly, the more information they grasp
 %Intuitively, the more they simulate incorrectly, the more information they grasp \emph{if we show the counterfactuals}.
 
 \paragraph{Procedure.}
-We recruited 13 graduate students who have intermediate NLP knowledge and have experience using model explanations, and asked them to simulate the aforementioned \qqp model for 20 rounds.
-In each round, the participants were given a base example with the model's prediction, as well as the SHAP weights, highlighted in the text and with a bar chart (Figure~\ref{fig:explanation}A).
+We recruited 13 graduate students with experience in model explanations, and asked them to simulate the aforementioned \qqp model for 20 rounds.
+In each round, the participants were given a base example, model prediction on it, and the SHAP weights, displayed as in Figure~\ref{fig:explanation}A.
 Moreover, they could create up to 10 counterfactuals on their own, and query the model predictions on them (they used around 6 chances.)
 %More interactions with the predictor usually result in better mental models~\cite{miller}, and we are interested in whether our counterfactuals \emph{still add information} after sufficient interactions (they usually used 6 chances.)
-Participants then simulated the model's predictions on six given counterfactuals, two from each of the following three conditions.
-We concluded the study with surveys on their counterfactual creation and simulation strategies.
+Participants then simulated the model predictions on six counterfactuals, two from each of the following three conditions.
+We concluded the study with surveys on their model inspection and simulation strategies.
 %The interface is in Appendix~\ref{appendix:exp_user_study}.
 
 %We validate this hypothesis in user study, where expert users did slightly better than random (accuracy: $55 \pm 6\%$) at predicting what a model would do on \sysname counterfactuals, even after seeing SHAP explanations \cite{NIPS2017_7062} and manually creating counterfactuals to explore the model's behavior. This indicates that seeing such explanations would add a lot of information that users are currently missing (much of which consisting of mistaken model predictions) even if when they perform manual counterfactual analysis and use feature attribution methods.
@@ -98,7 +98,7 @@ We concluded the study with surveys on their counterfactual creation and simulat
 \newcommand{\chuman}{\emph{Human}\xspace}
 \paragraph{Conditions.} 
 We compare three types of counterfactuals:
-(1) \cshap, the \sysname-generated counterfactuals, selected to complement SHAP; 
+(1) \cshap, the \sysname-generated, abnormal counterfactuals, selected to complement SHAP; 
 (2) \crandom, the randomly selected \sysname counterfactuals; 
 (3) \chuman, the human-generated counterfactuals, in which two graduate students (not participants) played with the model, and each created one $\xp$ where the prediction was incorrect and counterintuitive according to the SHAP score on $x$.
 The authors manually checked that all counterfactuals were fluent and unambiguous.
@@ -119,14 +119,14 @@ Error rates on counterfactuals in different conditions. The higher the error rat
 \paragraph{Results.}
 As a within-subject study, we compared \emph{the error rate of human simulations across the three conditions}.
 %As in Figure~\ref{fig:err_rate}, 
-Participants were able to simulate the cases in \crandom (error rate $e=23\%\pm6\%$), possibly because they contained more minor variations that aligned with participants' mental models built on the the SHAP values and their interactions with the models~\cite{miller}.
+Participants were able to simulate the cases in \crandom (error rate $e=23\%\pm6\%$), possibly because they are are aligned with participants' mental models built on SHAP explanations and their interactions with the model~\cite{miller}.
 They missed more \chuman ($e=39\%\pm11\%$) cases, and were even worse on \cshap ($45\%\pm 6\%$, only slightly better than random guess).%, though the confidence intervals overlap.
 This shows that \cshap counterfactuals are beyond participants' learnings from feature attributions and manual counterfactual analysis, and \emph{would still add value if they were presented.}
 They are also at least as effective as the \chuman ones, which is very expensive to create --- each graduate student spent 1.5--2 hours to generate 20 ``abnormal'' counterfactuals.
 
 Usually, participants simulated the model incorrectly because they missed the inspection spots.
 For example, they repeatedly perturbed ``depression'' in Figure~\ref{fig:explanation}A, and therefore had to guess when simulating Figure~\ref{fig:explanation}B.
-However, in 24\% of the missed \cshap cases, participants successfully covered the related pattern,\footnote{At least one of their queries perturbed the same spans as $\xp$, and query text overlaps with the $\xp$ for over 70\%.} but were misled by their inspections --- ``followed similar examples I tried,'' as one subject articulated.
+However, in 24\% of the missed \cshap cases, participants successfully inspected the related pattern,\footnote{At least one of their queries perturbed the same spans as $\xp$, and query text overlaps with the $\xp$ for over 70\%.} but were misled by it --- ``followed similar examples I tried,'' as one subject articulated.
 It was hard for them to imagine the model predicting \emph{Duplicate} on Figure~\ref{fig:explanation}B (\swap{help}{find}), when it predicted \emph{Non-Duplicate} on their query \exinline{How do I \swap{help}{play with}...?}
 The number dropped to $15\%$ for the \chuman condition.
 In other words, \emph{\cshap found more bugs within spots where humans considered inspected.}

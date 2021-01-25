@@ -7,9 +7,9 @@
 \includegraphics[trim={0 12.5cm 33cm 0cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
 \vspace{-15pt}
 \caption{
-(A) A \nli case with a correct \emph{Neutral} prediction.
-Through strict \tagstrs and blanks shown in the figure, \sysname generates two $\xp$ that negate the hypothesis sentence \emph{H}, which result in different predictions.
-(B) By extracting and selecting representative templates from different $\xp$, we can systematically compare a model's response to certain perturbation patterns, \eg the prediction flips from \emph{N}eutral$\veryshortarrow$\emph{C}ontradiction for 92.8\% times on \swap{\texttt{DET}}{no}.
+(A) A \nli case with a \emph{Neutral} prediction (the \uline{underlined} $f(\xp)$ are correct).
+Through strict \tagstrs and blanks, \sysname generates two $\xp$ that negate the hypothesis sentence \emph{H}, which result in different predictions.
+(B) Generalizing perturbation patterns beyond individual counterfactuals, we can systematically compare a model's response to different negations, \eg the prediction flips from \emph{N}eutral~$\veryshortarrow$~\emph{C}ontradiction for 92.8\% times on \swap{\texttt{DET}}{no}.
 %(C) Another blank placement that leads to analyses on \emph{quantifiers}.
 }
 \vspace{-10pt}
@@ -27,36 +27,52 @@ Here, the generation is largely driven by human analysts, and the relationship $
 To verify it, we can randomly select a \emph{neutral} instance $x$ as in Figure~\ref{fig:err_analysis}A, and inspect its counterfactuals that \emph{only} negate the hypothesis sentence.
 \sysname produces two $\xp$:
 While \exinline{is\add{n't}} seems to confirm the overfit to negation, \exinline{is not} shows a counterexample. 
-We therefore hypothesize: 
-\emph{The model has more nuanced responses to different kinds of negations}, overfitting to some patterns more than others.
+We therefore hypothesize that
+\emph{the model has more nuanced responses to different kinds of negations}.%, overfitting to some patterns more than others.
 
 \emph{Verify the hypothesis through systematic counterfactual analysis.}
-To verify that the hypothesis generalizes beyond one instance, we compare the impact of different negation patterns on \emph{a group of} 895 original examples that have \emph{neutral} groundtruths and predictions.
-For each $x$, we collect multiple counterfactuals that negate the hypothesis through the \ctrltag{negation} code.
-Then, similar to \citet{wu2020tempura}, we select representative negation patterns.
-As shown in Figure~\ref{fig:err_analysis}B, we extract \emph{templates} from each $\xp$ by abstracting the modified spans into different combinations of linguistic features, and select the templates that cover various counterfactuals through weighted set coverage (details in Appendix~\ref{appendix:err_analysis_template}).
+Does the observation generalize beyond one instance? 
+We compare different negation patterns on \emph{a group of} 895 $x$ that have \emph{neutral} groundtruths and predictions.
+For each $x$, we collect multiple counterfactuals by adding \ctrltag{negation} to the hypothesis, and extract \emph{negation templates} from each $\xp$ by abstracting the modified spans into linguistic features (as in Figure~\ref{fig:err_analysis}B).
+Then, we select representative templates that cover various counterfactuals, and are as concrete as possible. 
+The method is similar to \citet{wu2020tempura}, and more details are in Appendix~\ref{appendix:err_analysis_template}.
 The top three templates selected (in bold) show interesting contrasts:
-First, counter to our observation on Figure~\ref{fig:err_analysis}A, the model is relatively stable on \add{not} and \add{n't} --- they both around 43\% \emph{neutral} predictions to \emph{contradiction}, while maintaining others.
-However, the model does responds much more aggressively to \swap{\texttt{DET}}{no}, partially confirming our hypothesis.
+First, counter to Figure~\ref{fig:err_analysis}A, the model is relatively stable on \add{not} and \add{n't} --- they both flip around 43\% \emph{neutral} predictions to \emph{contradiction}, while maintaining others.
+However, the model does respond much more aggressively to \swap{\texttt{DET}}{no}, partially confirming our hypothesis.
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0.5cm 1.8cm 32.5cm 25.5cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
+\vspace{-15pt}
+\caption{
+Another blank placement of $x$ in Figure~\ref{fig:err_analysis}A. 
+Similar changes result in different predictions (should all be \uline{\emph{Neutral}}), which leads to analyses on \emph{quantifiers}.
+}
+\vspace{-10pt}
+\label{fig:err_analysis_quantifier}
+\end{figure}
+
 
 \emph{Drill-down through interactive blanking.}
 If \add{not} and \add{n't} are generally stable, what causes the difference in Figure~\ref{fig:err_analysis}A?
-We can drill down add blanks to the negated hypothesis.
-For example, inspired by the returns from \exinline{\texttt{[BLANK]} is\add{n't}/\add{not} looking out the window.}, we find changing \remove{woman} to \add{girl}, \add{boy}, and \add{man} in both the \emph{P} and the \emph{H} would all eliminate the difference, whereas \add{person} cannot.
+We can drill down by adding blanks to the negated hypotheses.
+For example, inspired by the returns from \exinline{\texttt{[BLANK]} is\add{n't}/\add{not} looking out the window}, we find changing \remove{woman} to \add{girl}, \add{boy}, and \add{man} in both the \emph{P} and the \emph{H} would all eliminate the \add{n't}/\add{not} difference, whereas \add{person} cannot.
 Intrigued by the impact of subjects, we also apply a similar blanking to the original \emph{H}.
-The wild predictions in Figure~\ref{fig:err_analysis}C lead us to further hypothesize that the model does not understand quantifiers, which we verify in Appendix~\ref{appendix:err_analysis_quantifier_case}.
+%: \exinline{\texttt{[BLANK]} looking out the window.}
+%When the fillin is \add{two women are}, the prediction is neutral, but it flips to contradiction when the number is \add{ten}.
+%When we instead use the fill in \add{more than one person is}, the model instead returns entailment.
+The wild predictions in Figure~\ref{fig:err_analysis_quantifier} lead us to further hypothesize that the model does not understand quantifiers, which we verify in Appendix~\ref{appendix:err_analysis_quantifier_case}.
 
 
 \paragraph{Takeaways.}
-The case highlights unique benefits from \sysname.
+The case highlights \sysname's unique support on interactive and targeted generation.
 First, the \emph{over-} generation helps analysts contrast similar perturbations, and form hypotheses that can be missed otherwise.
-Human analysts rarely check both \swap{is}{is not} and \swap{is}{isn't}, and therefore can hardly realize they can be on different sides of the decision boundary --- echoing our observation in \S\ref{subsec:exp_user_study} that human counterfactual analysis may be incomplete and misleading.
-
+Human analysts rarely check both \swap{is}{is not} and \swap{is}{isn't}, and therefore can hardly realize their potential differences --- echoing our observation in \S\ref{subsec:exp_user_study} that manual counterfactual analysis may be incomplete and misleading.
 Moreover, driven by the \tagstrs, \sysname allows inspecting patterns that are hard to retrieve from existing masked language models.
-When applying RoBERTa to the same blanked (masked) hypotheses, we obtain less than 5\% counterfactuals were related to negation compared to the \sysname ones.
-Instead, more than 1000 counterfactuals are related to \texttt{\swap{is}{VERB}} and \texttt{\swap{are}{VERB}}.
-Similarly, RoBERTa would not be able to produce examples in Figure~\ref{fig:err_analysis}C, as it focuses on single word replacement.
-The apparent gap shows that the use of control code is promising for interactive and targeted generation.
+When applying RoBERTa to the same blanked (masked) hypotheses, we obtain less than 5\% negation counterfactuals compared to the \sysname.
+Instead, more than 1,000 counterfactuals are on \swap{is}{\texttt{VERB}} and \swap{are}{\texttt{VERB}}.
+Similarly, RoBERTa would not be able to produce examples in Figure~\ref{fig:err_analysis_quantifier}, as it focuses on single word replacement.
+%The apparent gap highlights \sysname's support on interactive and targeted generation.
 
 %Moreover, with \sysname diversifying the text chunks to change, it \sysname helps contrast similar changes that happen at different places.
 %While \sysname enables the comparison between \swap{\texttt{VERB}}{\texttt{not VERB}} and \swap{\texttt{DET}}{no}, RoBERTa focus on changing \texttt{VERB}: the top two templates from it are \texttt{\swap{is}{VERB}} and \texttt{\swap{are}{VERB}}, producing 1000 conterfactuals in total.

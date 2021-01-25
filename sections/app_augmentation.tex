@@ -83,9 +83,9 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
 \begin{figure*}[ht]
 \centering
-\includegraphics[width=1\textwidth]{figures/explanation_task_ui}
-\vspace{-15pt}
-\caption{A sample explanation interface task for \S\ref{subsec:exp_user_study}.}
+\includegraphics[width=0.9\textwidth]{figures/explanation_task_ui}
+\vspace{-5pt}
+\caption{A sample explanation task for \S\ref{subsec:exp_user_study}.}
 \vspace{-10pt}
 \label{fig:explanation_ui}
 \end{figure*}
@@ -95,28 +95,28 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \label{appendix:label_instruct}
 
 
-\paragraph{Procedure}
+\textbf{Procedure}
 %, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction})
 The study started with an introduction: 
-``given a reference example, the crowdworker should annotate its counterfactual variations, based on whether the counterfactual is valid (\emph{fluent}), and the classification task label.''
+given a reference example, the crowdworker should annotate its counterfactual variations, based on whether the counterfactual is valid (\emph{fluent}), and the classification task label.
 To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
 The annotator then completed 22 tasks, labeling 3 counterfactuals of a single example in each round, as in Figure~\ref{fig:mturk_ui}.
 The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'', which included 6 unambiguous counterfactuals and known groundtruth labels in total.
 The gold cases later served as filters for high quality crowdworkers.
 As a result, each annotator contributed $20 \times 3=60$ labels.
-The median annotation time was around 15-20 minutes (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli), and participants received \$2.5 on average.
+The median annotation time was around 15-20 minutes (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli), and participants received \$2.5.
 
-\paragraph{Participants}
+\textbf{Participants}
 We recruited participants from Amazon's Mechanical Turk (MTurk), limiting the pool to subjects from within the United States with a prior task approval rating of at least 97\% and a minimum of 1,000 approved tasks.
 
-\paragraph{Data quality}
+\textbf{Data quality}
 We applied two filtering strategies: 
 (1) \emph{High-quality worker.} 
 We only kept data from participants whose median labeling time per round was more than 18 seconds and correctly labeled at least 4 gold counterfactuals (out of 6), or who correctly labeled all gold ones regardless of the time spent.
 (2) \emph{Majority vote labeling.}
 We collected two annotations per counterfactual, and only kept those that at least one annotator deemed \emph{valid/fluent}, and both annotators agreed on a particular \emph{class label.}
 
-Because the crowdworkers were usually noisy, when set out to collect augmentations on 1,000 original examples (thus 3,000 counterfactuals), we typically collect counterfactuals for 1,000 counterfactuals on 600 original examples.
+Because the crowdworkers are usually noisy, when set out to collect augmentations on 1,000 original examples (thus 3,000 counterfactuals), we typically collect counterfactuals for 1,000 counterfactuals on 600 original examples.
 One of the authors labeled a subset of 100 counterfactuals on 100 original examples in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, the raw labeling agreement $88\%$).
 
 
@@ -124,8 +124,8 @@ One of the authors labeled a subset of 100 counterfactuals on 100 original examp
 \label{appendix:data_collection}
 
 %\paragraph{Model.}
-We finetuned \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
-For each given $(m,n)$, we created three different samples of training data, and Table~\ref{table:aug_sst}--\ref{table:aug_nli} report the average and the variance of the samples.
+%We finetuned \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
+For each given $(m,n)$, we created three different samples of training data.
 Each sample was further averaged over four random seeds.
 For each run, we heuristically picked initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, respectively, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
 We selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and counterfactual examples.)

@@ -5,10 +5,11 @@
 \label{appendix:err_analysis_quantifier_case}
 
 
-\citet{gururangan2018annotation} also mentioned that one common strategy for creating NLI examples is to modify the numbers, suggesting that the model should have seen various examples related to numbers.
-We slice the data to find entailement instances that have numbers in the hypothesis sentence, and perform \ctrltag{quantifier} changes on them.
+%\citet{gururangan2018annotation} also mentioned that one common strategy for creating NLI examples is to modify the numbers, suggesting that the model should have seen various examples related to numbers.
+
+As a follow up to the case in Figure~\ref{fig:err_analysis_quantifier}, we slice the data to find \emph{entailement} instances that have numbers in the hypothesis sentence, and perform \ctrltag{quantifier} changes on them.
 Through the extracted templates, we notice two things: 
-(1) the model does not understand actual counting. 
+(1) the model does not perform actual counting. 
 When changing one number to another (\swap{\texttt{NUM}}{\texttt{NUM}}), the model only flips the label in 64.7\% cases, which is abnormal --- we would expect all cases like the one below:
 
 \ebox{

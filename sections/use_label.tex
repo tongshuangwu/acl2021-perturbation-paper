@@ -211,13 +211,13 @@ More details are in Appendix~\ref{appendix:label_instruct}.
 
 \textbf{Fluency.}
 Crowdworkers rated most counterfactuals to be fluent: $75\%$ for \dsst, $70\%$ for \dqqp, and $82\%$ for \dnli.
-One of the authors also manually labeled 600 counterfactuals of 120 instances, and arrived at similar fluency:
-The rate of unfiltered counterfactuals was $61\%$, which increased to $78\%$ after filtering. This shows that the filtering effectively helps reduce the invalid counterfactuals for humans to inspect.
+One of the authors also manually labeled 600 counterfactuals of 120 instances, and arrived at similar fluency of $78\%$.
+The fluency rate for unfiltered counterfactuals decreases to $61\%$, showing that the filtering effectively helps remove invalid counterfactuals that need inspection.
 
 \textbf{Efficiency.}
 Labeling three counterfactuals of a given example is reasonably easy, as (1) annotators are better at \emph{verifying} counterfactuals than manually \emph{generating} them~\cite{ribeiro2018sear}, and (2) annotators only need to focus on the reference example and the corresponding perturbed phrases, rather than re-parsing the full instance for each label they submit~\cite{Khashabi2020MoreBF}.
 As such, the median time for labeling one round (three $\xp$) is 30 seconds.
-Even with aggressive filterings on noisy workers, invalid $\xp$, and 40\%--60\% $\xp$ that do not flip the groundtruth label (for collecting contrast sets in \S\ref{subsec:contrast_set}), we still obtain one high-quality, label-flipping $\xp$ in 1--2.5 minutes.
+Even with aggressive filtering on noisy workers, invalid $\xp$, and 40\%--60\% $\xp$ that do not flip the groundtruth label (for collecting contrast sets in \S\ref{subsec:contrast_set}), we still obtain one high-quality, label-flipping $\xp$ in 1--2.5 minutes.
 This is 40\%--75\% more efficient than manual creation:
 %Because \sysname does not control the change of groundtruth label, when generating contrast sets (\S\ref{subsec:contrast_set}), we remove $\xp$ that maintains the label (40\% in \nli and 63\% in \sst).
 %Combined with the filtering on noisy workers and fluency, 
@@ -266,7 +266,7 @@ The reported performances are averaged across multiple data samples and random s
 %Comparing with these models help highlight the effectiveness of perturbations with respect to adding the same amount of original data. 
 
 We compare the models on out-of-domain datasets, as well as contrast sets and challenge sets that are designed to test model generalizations.
-When such datasets are unavailable (in \qqp), we switch to CheckList tests~\cite{checklist:acl20}, to quantify the model capabilities with test cases.
+When such datasets are unavailable (in \qqp), we instead quantify the model capabilities with CheckList tests~\cite{checklist:acl20}.
 
 \paragraph{Results.}
 Table~\ref{table:aug_sst}--\ref{table:aug_nli} shows the augmentation effectiveness in \sst and \nli. 
@@ -280,10 +280,10 @@ Importantly, in both \nli and \qqp, just augmenting the training data by $10\%$ 
 
 
 \emph{However, targeted augmentation is necessary.}
-Randomly generated counterfactuals are clearly beneficial for \sst, but not so much for \nli or \qqp, echoing \citet{huang2020counterfactually} (numbers omitted for space.)
+Randomly generated counterfactuals are beneficial for \sst, but not so much for \nli or \qqp, echoing \citet{huang2020counterfactually} (numbers omitted for space.)
 This is likely because certain augmentation patterns bring redundant benefits as pre-training~\cite{longpre2020effective}.
-Inspired by \citet{chen2019slice}, we instead focus on data slices that reflect known tricky cases to maximize the augmentation utility.
-We adjust their slicing functions to find the $x$ with certain patterns of interest, \eg prepositions in DNC~\cite{kim2019probing} for \nli (\exinline{His surfboard is \swap{beneath}{lying on} him}).
+Inspired by \citet{chen2019slice}, we instead focus on known tricky cases to maximize the augmentation utility.
+We adjust their slicing functions to find $x$ with patterns of interest, \eg prepositions in DNC~\cite{kim2019probing} for \nli (\exinline{His surfboard is \swap{beneath}{lying on} him}).
 Then, we simply blank the corresponding patterns so \sysname can perform relevant changes: \exinline{His surfboard is \texttt{[BLANK]} him.}
 The improved \maug in Table~\ref{table:aug_nli} indicates that focusing on where the current models fail can be beneficial, 
 
@@ -293,8 +293,8 @@ The improved \maug in Table~\ref{table:aug_nli} indicates that focusing on where
 \emph{The counterfactuals usually improve the model without hurting its counterpart.}
 In \nli, DNC includes pairs of probing examples, one from the original MNLI and one manually and minimally perturbed.
 %Because DNC includes both the probing counterfactuals and their paired original data, we can safely conclude that the model did not overfit to the augmented pattern.
-The improvement on it shows that \maug did not overfit to the augmented pattern.
-Similarly, \maug for \qqp consistently improves tests that reflect the importance of entity ordering (\exinline{is A married to B?}), as well as those where the ordering should be ignored (\exinline{does A hate B?}).
+The improvement on it shows that \maug does not overfit to the augmented pattern.
+Similarly, \maug for \qqp improves on tests that reflect competing patterns, \eg both when the entity order is important (\exinline{is A married to B?}), and when they should be ignored (\exinline{does A hate B?}).
 
 
 %\subsection{Takeaways}

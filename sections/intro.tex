@@ -17,7 +17,8 @@ As a result, prior work has tailored counterfactual generators for every applica
 For example, to support model training and evaluation, human annotators collect counterfactuals that change the groundtruth labels by manually rewriting instances~\cite{gardner2020contrast} or defining perturbation functions~\cite{wu2019errudite}.
 The manual rewrites are costly (\eg 4-5 minutes per counterfactual \cite{kaushik2019learning}) and liable to systematic omissions (\eg human annotators may miss \swap{kids}{no one} in Figure \ref{fig:teaser}B).
 The focus on label-flipping relationships also largely ignores the benefit from label-preserving ones on model robustness.
-In contrast, adversarial examples specify a different relationship: $x$ and $\xp$ must have the same groundtruth but different model predictions, driving the generator to prioritize straightforward paraphrasing or synonym replacement~\cite{iyyer2018adversarial, ribeiro2018semantically}, over alternatives that change the semantic meaning (\eg negating sentences in named entity recognition).
+In contrast, adversarial examples specify a different relationship: $x$ and $\xp$ must have the same groundtruth but different model predictions, driving the generator to prioritize straightforward paraphrasing~\cite{iyyer2018adversarial, ribeiro2018semantically}, over alternatives that change the semantic meaning (\eg negations in named entity recognition).
+% or synonym replacement
 
 \begin{figure}[t]
 \centering
@@ -42,17 +43,18 @@ For example, in (D) we select counterfactual explanations that complement the fe
 %\hao{might be good to clarify that these two are not mutually-exclusive: adversarial examples should sometimes be close to the original}
 % 
 However, counterfactual generation does not \emph{have} to be task-specific.
-As shown in Figure~\ref{fig:teaser}, the same set of counterfactuals can be useful for a variety of applications.
-Moreover, in open-ended uses cases like counterfactual explanation (Figure~\ref{fig:teaser}D) and analysis, a general-purpose pool of diverse counterfactuals is preferable, as the relationship is not precisely defined in advance.
-In this work, we formalize the task of \emph{automatic counterfactual generation}, which disentangles generation from the application of counterfactuals.
-Given an input $x$, our generator produces a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with reasonable but \emph{application-agnostic} relationships $x \veryshortarrow \xp_i$ (Figure~\ref{fig:teaser}B).
-We require counterfactuals to be \emph{fluent}, \emph{diverse}, and \emph{close to $x$}.
-Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for the application of interest (Figure~\ref{fig:teaser}C).
-We frame the generation step as conditional text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using datasets of $(x, \xp)$ pairs. 
-We also allow for targeted counterfactuals, by specifying where the perturbation occurs in the sentence~\cite{donahue2020enabling} and using \tagstrs such as \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).
+The same set of counterfactuals in Figure~\ref{fig:teaser} can support a variety of applications.
+Moreover, for cases like counterfactual explanation (Figure~\ref{fig:teaser}D) and analysis, a general-purpose pool of counterfactuals is preferable, as the relationship-of-interest can be more open-ended and user oriented.
+In this work, we formalize the task of \emph{counterfactual generation}, which disentangles generation from the application of counterfactuals.
+Given an input $x$, our generator produces a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with \emph{application-agnostic} relationships $x \veryshortarrow \xp_i$ (Figure~\ref{fig:teaser}B).
+We require $\xp$ to be \emph{fluent}, \emph{diverse}, \emph{controllable}, and \emph{close to $x$}.
+Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for an application (Figure~\ref{fig:teaser}C).
+We frame the generation step as conditional text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using $(x, \xp)$ pairs. 
+We also allow for targeted counterfactuals, by specifying where the perturbation occurs~\cite{donahue2020enabling} and using \tagstrs like \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).
 %--- the control is \emph{the backbone of} various downstream applications.
 
-We propose simple yet effective selection strategies, and show that a single \sysname model can significantly aid humans in diverse downstream applications. For \emph{counterfactual training and evaluation}, humans label \sysname counterfactuals rather than creating them from scratch, resulting in training data that significantly improves model generalization, as well as high-quality contrast sets~\cite{gardner2020contrast}, with 40--75\% less annotation effort ~\cite{kaushik2019learning}. In another application, \sysname produces \emph{counterfactual explanations} that bring significant insights that extend beyond state-of-the-art explanation techniques. Finally, \sysname supports counterfactual \emph{error analysis} by allowing users to explore related counterfactuals (\eg the model responds differently to different negation forms in Figure \ref{fig:teaser}B) and to aggregate individual counterfactuals into patterns in order to systematically understand model behavior.
+We propose simple yet effective selection strategies, and show that a single \sysname model can significantly aid humans in diverse downstream applications.\footnote{We demonstrate \sysname in semi-automatic settings, but as discussed in \S\ref{subsec:nlg}, it can also work automatically.} 
+For \emph{counterfactual training and evaluation}, humans label \sysname counterfactuals rather than creating them from scratch, resulting in training data that significantly improves model generalization, as well as high-quality contrast sets~\cite{gardner2020contrast}, with 40--75\% less annotation effort ~\cite{kaushik2019learning}. In another application, \sysname produces \emph{counterfactual explanations} that bring significant insights that extend beyond state-of-the-art explanation techniques. Finally, \sysname supports counterfactual \emph{error analysis} by allowing users to explore related counterfactuals (\eg the model responds differently to different negation forms in Figure \ref{fig:teaser}B) and to aggregate individual counterfactuals into patterns in order to systematically understand model behavior.
 
 %First, 
 % By lifting the burden of manual rewrite, \sysname \emph{facilitates effective counterfactual training and evaluation}.
