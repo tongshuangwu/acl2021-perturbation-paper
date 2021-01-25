@@ -97,26 +97,25 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
 \textbf{Procedure}
 %, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction})
-The study started with an introduction: 
-given a reference example, the crowdworker should annotate its counterfactual variations, based on whether the counterfactual is valid (\emph{fluent}), and the classification task label.
+The study started with an introduction about counterfactuals and the fluency and class labels.
+%: given a reference example, the crowdworker should annotate its counterfactual variations, based on whether the counterfactual is valid (\emph{fluent}), and the classification task label.
 To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
 The annotator then completed 22 tasks, labeling 3 counterfactuals of a single example in each round, as in Figure~\ref{fig:mturk_ui}.
-The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'', which included 6 unambiguous counterfactuals and known groundtruth labels in total.
+The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'' with known correct labels.
 The gold cases later served as filters for high quality crowdworkers.
 As a result, each annotator contributed $20 \times 3=60$ labels.
 The median annotation time was around 15-20 minutes (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli), and participants received \$2.5.
 
 \textbf{Participants}
-We recruited participants from Amazon's Mechanical Turk (MTurk), limiting the pool to subjects from within the United States with a prior task approval rating of at least 97\% and a minimum of 1,000 approved tasks.
+We recruited participants from MTurk, limiting the pool to subjects from within the US with a prior task approval rating of at least 97\% and a minimum of 1,000 approved tasks.
 
 \textbf{Data quality}
 We applied two filtering strategies: 
 (1) \emph{High-quality worker.} 
-We only kept data from participants whose median labeling time per round was more than 18 seconds and correctly labeled at least 4 gold counterfactuals (out of 6), or who correctly labeled all gold ones regardless of the time spent.
+We only kept data from participants whose median labeling time per round was more than 18 seconds and correctly labeled at least 4 gold counterfactuals (out of 6), or who correctly labeled all gold ones.
 (2) \emph{Majority vote labeling.}
 We collected two annotations per counterfactual, and only kept those that at least one annotator deemed \emph{valid/fluent}, and both annotators agreed on a particular \emph{class label.}
-
-Because the crowdworkers are usually noisy, when set out to collect augmentations on 1,000 original examples (thus 3,000 counterfactuals), we typically collect counterfactuals for 1,000 counterfactuals on 600 original examples.
+%Due to the crowdsourcing noise, when set out to collect counterfactuals on 1,000 original examples (thus 3,000 counterfactuals), we typically collect counterfactuals for 1,000 counterfactuals on 600 original examples.
 One of the authors labeled a subset of 100 counterfactuals on 100 original examples in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, the raw labeling agreement $88\%$).
 
 

@@ -37,7 +37,7 @@ To balance the distribution (shown in Table~\ref{table:gpt_train_stats}), for ea
 \textbf{Contrast set.}
 Authors of 10 existing NLP dataset each manually perturbed 100--1,000 instances to change the gold label, so to inspect a model's local decision boundary~\cite{gardner2020contrast}.
 The perturbation patterns vary based on the tasks and the annotators, allowing us to learn diverse strategies.
-To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though \qqp would be a potentially interesting dataset for training \sysname, we omitted it so \qqp can be used in our evaluation.}
+To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though \qqp is suitable for training \sysname, we omitted it so \qqp can be used in our evaluation.}
 %\wts{Re-train the model with other contrast sets.}
 
 
@@ -110,7 +110,7 @@ There are three common failure cases for the \tagstrshorts:
 (1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
 (2) $x$ does not have a corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
 (3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
-In the ablation study, we filtered out prompts that fell under cases 1 and 2.
+%In the ablation study, we filtered out prompts that fell under cases 1 and 2.
 
 
 
@@ -143,10 +143,9 @@ In the ablation study, we filtered out prompts that fell under cases 1 and 2.
     \label{table:intrinsic}
 \end{table}
 
-\subsubsection{Closeness, Diversity, Fluency}
+\subsubsection{Closeness and Diversity}
 
-Similar to \citet{madaan2020generate}, we verify that the \sysname generations are fluent (``plausible'' in their case) through human evaluations (\S\ref{subsec:label_efficiency}).
-We also quantify the diversity and closeness by comparing it with baseline models.
+Similar to \citet{madaan2020generate}, we quantify the diversity and closeness of \sysname by comparing it with baseline models.
 
 For a given $x$ and its counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{malandrakis-etal-2019-controlled, zhu2018texygen} within the generated counterfactual set $\hat{\xset}$.
 The higher the BLEU, the more lexically different the generated phrases are to each other. 

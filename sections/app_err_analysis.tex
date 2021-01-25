@@ -4,29 +4,29 @@
 \subsection{Additional Case Study: Quantifiers}
 \label{appendix:err_analysis_quantifier_case}
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 25.2cm 34.5cm 0cm},clip,width=1\columnwidth]{figures/err_analysis_two_three}
+\vspace{-15pt}
+\caption{
+The \nli model cannot perform the actual counting when the exact number is missing from \emph{P}.
+In (B), it still predicts (the now incorrect) \emph{Entailment}.
+}
+\vspace{-10pt}
+\label{fig:err_analysis_two_three}
+\end{figure}
+
 
 %\citet{gururangan2018annotation} also mentioned that one common strategy for creating NLI examples is to modify the numbers, suggesting that the model should have seen various examples related to numbers.
 
 As a follow up to the case in Figure~\ref{fig:err_analysis_quantifier}, we slice the data to find \emph{entailement} instances that have numbers in the hypothesis sentence, and perform \ctrltag{quantifier} changes on them.
 Through the extracted templates, we notice two things: 
-(1) the model does not perform actual counting. 
-When changing one number to another (\swap{\texttt{NUM}}{\texttt{NUM}}), the model only flips the label in 64.7\% cases, which is abnormal --- we would expect all cases like the one below:
+First, the model does not perform actual counting. 
+When changing one number to another (\swap{\texttt{NUM}}{\texttt{NUM}}), the model only flips the label in 64.7\% cases, which is abnormal --- we would expect all cases to be like in Figure~\ref{fig:err_analysis_two_three}.
+Diving into the instances, we realize that the model can be easily confused when the explicit number is not in the premise. Indeed, when we further filter the instance to only keep instances like in Figure~\ref{fig:err_analysis_two_three}B, the label flip rate of \swap{\texttt{NUM}}{\texttt{NUM}} further decreases to 30.2\%.
 
-\ebox{
-\textbf{P}: Two women having drinks at the bar.\\
-\textbf{H}: \swap{Two}{Three} women are at a bar.\\
-\textbf{$\mathbf{f(x)\rightarrow f(\xp)}$}: \swap{entailment}{contradiction}
-}
 
-Diving into the instances, we realize that the model can be easily confused when the explicit number is not in the premise. Indeed, when we further filter the instance to only keep instances like the one below, the label flip rate of \swap{\texttt{NUM}}{\texttt{NUM}} further decreases to 30.2\%.
-
-\ebox{
-\textbf{P}: A boy and a girl gaze in a clothing store window.\\
-\textbf{H}: \swap{Two}{Three} kids are looking in a store window.\\
-\textbf{$\mathbf{f(x)\rightarrow f(\xp)}$}: \swap{entailment}{entailment}
-}
-
-(2) the model can react to \emph{some} quantifier phrase modifiers. 
+Second, the model can react to \emph{some} quantifier phrase modifiers. 
 \swap{}{at least} (\exinline{\add{at least} women are at a bar}) will always still result in \emph{entailment}, prediction, \swap{}{only} and \swap{}{exactly} flip the predicted label to \emph{neutral} 90\% of the time (\exinline{\add{exactly} women are at a bar}), but the model only changes the prediction 52.6\% of the time when we add \swap{}{more than} (\exinline{\add{more than} women are at a bar}).
 
 
