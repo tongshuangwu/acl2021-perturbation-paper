@@ -80,6 +80,9 @@
 \definecolor{cdel}{rgb}{0.83, 0.32, 0.16}
 \def \arrow{$\veryshortarrow$}
 \newcommand{\add}[1]{\colbox{caddback}{\color{cadd}#1\xspace}} %
+\newcommand{\addplus}[1]{{\footnotesize+}\add{#1}}
+
+
 \newcommand{\remove}[1]{\colbox{cdelback}{{\color{cdel}#1\xspace}}}%
 \newcommand{\swap}[2]{\remove{#1}~\arrow~\add{#2}}
 \newcommand{\ctrltag}[1]{\texttt{#1}\xspace}
@@ -182,7 +185,7 @@
 
 % teal, cyan
 %\title{\sysname: General-purpose Counterfactual Generation}
-\title{\sysname: General-purpose Counterfactual Generation \wts{or: Generating Counterfactuals \\for Improving, Explaining, and Analyzing Models}}
+\title{\sysname: Generating Counterfactuals \\for Explaining, Evaluating, and Improving Models}
 
 
 \author{
@@ -208,16 +211,30 @@ $^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\
 \begin{document}
 \maketitle
 \begin{abstract}
-Counterfactual examples have been shown to be useful for many applications, including calibrating, evaluating, and explaining model decision boundaries. 
-However, previous methods for generating such counterfactuals have been tightly tailored to a specific application, used a limited range of linguistic patterns, or are hard to scale. 
-We propose to disentangle counterfactual generation from its use cases, \ie gather general-purpose counterfactuals first, and then select them for specific applications. 
-We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator, \sysname, which produces fluent and diverse counterfactuals. 
-Our method also allows control over where perturbations happen and what they do. 
-We show \sysname supports multiple use cases: 
-When creating datasets for model training and evaluation, \sysname helps to save up to 75\% annotation efforts over manual creation.
-When used to produce explanations and for error analysis, \sysname reveals erroneous model behaviors that are easily missed by human analysts.
 
- %
+
+While counterfactual examples (or perturbations) are useful for analysis and training of NLP models, current generation methods either rely on manual labor to create very few counterfactuals, or only instantiate a small set of automatic perturbations such as paraphrases or word substitutions.
+We present \sysname, a general-purpose counterfactual generator that allows for control over perturbation types and locations, trained by finetuning GPT-2 on multiple datasets of paired sentences. 
+We show that \sysname produces diverse sets of realistic counterfactuals, which in turn are useful in various distinct applications: improving training and evaluation on three different tasks (with up to 75\% less annotation effort than manual generation), augmenting state-of-the-art explanation techniques, and supporting systematic counterfactual error analysis that reveals behaviors easily missed by analysts.
+
+% Counterfactual examples are useful for various applications, but current methods for generating them either rely on crowdsourcing, or only instantiate a small set of possible perturbations-of-interest (\eg changing the groundtruth label through a single antonym substitution.)
+% We propose \sysname, a general purpose counterfactual generator, by finetuning GPT-2 on multiple datasets with paired sentences. 
+% \sysname allows control over the type and location of perturbations, and therefore more comprehensively cover desired counterfactuals.
+% We show that \sysname produces a diverse set of fluent counterfactuals, and that simple selection mechanisms make it useful for training and evaluation (up to 75\% less annotation effort compared to manual creation), augments state-of-the-art explanation techniques, and supports counterfactual error analysis by revealing erroneous model behaviors that are easily missed by human analysts.
+
+
+%Counterfactual examples have been shown to be useful for many applications, including calibrating, evaluating, and explaining model decision boundaries. 
+%However, previous methods for generating such counterfactuals have been tightly tailored to a specific application, used a limited range of linguistic patterns, or are hard to scale. 
+%We propose to disentangle counterfactual generation from its use cases, \ie gather general-purpose counterfactuals first, and then select them for specific applications. 
+%We frame the automated counterfactual generation as text generation, and finetune GPT-2 into a generator, \sysname, which produces fluent and diverse counterfactuals. 
+%Our method also allows control over where perturbations happen and what they do. 
+%We show \sysname supports multiple use cases: 
+%When creating datasets for model training and evaluation, \sysname helps to save up to 75\% annotation efforts over manual creation.
+%When used to produce explanations and for error analysis, \sysname reveals erroneous model behaviors that are easily missed by human analysts.
+
+
+
+%
 %Existing methods generate counterfactual examples for specific applications, even though most of the examples can be broadly used for calibrating, evaluating, and explaining model decision boundaries. 
 %Constrained by their use cases, the methods each have a limited linguistic pattern coverage or are hard to scale. 
 %We propose to disentangle the generation from the use cases, \ie, gather general-purpose counterfactuals first, and then select them for specific applications. 

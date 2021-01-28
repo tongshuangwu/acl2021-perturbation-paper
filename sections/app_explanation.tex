@@ -1,3 +1,25 @@
+
+
+\begin{comment}
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=1\textwidth]{figures/explanation_instruction}
+\vspace{-15pt}
+\caption{The instruction for the explanation study in \S\ref{subsec:exp_user_study}. \wts{Maybe remove.}}
+\vspace{-10pt}
+\label{fig:explanation_instruction}
+\end{figure*}
+\end{comment}
+
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/explanation_task_ui}
+\vspace{-5pt}
+\caption{A sample explanation task for \S\ref{subsec:exp_user_study}.}
+\vspace{-10pt}
+\label{fig:explanation_ui}
+\end{figure*}
+
 \section{Additional Details to Explanations \S\ref{sec:app_explain}}
 \label{appendix:explanation}
 
@@ -5,19 +27,14 @@
 \subsection{Selection Methods}
 \label{appendix:exp_rank}
 
-\paragraph{SHAP complement as local explanation}
-Because the SHAP weights reflect the average effect of masking a token $t$, 
-%instead of finding just one abnormal counterfactual, 
-we also focus on \emph{word features that are abnormal on average}.
+Because  SHAP weights reflect the average effect of masking a token $t$, we also focus on \emph{word features that are abnormal on average}.
 
-More concretely, we define the expected change in prediction of perturbing a token $t$ to be the SHAP importance on it $\E[\dist(t, x)] = s(t)$.
+More concretely, we define the expected change-in-prediction for perturbing a token $t$ to be the SHAP importance on it, $\E[\dist(t, x)] = s(t)$.
 In Figure~\ref{fig:explanation}, $s(t\text{=\remove{depression}})=0.276$.
-The actual prediction change is the weighted average of $|\fp(x)-\fp(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a relationship}), where
-$\fp(x)$ denotes the prediction probability of $f$ on $x$.
-The weight corresponds to the number of words modified in $\xp$: If $e(\xp)$ denotes the set of edited words (replaced or deleted from $x$ in $\relation{\xp}$), then $w(\xp) = 1/|e(\xp)|$.
+The actual prediction change $\dist(t, x)$ is the weighted average of $|\fp(x)-\fp(\xp)|$ for all the $\xp$ that affect $t$ (\swap{depression}{trouble}, \swap{depression}{a mood}), where $\fp(x)$ is the prediction probability of $f$ on $x$.
+The weight corresponds to the number of words modified in $\xp$: If $e(\xp)$ denotes the set of edited words in $x$, then $w(\xp) = 1/|e(\xp)|$.
 Intuitively, the more words changed in $\xp$, the less impact each word has; In Figure~\ref{fig:explanation}D, we regard ``depression'' to be responsible for half of the impact in \swap{in depression}{suicidal}.
-
-We group the $\xp$ based on their affected words $G_t = \{\xp\ |\ t \in e(\xp)\}$. $\dist(t, x)$ then becomes:
+We group $\xp$ based on their affected words $G_t = \{\xp\ |\ t \in e(\xp)\}$. $\dist(t, x)$ then becomes:
 $$\dist(t, x) = \frac{1}{|G_t|+1} \left(s(t) + \sum_{\xp \in G_t} w(t)\cdot |\fp(x)-\fp(\xp)|\right)$$
 The additional SHAP weight $s(t)$ acts as a smoothing factor to punish dominating outlier $\xp$.
 Then the gap between the expectation and the reality is:
