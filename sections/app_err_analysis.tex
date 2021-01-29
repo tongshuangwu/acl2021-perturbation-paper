@@ -20,13 +20,12 @@ The \nli model cannot perform the actual counting when the exact number is missi
 %\citet{gururangan2018annotation} also mentioned that one common strategy for creating NLI examples is to modify the numbers, suggesting that the model should have seen various examples related to numbers.
 
 As a follow-up to Figure~\ref{fig:err_analysis_quantifier}, we slice the data to find \emph{entailement} instances that have numbers in the hypothesis sentence, and perturb their \ctrltag{quantifiers}.
-Through the extracted templates, we notice two things: 
-First, the model does not perform actual counting. 
-When changing one number to another (\swap{\texttt{NUM}}{\texttt{NUM}}), the model only flips the label in 64.7\% cases, which is abnormal --- we would expect all cases to be like in Figure~\ref{fig:err_analysis_two_three}A.
-Diving into the instances, we realize that the model can be easily confused when the explicit number is not in the premise. Indeed, when we further filter the instance to only keep instances like in Figure~\ref{fig:err_analysis_two_three}B, the label flip rate of \swap{\texttt{NUM}}{\texttt{NUM}} further decreases to 30.2\%.
+The extracted templates show that the model does not perform actual counting. 
+When changing one number to another (\swap{\texttt{NUM}}{\texttt{NUM}}), the model only flips the label in 64.7\% cases, while we would expect all cases to be like in Figure~\ref{fig:err_analysis_two_three}A.
+Diving into the instances, the model seems easily confused when the explicit number is not in the premise. 
+Indeed, when we filter the instance to only keep instances like in Figure~\ref{fig:err_analysis_two_three}B, the label flip rate of \swap{\texttt{NUM}}{\texttt{NUM}} further decreases to 30.2\%.
 
-
-Second, the model can react to \emph{some} quantifier phrase modifiers. 
+Further, the model only reacts to \emph{some} quantifier phrase modifiers. 
 \addplus{at least} (\exinline{\add{at least} women are at a bar}) will always still result in \emph{entailment}, prediction, \addplus{only} and \swap{}{exactly} flip the predicted label to \emph{neutral} 90\% of the time (\exinline{\add{exactly} women are at a bar}), but the model only changes the prediction 52.6\% of the time when we add \addplus{more than} (\exinline{\add{more than} women are at a bar}).
 
 
@@ -38,14 +37,14 @@ Similar to \citet{wu2020tempura}, the process of finding representative perturba
 \textbf{Extract template.}
 For each $\xp$, we compare it with its $x$, and translate the perturbed spans into templates using different combinations of texts, lemmas, sparse and fine-grained part-of-speech tags.
 We optionally include surrounding contexts determined by the parsing tree structure (tokens that share the same parents as the perturbed span).
-For example, \exinline{is \add{not} reading} can be translated into a set of templates $t$ that are as finer-grained as \swap{is reading}{is not reading}, or as sparse as \addplus{\texttt{PART}}.
-Similarly, \exinline{are \add{not} playing} also results in \addplus{\texttt{PART}} or \addplus{\texttt{not}}, but not \swap{is reading}{is not reading}.
+For example, \exinline{is \add{not} reading} can result in templates $t$ as fine-grained as \swap{is reading}{is not reading}, or as sparse as \addplus{\texttt{PART}}.
+Meanwhile, \exinline{are \add{not} playing} also translates to \addplus{\texttt{PART}} or \addplus{\texttt{not}}, but not \swap{is reading}{is not reading}.
 As such, the $\xp$ and templates form a many-to-many relationship: each $\xp$ generates multiple templates, and each template covers a different group of $\xp$.
 
 \textbf{Select Representative Templates.}
 To find representative changes, we prefer (1) templates that cover a large number of $\xp$.
-Meanwhile, to avoid overfitting to one instance (\eg extracting a template \swap{red}{\texttt{ADJ}} only because ``red'' is repeatedly perturbed in one $x$ 100 times), we prefer (2) templates that perturb various unique $x$.
-We also prefer (3) finer-grained templates, to avoid being unnecessarily abstract (\eg it is unnecessary to avoid abstracting ``not'' when it is the only \texttt{PART} changed.)
+Meanwhile, to avoid overfitting to one instance (\eg extracting a template \swap{red}{\texttt{ADJ}} only because ``red'' is repeatedly perturbed in one $x$), we prefer (2) templates that perturb various unique $x$.
+We also prefer (3) finer-grained templates, to avoid being unnecessarily abstract (\eg to avoid abstracting ``not'' when it is the only \texttt{PART} changed.)
 
 %$\hat{\xset}_i$
 
