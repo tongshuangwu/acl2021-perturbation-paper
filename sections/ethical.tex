@@ -6,7 +6,9 @@ Our work includes crowdlabeling counterfactuals, whose detailed procedures are i
 The base tasks and datasets are standard and do not include sensitive or personal information, and therefore we do not foresee ethical issues. 
 As for model training, the most expensive experiment is on finetuning GPT-2 into \sysname, which took around 8 hours (Appendix~\ref{appendix:train_data}).
 To reduce the cost, we may consider optimizing the finetuning dataset to reduce repetitive sentence pairs, and thereby train \sysname with fewer shots.
-
+\wts{cut we don't foresee ethical issues}
+\wts{add payments here}
+\wts{human-AI hybrid mechanism, algorithm tells people what to do, try to force humans drive more, manipulating people somehow. On the edge of controlling human, deserves careful consideration}
 % overloaded word of bias
 More critically, \sysname may be misused in the semi-automatic settings. 
 As discussed in \S\ref{sec:discuss}, \sysname inherits some biases from its training datasets.

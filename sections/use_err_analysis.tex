@@ -1,7 +1,7 @@
 \section{Counterfactual Error Analysis}
-\label{sec:err_analysis}
+\label{sec:app_err_analysis}
 
-
+%
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 12.5cm 33cm 0cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
@@ -67,7 +67,7 @@ The wild predictions in Figure~\ref{fig:err_analysis_quantifier} lead us to furt
 \paragraph{Takeaways.}
 \sysname provides unique support for interactive and targeted generation.
 First, \emph{over-}generation helps analysts contrast similar perturbations and form hypotheses that might otherwise be missed.
-Analysts rarely check both \swap{is}{is not} and \swap{is}{isn't}, and therefore can overlook potential differences, echoing our observation (\S\ref{subsec:exp_user_study}) that manual counterfactual analysis can be misleading.
+Analysts rarely check both \swap{is}{is not} and \swap{is}{isn't}, and therefore can overlook potential differences, echoing our observation (\S\ref{sec:app_explain}) that manual counterfactual analysis can be misleading.
 Using \tagstrs, \sysname also reveals patterns that are hard to retrieve from existing masked language models.
 When applying RoBERTa to the same blanked (masked) hypotheses, we obtain less than 5\% negation counterfactuals compared to \sysname.
 Instead, over 1,000 counterfactuals concern \swap{is}{\texttt{VERB}} and \swap{are}{\texttt{VERB}}.
