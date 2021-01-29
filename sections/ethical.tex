@@ -1,18 +1,18 @@
 
 \section{Ethical Consideration}
-\wts{This is an extra discussion section that's recommended, and can go beyond 8 pages: https://2021.aclweb.org/ethics/Ethics-FAQ/}
+Our work includes labeling counterfactuals on crowdsourcing platforms, as well as conducting user studies with graduate students.
+As detailed in Appendix~\ref{appendix:label_instruct} and \ref{appendix:exp_user_study}, we compensated the MTurk workers \$2.5 for ${\approx}15$ minutes of labeling, and the graduate students \$20 for the user study (one hour), above the U.S. federal minimum wage.
 
-Our work includes crowdlabeling counterfactuals, whose detailed procedures are in Appendix~\ref{appendix:label_instruct}.
-The base tasks and datasets are standard and do not include sensitive or personal information, and therefore we do not foresee ethical issues. 
-As for model training, the most expensive experiment is on finetuning GPT-2 into \sysname, which took around 8 hours (Appendix~\ref{appendix:train_data}).
-To reduce the cost, we may consider optimizing the finetuning dataset to reduce repetitive sentence pairs, and thereby train \sysname with fewer shots.
-\wts{cut we don't foresee ethical issues}
-\wts{add payments here}
-\wts{human-AI hybrid mechanism, algorithm tells people what to do, try to force humans drive more, manipulating people somehow. On the edge of controlling human, deserves careful consideration}
-% overloaded word of bias
-More critically, \sysname may be misused in the semi-automatic settings. 
-As discussed in \S\ref{sec:discuss}, \sysname inherits some biases from its training datasets.
-However, as it generates multiple counterfactuals, humans may assume that \sysname comprehensively cover \emph{all} the counterfactuals possible, and develop over-reliance~\cite{bansal2021does}.
-The over-reliance may hinder humans' counterfactual coverage during labeling or analysis.
-We plan to highlight the limitations along as a component of the model documentation. 
-In future work, we also plan to design interactive interfaces that help humans to properly collaborate with \sysname.
+We only finetune GPT-2 rather than training it from scratch, such that our compute costs are relatively low (around 8 hours for finetuning, Appendix~\ref{appendix:train_data}). All of our finetuning experiments involved finetuning RoBERTa on smaller datasets.
+% To reduce the cost, we may consider optimizing the finetuning dataset to reduce repetitive sentence pairs, and thereby train \sysname with fewer shots.
+
+More critically, with most of our demonstrated applications using a human-AI hybrid mechanism, we stress that the interaction between the human and the model deserves careful consideration.
+It has long been reported that algorithms interacting with the humans can negatively impact the human;\footnote{\url{https://www.nytimes.com/interactive/2017/04/02/technology/uber-drivers-psychological-tricks.html?_r=0}}
+In our case, the concern might be that users can develop an over-reliance on \sysname~\cite{bansal2021does} and hastily rely on its generations.
+Not only can this decrease users' creativity~\cite{green-etal-2014-human}, but it may bias their analysis process.
+As discussed in \S\ref{sec:discuss}, \sysname generation is not exhaustive, and may favor some perturbation patterns over others in unpredictable ways.
+% Hastily relying on \sysname generations may risk incomplete explorations.
+In the short term, we plan to highlight this limitations as part of the model documentation, while future research identifies interaction mechanisms that ensure that \sysname or other counterfactual generators support humans, rather than hindering their performance.
+
+
+

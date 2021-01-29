@@ -78,10 +78,10 @@ For example, \ctrltag{negation} occurs when we observe changes on negation modif
 When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
 In Figure~\ref{fig:blank}A, we use \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
 If we cannot identify the \tagstr for a $(x, \xp)$ or if the editing distance is too large, we denote it with \ctrltag{global} and use it as a negative training sample.
-To balance the distribution (Table~\ref{table:gpt_train_stats}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstr.
+To balance the distribution (Table~\ref{table:gpt_train_stats}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstrshorts.
+
 To allow flexible blanking at generation time, we generate multiple training prompts from one $(x, \xp)$, by blanking (1) just the changed tokens, (2) the associated parsing structures, (3) the merged changes, and (4) the entire sentence (examples are in Figure~\ref{fig:blank}).
 %As a result, we form up to four unique training prompts given one $(x, \xp)$ pair 
-
 %max_log_prob_diff
 %With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
 %\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
@@ -99,17 +99,18 @@ The training took around 8 hours on two Titan's RTX.
 
 
 We finetune another GPT-2 model with training prompts that \emph{do not} contain \tagstrs (called \emph{\sysname-a}), and quantify the impact of the \tagstrshorts through an ablation study.
-For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 300 prompts.
+For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 300 prompts (equally sampled from \qqp, \dnli, \dsst)
 For each prompt, we generate counterfactuals through beam search (beam $=5$), and recompute the \tagstrshorts on the top three returns.
 We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
 The success rate increases by $28\% \pm 18\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\%, from 40\% to 48\%) to \ctrltag{insert} (65\%, from 14\% to 79\%).
 %\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
 %\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
 
-There are three common failure cases for the \tagstrshorts:
+
+Common failure cases include
 %Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
-(1) The dual manipulation from the \tagstrs and the blanks can conflict, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
-(2) $x$ does not have a corresponding pattern. \ctrltag{shuffle} is not applicable when the sentence has only one adjective or noun (\eg \exinline{the movie is good}).
+(1) The \tagstrs conflict with the blanks, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
+(2) $x$ does not have a corresponding pattern, \eg \ctrltag{shuffle} is not applicable to \exinline{the movie is good}.
 (3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
 %In the ablation study, we filtered out prompts that fell under cases 1 and 2.
 
@@ -117,22 +118,21 @@ There are three common failure cases for the \tagstrshorts:
 
 
 \begin{comment}
-{'gpt2': {'bleu4': 0.20231169290227205,
-  'bluescore': 0.89183205,
-  'sem_dist': 0.7349638487702381,
-  'tree_dist': 11.125,
-  'edit_dist': 0.8001636495008976},
- 'bert': {'bleu4': 0.3210019541707289,
-  'bluescore': 0.94413376,
-  'sem_dist': 0.18231783725066592,
-  'tree_dist': 1.1599999999999997,
-  'edit_dist': 0.258799655063299},
- 'polyjuice': {'bleu4': 0.2202148555800664,
-  'bluescore': 0.93493116,
-  'sem_dist': 0.33438068684504313,
-  'tree_dist': 2.0633333333333335,
-  'edit_dist': 0.3677595090955571}}
-
+{'gpt2': {'bleu4': 0.17553428639447374,
+  'bluescore': 0.8947643,
+  'sem_dist': 0.6225155562821245,
+  'tree_dist': 6.350782997762864,
+  'edit_dist': 0.7045303072049199},
+ 'bert': {'bleu4': 0.4699445059841606,
+  'bluescore': 0.9546045,
+  'sem_dist': 0.15153456281610847,
+  'tree_dist': 1.352,
+  'edit_dist': 0.14362360165631063},
+ 'polyjuice': {'bleu4': 0.33819550232972273,
+  'bluescore': 0.9369372,
+  'sem_dist': 0.23683031172394833,
+  'tree_dist': 2.1298870056497172,
+  'edit_dist': 0.2505382626667885}}
 \end{comment}
 
 
@@ -145,12 +145,12 @@ There are three common failure cases for the \tagstrshorts:
     \multirow{2}{*}{Model} & Diversity & \multicolumn{2}{c}{Closeness} \\
     \cmidrule(lr){2-2}
     \cmidrule(lr){3-4}
-    & Self-BLEU $\downarrow$ & Semantic $\downarrow$ & Tree edit $\downarrow$ \\
+    & Self-BLEU $\downarrow$ & Levenshtein $\downarrow$ & Syntactic $\downarrow$ \\
     % \cmidrule{2-4}
     \midrule
-    \emph{\sysname} & \textbf{0.22}     & \textbf{0.33} & \textbf{\ \ 2.06} \\
-    Masked-LM       & 0.32              & \textbf{0.18} & \textbf{\ \ 1.16} \\
-    GPT-2           & \textbf{0.20}     & 0.73          & 11.12 \\
+    \emph{\sysname} & \textbf{0.34}     & \textbf{0.25} & \textbf{2.13} \\
+    RoBERTa         & 0.47              & \textbf{0.14} & \textbf{1.32} \\
+    GPT-2           & \textbf{0.18}     & 0.70          & 6.35 \\
     \bottomrule
     \end{tabular}
     \vspace{-2.5mm}
@@ -161,20 +161,16 @@ There are three common failure cases for the \tagstrshorts:
 \end{table}
 
 \subsubsection{Closeness and Diversity}
-
-Similar to \citet{madaan2020generate}, we compare the diversity and closeness of \sysname with baseline models.
+Similar to \citet{madaan2020generate}, we also compare the \emph{diversity} and \emph{closeness} of \sysname with alternative generators, \ie RoBERTa, representing masked language models that prioritize word substitutions, and original \emph{GPT-2}, representing the standard generative model not conditioned on $x$. 
 For a given $x$ and its counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{zhu2018texygen} within $\hat{\xset}$.
-%The higher the BLEU, the more lexically different the generated phrases are to each other. 
-A higher score implies less diversity of the generated $\xp$.
-Meanwhile, \emph{closeness} is the average distance between $x$ and every $\xp \in \hat{\xset}$, both semantically (on sentence embedding~\cite{reimers-2019-sentence-bert}) and syntactically (tree edit distance~\cite{zhang1989simple}).
+Meanwhile, \emph{closeness} is the average distance between $x$ and every $\xp \in \hat{\xset}$, both with the normalized word level Levenshtein edit distance (\cite{levenshtein1966binary}, used in MiCE~\cite{ross2020explaining}), and the syntactic tree edit distance (\cite{zhang1989simple} in GYC~\cite{madaan2020generate}).
 
-We use similar baselines as \citet{madaan2020generate}: 
-(1) \emph{Masked-LM}, where we blank certain parts of $x$ (by randomly placing up to three \texttt{[MASK]} tokens), and ask RoBERTa to fill in the blank.
-We rely on the CheckList implementation~\cite{checklist:acl20}, as it allows filling in multiple blanks at once through beam search. 
-(2) Un-finetuned \emph{GPT-2}, an off-the-self language generation model.
-We use the first two words of $x$ as the input context (prompt), limit the length of the generation to be similar to $x$.
-As the model generates \emph{arbitrary text} that do not depend on $x$, we agree with \citet{madaan2020generate} that general text generation models should not satisfy the \emph{closeness} requirement.
-We randomly select 120 instances from \qqp, \dnli, and \dsst (40 per dataset), and generate 10 $\xp$ per $x$ using each of the three generators.
+We run the three generators on 300 sentences in total.
+In GPT-2, we take the first two words of an $x$ as the input context (prompt), limit the length of the generation to be similar to $x$, and collect 10 counterfactuals.
+As for RoBERTa, we repeatedly perturb $x$ for three times, each time randomly placing up to three \texttt{[MASK]} tokens, and ask the generator to generate 5 counterfactuals through beam search~\cite{checklist:acl20}.
+\sysname uses the same blank (mask) placement as in RoBERTa, but additionally enumerate through all \tagstrs.
+For each $x$, we randomly sample 5 counterfactuals to form $\hat{\xset}$ per generator.
+
 As shown in Table~\ref{table:intrinsic}, \sysname achieves a balance between diversity and closeness.
 Ideally, we would also like to compare \sysname with our concurrent work GYC~\cite{madaan2020generate} and MiCE~\cite{ross2020explaining}.
 %Inspired by style transfer~\cite{yang2018unsupervised} and controlled text generation, GYC performs the perturbation on the latent space of the input $x$.
