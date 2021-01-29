@@ -175,7 +175,7 @@ At generation time, if the user provides only the original example, \sysname wil
 In order to train a conditional model,
 % according to the specifications in Figure~\ref{fig:blank},
 we combine six existing datasets with paired sentences, each containing a subset of the desired phenomena in Table \ref{table:ctrltag}. Further, we find naturally occurring sentence pairs (filtered by edit distance to guarantee closeness) in non-paired datasets including CommonGen~\cite{lin-etal-2020-commongen}, Natural Questions~\cite{kwiatkowski-etal-2019-natural} and SQuAD \cite{rajpurkar-etal-2016-squad}, resulting in a final dataset with \emph{diverse} counterfactuals (details in Appendix \ref{appendix:train_data}). 
-Each $(x, \xp)$ in the training dataset is translated into the format given in Figure \ref{fig:blank} by computing the \tagstr from linguistic features (POS tags and dependency trees) and placing \texttt{[BLANK]}s at random subtrees of $x$'s parse tree, resulting in $657,144$ training prompts from $191,415$ sentence pairs.
+Each $(x, \xp)$ in the training dataset is translated into the format given in Figure \ref{fig:blank} by computing the \tagstr from linguistic features (POS tags and dependency trees) and placing \texttt{[BLANK]}s at random subtrees of $x$'s parse tree, resulting in $657,144$ training prompts from $186,451$ sentence pairs.
 
 % we train gpt-2 on this and add filtering
 We train \sysname by finetuning GPT-2 \cite{radford2019language} on the resulting training prompts.
@@ -183,59 +183,67 @@ While the original GPT-2 produces \emph{fluent} text,
 % as defined in \S\ref{sec:desiderata}, certain
 some combinations of \tagstrs and \texttt{BLANK}s cause \sysname to generate ungrammatical or nonsensical results.
 Following \citet{morris2020textattack}, we score both $x$ and $\xp$ with GPT-2, filtering $\xp$ when the log-probability (on the full sentence or on the perturbed chunks) decreases more than 10 points relative to $x$.
-As illustrated below, this threshold results in fluent counterfactuals 76--87\% of the time in different domains, suitable for applications in which people ``team up'' with \sysname and reject ungrammatical counterfactuals (as in \S\ref{sec:app_label}--\S\ref{sec:app_err_analysis}). Fully automated uses of \sysname (\eg adversarial attacks) may benefit from stricter constraints \cite{morris2020textattack}, at the cost of diversity --- more surprising changes may be filtered even if fluent.
+Fully automated uses of \sysname (\eg adversarial attacks) may benefit from stricter constraints \cite{morris2020textattack}, at the cost of diversity --- more surprising changes may be filtered even if fluent.
 
 
-\subsection{Intrinsic Evaluations}
+\subsection{Intrinsic Evaluation}
 \label{subsec:intrinsic}
 
 
 
-We verify that \sysname generates \emph{fluent} texts through human evaluations in three domains: (1) \sst Analysis on \dsst~\cite{socher2013recursive},
-(2) Natural Language Inference (\nli) on \dnli~\cite{bowman-etal-2015-large}, and 
+We verify that \sysname generates \emph{fluent} counterfactuals for sentences in three tasks / datasets not used for training: (1) \sst Analysis, \dsst~\cite{socher2013recursive},
+(2) Natural Language Inference (\nli), \dnli~\cite{bowman-etal-2015-large}, and 
 (3) Duplicate Question Detection (\dqqp)~\cite{wang2018glue}.
-We randomly select 100 sentences from each dataset, generate 3 \sysname counterfactuals per $x$, and ask Amazon Mechanical Turk workers to judge the generation fluency (\emph{``written by a native speaker''}).
-The crowdworkers rated most counterfactuals to be fluent: $79\%$ for \dsst, $76\%$ for \dqqp, and $87\%$ for \dnli.
-One of the authors also manually labeled counterfactuals of 120 instances, and arrived at similar fluency.
-Without automatic filtering, the fluency rate decreases to $61\%$.
+We randomly select 100 sentences from each dataset, generate 3 \sysname counterfactuals per $x$, and ask crowd workers to rate whether they were \emph{``likely written by a native speaker.''}
+The workers rated most counterfactuals as fluent: $79\%$ for \dsst, $76\%$ for \dqqp, and $87\%$ for \dnli,  which we show in subsequent sections is suitable for applications in which people ``team up'' with \sysname.
+% One of the authors also manually labeled counterfactuals of 120 instances, and arrived at similar fluency.
+% Without automatic filtering, the fluency rate decreases to $61\%$.
+
+Further, we quantify the impact of \tagstrs through an ablation study, and compare \sysname with another GPT-2 finetuned on prompts without the \tagstrshorts (and so it does not accept any kinds of controls). 
+We verify that the \tagstrshorts can improve the success rate of generating counterfactuals with the desired $\relation{\xp}$ set out in Table~\ref{table:ctrltag}.
+For some perturbations that rarely occur naturally (\eg negation, insert), the rate can improve as much as 64\%.
+
+We also compare \sysname to counterfactuals generated by RoBERTa and GPT-2 as to their distance from the original instance (syntactic~\cite{zhang1989simple} and word level Levenshtein distance~\cite{levenshtein1966binary}), and perturbation diversity measured by self-BLEU~\cite{zhu2018texygen}. 
+Besides having the benefit of control, \sysname generates counterfactuals that are still close to the original instance (syntactic $\approx 2$ and edit $\approx TODO$, compared to GPT-2's $\approx 11$ and $\approx TODO$), with more perturbation diversity than RoBERTa (which is restricted to word substitutions).
+More details are in Appendix~\ref{appendix:intrinsic}.
 
 
-\begin{table}[tb]
-\small
-    \centering
-    %\setlength{\tabcolsep}{1.3pt}
-    \begin{tabular}{@{}lccc@{}}
-    \toprule
-    \multirow{2}{*}{Model} & Diversity & \multicolumn{2}{c}{Closeness} \\
-    \cmidrule(lr){2-2}
-    \cmidrule(lr){3-4}
-    & Self-BLEU $\downarrow$ & Semantic $\downarrow$ & Tree edit $\downarrow$ \\
-    % \cmidrule{2-4}
-    \midrule
-    \emph{\sysname} & \textbf{0.22}     & \textbf{0.33} & \textbf{\ \ 2.06} \\
-    RoBERTa       & 0.32              & \textbf{0.18} & \textbf{\ \ 1.16} \\
-    GPT-2           & \textbf{0.20}     & 0.73          & 11.12 \\
-    \bottomrule
-    \end{tabular}
-    \vspace{-5pt}
-    \caption{Intrinsic evaluation metrics. 
-    \sysname counterfactuals are \emph{closer} to the original instance than GPT-2, and more \emph{diverse} than RoBERTa.}
-    \vspace{-15pt}
-    \label{table:intrinsic}
-\end{table}
+% \begin{table}[tb]
+% \small
+%     \centering
+%     %\setlength{\tabcolsep}{1.3pt}
+%     \begin{tabular}{@{}lccc@{}}
+%     \toprule
+%     \multirow{2}{*}{Model} & Diversity & \multicolumn{2}{c}{Closeness} \\
+%     \cmidrule(lr){2-2}
+%     \cmidrule(lr){3-4}
+%     & Self-BLEU $\downarrow$ & Semantic $\downarrow$ & Tree edit $\downarrow$ \\
+%     % \cmidrule{2-4}
+%     \midrule
+%     \emph{\sysname} & \textbf{0.22}     & \textbf{0.33} & \textbf{\ \ 2.06} \\
+%     RoBERTa       & 0.32              & \textbf{0.18} & \textbf{\ \ 1.16} \\
+%     GPT-2           & \textbf{0.20}     & 0.73          & 11.12 \\
+%     \bottomrule
+%     \end{tabular}
+%     \vspace{-5pt}
+%     \caption{Intrinsic evaluation metrics. 
+%     \sysname counterfactuals are \emph{closer} to the original instance than GPT-2, and more \emph{diverse} than RoBERTa.}
+%     \vspace{-15pt}
+%     \label{table:intrinsic}
+% \end{table}
 
-Similar to \citet{madaan2020generate}, we also compare the \emph{diversity} and \emph{closeness} of \sysname with alternative generators, \ie RoBERTa~\cite{liu2019roberta}, representing masked language models that prioritize word substitutions, and original \emph{GPT-2}, representing the standard generative model not conditioned on $x$. 
-For a given $x$ and its counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{zhu2018texygen} within $\hat{\xset}$.
-Meanwhile, \emph{closeness} is the average distance between $x$ and every $\xp \in \hat{\xset}$, both semantically (via sentence embedding~\cite{reimers-2019-sentence-bert}) and syntactically (tree edit distance~\cite{zhang1989simple}).
-We randomly generate 10 $\xp$ per $x$ on 120 instances using each of the three generators.
-Table~\ref{table:intrinsic} shows that \sysname achieves a balance between diversity and closeness.
+% Similar to \citet{madaan2020generate}, we also compare the \emph{diversity} and \emph{closeness} of \sysname with alternative generators, \ie RoBERTa~\cite{liu2019roberta}, representing masked language models that prioritize word substitutions, and original \emph{GPT-2}, representing the standard generative model not conditioned on $x$. 
+% For a given $x$ and its counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{zhu2018texygen} within $\hat{\xset}$.
+% Meanwhile, \emph{closeness} is the average distance between $x$ and every $\xp \in \hat{\xset}$, both semantically (via sentence embedding~\cite{reimers-2019-sentence-bert}) and syntactically (tree edit distance~\cite{zhang1989simple}).
+% We randomly generate 10 $\xp$ per $x$ on 120 instances using each of the three generators.
+% Table~\ref{table:intrinsic} shows that \sysname achieves a balance between diversity and closeness.
 
-Further, to verify that \sysname can be \emph{controlled} to generate counterfactuals with desired perturbation types, we finetune another \emph{\sysname-a} with training prompts that \emph{do not} contain \tagstrs and quantify the impact of the \tagstrshorts through an ablation study.
-For each \tagstr in Table~\ref{table:ctrltag}, we compare the \emph{control success rate} of \sysname and \sysname-a on 250 prompts by recomputing the \tagstrshorts on the top three generated texts.
-We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation).
-The success rate increases by $29\% \pm 18\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (from 40\% to 48\%) to \ctrltag{insert} (from 13\% to 79\%).
-Common failure cases include conflicting manipulations from the \tagstrs and the blanks (\eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}) and dominating perturbation patterns (\eg changing the quantifier in \exinline{two dogs are running}.)
-We include more details in Appendix~\ref{appendix:intrinsic}.
+% Further, to verify that \sysname can be \emph{controlled} to generate counterfactuals with desired perturbation types, we finetune another \emph{\sysname-a} with training prompts that \emph{do not} contain \tagstrs and quantify the impact of the \tagstrshorts through an ablation study.
+% For each \tagstr in Table~\ref{table:ctrltag}, we compare the \emph{control success rate} of \sysname and \sysname-a on 250 prompts by recomputing the \tagstrshorts on the top three generated texts.
+% We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation).
+% The success rate increases by $29\% \pm 18\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (from 40\% to 48\%) to \ctrltag{insert} (from 13\% to 79\%).
+% Common failure cases include conflicting manipulations from the \tagstrs and the blanks (\eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}) and dominating perturbation patterns (\eg changing the quantifier in \exinline{two dogs are running}.)
+% We include more details in Appendix~\ref{appendix:intrinsic}.
 
 % \paragraph{\emph{Fluency}: Through post-hoc filtering.}
 % Certain combinations of \tagstrs and \texttt{BLANK}s cause \sysname to generate ungrammatical or nonsensical counterfactuals 40\% of the time.

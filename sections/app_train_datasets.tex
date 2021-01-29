@@ -7,14 +7,14 @@
 \toprule
 \textbf{Dataset} & \textbf{\ctrltag{negation}} & \textbf{\ctrltag{quantifier}} & \textbf{\ctrltag{leixcal}} & \textbf{\ctrltag{resemantic}} & \textbf{\ctrltag{insert}} & \textbf{\ctrltag{delete}} & \textbf{\ctrltag{restructure}} & \textbf{\ctrltag{shuffle}} & \emph{\ctrltag{global}} \\ 
 \midrule
-        CAD &      3,456 &         457 &    10,650 &        4,634 &    2,169 &    2,162 &          234 &       84 &    3,756 \\
-   Contrast &       336 &         436 &     1,607 &        1,291 &     589 &     586 &          275 &      149 &     877 \\
-       HANS &        50 &           0 &        0 &           0 &    3,926 &    3,926 &          494 &     1,602 &       2 \\
-    ParaNMT &      2,797 &         825 &    10,000 &       10000 &    6,442 &    6,205 &         5,136 &     1,417 &   10,000 \\
-       PAWS &        81 &        1,815 &    10,000 &       10000 &    3,630 &    3,403 &         4,551 &    10,000 &   10,000 \\
- WinoGrande &      3,011 &          94 &    10,000 &        6,927 &     120 &     124 &          453 &       65 &    3184 \\
+        CAD &      3,274 &         292 &    8,143 &         2,603 &      960 &         952 &          220 &       36 &    3,466 \\
+   Contrast &       336 &         436 &     1,607 &         1,291 &      589 &         586 &          275 &      149 &     877 \\
+       HANS &        50 &           0 &        0 &              0 &      3,926 &       3,926 &          494 &     1,602 &       2 \\
+    ParaNMT &      2,797 &         825 &    10,000 &        10000 &    6,442 &       6,205 &         5,136 &     1,417 &   10,000 \\
+       PAWS &        81 &        1,815 &    10,000 &        10000 &    3,630 &       3,403 &         4,551 &    10,000 &   10,000 \\
+ WinoGrande &      3,011 &          94 &    10,000 &        6,927 &     120 &         124 &          453 &       65 &    3184 \\
     \emph{Crawled} &         0 &           0 &     5,000 &           0 &    5,000 &    5,000 &            0 &      108 &    5,000 \\
-      \textbf{Total} &      9,731 &        3,627 &    47,257 &       32,852 &   21,876 &   21,406 &        11,143 &    13,425 &   32,819 \\
+      \textbf{Total} &      9,549 &        3,462 &    44,750 &       30,821 &   20,667 &   20,167 &        11,129 &    13,377 &   32,529 \\
 \bottomrule
 \vspace{-15pt}
 \end{tabular}
@@ -31,20 +31,20 @@
 \subsection{Training data collection}
 
 
-We combine the following NLP datasets for finetuning \sysname.
-To balance the distribution (shown in Table~\ref{table:gpt_train_stats}), for each dataset, we extract \tagstrs from all the data pairs, and randomly sample up to 10,000 instances per \tagstr.
+We combine several datasets to finetune \sysname.
 
 \textbf{Contrast set.}
 Authors of 10 existing NLP dataset each manually perturbed 100--1,000 instances to change the gold label, so to inspect a model's local decision boundary~\cite{gardner2020contrast}.
 The perturbation patterns vary based on the tasks and the annotators, allowing us to learn diverse strategies.
-To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.\footnote{Similarly, though \qqp is suitable for training \sysname, we omitted it so \qqp can be used in our evaluation.}
+To make sure we can use the contrast set to evaluate the \sst model, we excluded the IMDb movie review from the training.
 %\wts{Re-train the model with other contrast sets.}
 
 
 \textbf{Counterfactually-augmented data (CAD).}
-\citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k) and SNLI (6.6k).
+\citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k), of which we split into paired sentences to match the text length of other datasets.
 CAD's perturbation patterns also vary based on the task, but can especially contribute to \ctrltag{negation}.
-We split the movie review paragraphs into paired sentences to match the text length of other datasets.
+As NLI is in our demonstrating applications, we did not use their 6.6k SNLI counterfactuals.\footnote{Similarly, though \qqp is suitable for training \sysname, we omitted it so \qqp can be used in our evaluation.}
+% and SNLI (6.6k).
 
 
 \textbf{WinoGrande} is a large-scale dataset of 44k instances for testing common sense problems~\cite{sakaguchi2019winogrande}.
@@ -78,6 +78,7 @@ For example, \ctrltag{negation} occurs when we observe changes on negation modif
 When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
 In Figure~\ref{fig:blank}A, we use \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
 If we cannot identify the \tagstr for a $(x, \xp)$ or if the editing distance is too large, we denote it with \ctrltag{global} and use it as a negative training sample.
+To balance the distribution (Table~\ref{table:gpt_train_stats}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstr.
 To allow flexible blanking at generation time, we generate multiple training prompts from one $(x, \xp)$, by blanking (1) just the changed tokens, (2) the associated parsing structures, (3) the merged changes, and (4) the entire sentence (examples are in Figure~\ref{fig:blank}).
 %As a result, we form up to four unique training prompts given one $(x, \xp)$ pair 
 
@@ -92,17 +93,16 @@ The training took around 8 hours on two Titan's RTX.
 \subsection{Intrinsic Evaluations}
 \label{appendix:intrinsic}
 
-
-\wts{I will change this because...I moved it upfront}
-
 \subsubsection{Controllability with Ablation Studies}
 \label{appendix:ablation_control}
 
+
+
 We finetune another GPT-2 model with training prompts that \emph{do not} contain \tagstrs (called \emph{\sysname-a}), and quantify the impact of the \tagstrshorts through an ablation study.
-For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 250 prompts (from 100 unique original sentences).
-For each prompt, we generate counterfactuals through beam search (beam $=10$), and recompute the \tagstrshorts on the top three returns.
+For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 300 prompts.
+For each prompt, we generate counterfactuals through beam search (beam $=5$), and recompute the \tagstrshorts on the top three returns.
 We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
-The success rate increases by $28.4\% \pm 18.2\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\%, from 40.4\% to 48.4\%) to \ctrltag{insert} (64.1\%, from 13.5\% to 78.6\%).
+The success rate increases by $28\% \pm 18\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\%, from 40\% to 48\%) to \ctrltag{insert} (65\%, from 14\% to 79\%).
 %\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
 %\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
 
