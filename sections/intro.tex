@@ -6,8 +6,6 @@
 Counterfactual reasoning --- mentally simulating what \emph{would have happened} if conditions were different --- is a common tool for making causality assessments~\cite{kahneman}, which in turn are crucial for model training, evaluation, and explanation~\cite{miller}. 
 For example, in Figure~\ref{fig:teaser}, \exinline{It is great for kids} is perturbed into multiple variations, each providing unique insights by simulating what would have happened if the sentence was different.
 
-
-%\hao{suggestion: it could be great if you can highlight the high cost of existing approaches by being more specific on, \eg the cost of human annotation and cite some works backing it up. something like the human annotation in xxx costs xxx money/time would be very convincing. }
 Applications of counterfactual reasoning to NLP generally specify the relationship $x \veryshortarrow \xp$, and then create $\xp$ according to the relationship.
 As a result, prior work has tailored counterfactual generators for every application, which induces different limitations.
 %For example, a minimal edit of a sentence $x$ that results in a different label is useful for model training and evaluation.
@@ -25,10 +23,10 @@ In contrast, adversarial examples specify a different relationship: $x$ and $\xp
 \includegraphics[trim={0 18cm 30.5cm 0cm},clip, width=1\columnwidth]{figures/teaser.pdf}
 \vspace{-15pt}
 \caption{
-Overview: (A) given sentiment analysis instance $x$, \sysname generates (B) a large set of perturbations $\xp$, which are then (C) selected for downstream use.
+Overview: (A) given a sentiment analysis instance $x$, \sysname generates (B) a large set of counterfactuals $\xp$, which are then (C) selected for downstream use.
 For example, in (D) we select counterfactual explanations that complement the feature attributions: though both ``great'' and ``kids'' are deemed important, perturbing them may not affect the prediction $f(x)=f(\xp)=\text{\emph{positive}}$, revealing model errors.\footnotemark
 }
-\vspace{-15pt}
+\vspace{-10pt}
 \label{fig:teaser}
 \end{figure} 
 \footnotetext{We open source both the \sysname model and the selection strategies at \modelurl.}

@@ -99,10 +99,10 @@ The training took around 8 hours on two Titan's RTX.
 
 
 We finetune another GPT-2 model with training prompts that \emph{do not} contain \tagstrs (called \emph{\sysname-a}), and quantify the impact of the \tagstrshorts through an ablation study.
-For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 300 prompts (equally sampled from \qqp, \dnli, \dsst)
+For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 300 prompts.
 For each prompt, we generate counterfactuals through beam search (beam $=5$), and recompute the \tagstrshorts on the top three returns.
 We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
-The success rate increases by $28\% \pm 18\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 8\%, from 40\% to 48\%) to \ctrltag{insert} (65\%, from 14\% to 79\%).
+The success rate increases by $26\% \pm 13\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 6\%, from 50\% to 56\%) to \ctrltag{negation} (42\%, from 5\% to 47\%).
 %\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
 %\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
 

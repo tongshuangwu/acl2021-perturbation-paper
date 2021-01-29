@@ -137,7 +137,7 @@
 % constants
 \newcommand{\sysname}{\textsc{Polyjuice}\xspace}
 \newcommand{\modelurl}{\url{https://huggingface.co/uw-hai/polyjuice}}
-\renewcommand{\modelurl}{\texttt{[URL omitted.]}}
+\renewcommand{\modelurl}{\texttt{[URL omitted]}}
 
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
 \newcommand{\tagstr}{control code\xspace}
@@ -215,7 +215,7 @@ $^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\
 
 While counterfactual examples (or perturbations) are useful for analysis and training of NLP models, current generation methods either rely on manual labor to create very few counterfactuals, or only instantiate a small set of automatic perturbations such as paraphrases or word substitutions.
 We present \sysname, a general-purpose counterfactual generator that allows for control over perturbation types and locations, trained by finetuning GPT-2 on multiple datasets of paired sentences. 
-We show that \sysname produces diverse sets of realistic counterfactuals, which in turn are useful in various distinct applications: improving training and evaluation on three different tasks (with up to 75\% less annotation effort than manual generation), augmenting state-of-the-art explanation techniques, and supporting systematic counterfactual error analysis that reveals behaviors easily missed by analysts.
+We show that \sysname produces diverse sets of realistic counterfactuals, which in turn are useful in various distinct applications: improving training and evaluation on three different tasks (with up to 75\% less annotation effort than manual generation), augmenting state-of-the-art explanation techniques, and supporting systematic counterfactual error analysis that reveals behaviors easily missed by human experts.
 
 % Counterfactual examples are useful for various applications, but current methods for generating them either rely on crowdsourcing, or only instantiate a small set of possible perturbations-of-interest (\eg changing the groundtruth label through a single antonym substitution.)
 % We propose \sysname, a general purpose counterfactual generator, by finetuning GPT-2 on multiple datasets with paired sentences. 
