@@ -27,10 +27,7 @@
 
 % \subsection{Foils to Feature Attribution Explanations}
 A popular way of explaining NLP models is to attribute importance weights to the input tokens, either using attention scores~\cite{wiegreffe2019attention} or by summarizing the model behavior on perturbed instances (\eg LIME~\cite{Ribeiro2016WhySI} and SHAP~\cite{NIPS2017_7062}).
-Though ubiquitous, prior work asserts that token scores do not always reflect their real importance~\cite{pruthi2020learning}.
-For example, popular packages like LIME or SHAP estimate scores by \emph{masking} words, and therefore may not reflect model behaviors on natural counterfactual cases involving \eg word substitutions.
-With the feature importance in Figure~\ref{fig:explanation}A, it is hard for users to imagine the model changing predictions when the trivial token ``friend'' in Q2 is perturbed (in C), or that changing the important ``in depression'' may not matter (in D).
-Even when the scores correlate with the importance, they can be too abstract for users to decipher~\cite{miller} --- without the concrete example in Figure~\ref{fig:explanation}B, users may not grasp what it means that the score for ``help'' ${\approx}0.05$. 
+Even if token scores really reflect their real importance (\citet{pruthi2020learning} provided counter-examples), they can be too abstract for users to really understand model behavior~\cite{miller}. For example, while the explanation in Figure~\ref{fig:explanation}A indicates that the token ``help'' in Q2 is not very important, it's hard for users to grasp what that means without concrete examples, such as the one in Figure~\ref{fig:explanation}B. 
 
 \begin{figure}[t]
 \centering
@@ -49,14 +46,52 @@ depicts an unexpected flipped prediction ($\neq)$, given the low SHAP weight of 
 \footnotetext{From BERT \qqp model: \url{https://huggingface.co/textattack/bert-base-uncased-QQP}}
 
 
-That said, directly presenting a large number of concrete counterfactuals would be overwhelming.
-We instead proposal a complementary improvement, displaying feature attributions as the high level summary, together with a judicious selection of \sysname counterfactuals to compensate their defects.
-Following \citet{miller}'s observation that people look for explanations that reveal \emph{unexpected} behavior, we select \emph{surprising} counterfactuals.
-That is, we estimate the expected change in prediction with feature attributions, and use it to sample counterfactuals that violate the expectations.
-This includes examples where the \emph{real} change in prediction is large even though importance scores are low (Figure~\ref{fig:explanation}C), and examples where the change is small but importance scores are high (Figure~\ref{fig:explanation}D).
-Details are in Appendix~\ref{appendix:exp_rank}. 
-Alternatively, based on their own understandings of token scores, \emph{users} can interactively view counterfactuals that perturb certain tokens of interest, an technique we explore in the next section. 
+That said, directly presenting a large number of concrete counterfactuals would be overwhelming, and so feature attribution methods are still useful as high level summaries.
+One way to improve the explanation is to combine them with interactions, showing multiple \sysname counterfactuals that perturb the same span on-demand, a technique we explore in the next section. 
+%as the alternative of presenting a large number of concrete counterfactuals would be overwhelming. 
+%One way to improve them is by making them interactive, showing multiple \sysname counterfactuals that perturb the same span on-demand, a technique we explore in the next section. 
+Here, we propose a complementary improvement: displaying a judicious selection of \sysname counterfactuals in addition to importance weights (Details in Appendix~\ref{appendix:exp_rank}). 
+Following \citet{miller}'s observation that people look for explanations that reveal \emph{unexpected} behavior, we select \emph{surprising} counterfactuals that violate the expectations set by the feature attributions.
+This includes examples where the \emph{real} change in prediction is large even though importance scores are low (Figure~\ref{fig:explanation}C, where perturbing the trivial ``friend'' results in flipped model prediction), and examples where the change is small but importance scores are high (Figure~\ref{fig:explanation}D).
+%
+%TODO: Do we want to cut this line?
+If used with popular packages such LIME or SHAP, this procedure can also highlight their limitations: 
+these methods usually estimate weights by \emph{masking} words, which may not correspond to natural counterfactual cases involving \eg word substitutions.
 
+
+% This procedure also has the advantage of highlighting limitations of perturbations based on masking, used by popular packages such as LIME~\cite{Ribeiro2016WhySI} and SHAP~\cite{NIPS2017_7062}.
+
+
+% While helpful as summaries, token scores may not reflect their real importance to the model, a limitation well known for attention~\cite{pruthi2020learning} and inherent to perturbation-based methods relying exclusively on masking tokens, \eg ``friend'' has near-zero weight in Figure~\ref{fig:explanation}, even though \swap{friend}{woman} flips the prediction in \ref{fig:explanation}C (\swap{friend}{[MASK]} has no effect on the prediction).
+
+
+% 	B. Problem 1: can lead to error if it's too abstract, provide an example where a non important feature really is not important, but should be. Cite social science: people like counterfactuals, people like foils, people like concrete (is this in social science? Lol)
+% Problem 2: relies on masking or attention, may not correspond to natural counterfactual cases
+
+
+% Counterfactuals are essential for interpretability, as people seek for explanations through contrastive cases or ``foils.''~\cite{miller}.
+% Because a large set of counterfactuals can be overwhelming, current techniques use feature attributions to summarize various local perturbations (\eg SHAP~\cite{NIPS2017_7062} or LIME~\cite{Ribeiro2016WhySI}).
+
+% However, the resulting overview faces two challenges.
+% First, feature weights can be too abstract for people to fully grasp.
+% Without \swap{help}{find} in Figure~\ref{fig:explanation}B, an analyst viewing Figure~\ref{fig:explanation}A can hardly notice that the BERT \qqp model incorrectly assigns \remove{help} as a trivial feature.
+% % see above for the actual quote. Did I interpret it correctly?
+% Indeed, \citet{miller} argued that it may be unreasonable to expect a lay-user to be able to interpret an attribution, and that concrete foils are more intuitive.
+% Second, feature attribution methods estimate weights by \emph{masking} words, which may not correspond to natural counterfactual cases involving \eg word substitutions.
+% The usually overlooked gap can mislead analysts to over-generalize their perceived model behaviors.
+
+
+% To address such issues, we present \sysname counterfactuals in addition to feature attributions.
+% Following \citet{miller}'s observations that abnormal factors are more salient, we select counterfactuals that \emph{violate expectation}.
+% That is, for each $\xp$, we compute the deviation of its \emph{actual} change of prediction from the \emph{expected} change, given the weights of perturbed features.
+% We select $\xp$ that displays large prediction change, when small changes are expected. 
+% In Figure~\ref{fig:explanation}C, \swap{friend}{woman} changes the prediction from \emph{Duplicate} to \emph{Non-Duplicate}, even though ``friend'' has low weight; 
+% Conversely, we also include those with small changes, when large changes are expected.
+% In Figure~\ref{fig:explanation}D, changing the important \remove{in depression} still results in \emph{Duplicate}.
+% Computational details are in Appendix~\ref{appendix:exp_rank}.
+
+% \subsection{User Evaluation}
+% \label{subsec:exp_user_study}
 
 \newcommand{\cshap}{\emph{\sysname-surprise}\xspace}
 \newcommand{\crandom}{\emph{\sysname-random}\xspace}
@@ -69,8 +104,6 @@ We evaluate three ways of generating counterfactuals: (1) \crandom, a baseline w
 
 We recruited 13 participants (graduate students with experience in model explanation), and had them analyze the aforementioned \qqp model. In each round, users were shown an example, the model prediction, and a SHAP explanation, as in Figure~\ref{fig:explanation}A. Users were instructed to create up to $10$ counterfactuals in order to better understand model behavior around the example, for which model predictions were given (users created $6$ on average). 
 Finally, users simulated what the model would do on six counterfactuals, two from each condition (in random order). Counterfactuals where users make mistakes are preferable, as displaying these would add information that users do not already have.
-
-
 
 % \paragraph{Setup.}
 % We recruited 13 graduate students with experience in model explanations, and asked them to simulate the predictions of the aforementioned \qqp model on counterfactuals for 20 rounds.
@@ -104,9 +137,10 @@ Simulation error rates on counterfactuals. Higher error rates are better, indica
 % \end{comment}
 
 \paragraph{Results.}
-As in Figure~\ref{fig:err_rate}, humans can simulate model behavior on \cshap counterfactuals only slightly better than random guessing ($45\%\pm6\%$), \ie these examples display model behavior that is surprising to users even after seeing explanations and creating their own counterfactuals. \chuman ones also had a high error rate, but at a much higher cost: generating these for just 20 original instances took 1.5--2 hours of expert labor.
+Figure~\ref{fig:err_rate} presents the simulation error rates. 
+We see that humans can simulate model behavior on \cshap counterfactuals only slightly better than random guessing ($45\%\pm6\%$), \ie these examples display model behavior that is surprising to users even after seeing explanations and creating their own counterfactuals. \chuman counterfactuals also had a high error rate, but at a much higher cost: generating these for just 20 original instances took 1.5--2 hours of expert labor.
 
-While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntatic tree edit (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker'', in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences in order to find surprising behaviors.
+While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntatic tree edit distance (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker'', in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences in order to find surprising behaviors.
 
 % Have to decide if it's worth keeping this paragraph
 Qualitatively, the study participants tended to create counterfactuals by perturbing the token with the highest weights (84\% of their creations perturbed tokens in the top 15\% quantile of weights), not gaining a real understanding of how the other tokens impact predictions. Participants also made a significant number of mistakes even for tokens they had inspected, \eg a participant perturbed the example in Figure~\ref{fig:explanation}A by replacing \swap{help}{play with}, which the model predicts as \emph{Non-Duplicate}. When faced with \swap{help}{find} in Figure~\ref{fig:explanation}, they incorrectly assumed the behavior would be the same.

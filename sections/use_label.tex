@@ -40,7 +40,7 @@
 \end{tabular}
 \vspace{-5pt}
 \caption{Counterfactuals as contrasts sets, revealing model insufficiency. The table contains accuracies on the development set, the original set of $x$, the contrast sets, and the consistency between them (cases where the model predicts both the $x$ and the $\xp$ correctly.)}
-\vspace{-15pt}
+\vspace{-10pt}
 \label{table:contrast_set_result}
 \end{table}
 }
@@ -50,21 +50,21 @@
 \begin{table*}
 \small
 \centering
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{5pt}
 \begin{tabular}{@{}lllllllll@{}}
 \toprule
-    Model & 
-    \cellcolor{cid}SST-2 & 
-    \cellcolor{cood}Senti140 & 
-    \cellcolor{cood}SemEval & 
-    \cellcolor{cood}Amzbook & 
-    \cellcolor{cood}Yelp & 
-    \cellcolor{cood}IMDB & 
-    \cellcolor{ccon}IMDB-Cont. & 
-    \cellcolor{ccon}{IMDB-CAD} \\
+ Model & 
+ \cellcolor{cid}SST-2 & 
+ \cellcolor{cood}Senti140 & 
+ \cellcolor{cood}SemEval & 
+ \cellcolor{cood}Amzbook & 
+ \cellcolor{cood}Yelp & 
+ \cellcolor{cood}IMDB & 
+ \cellcolor{ccon}IMDB-Cont. & 
+ \cellcolor{ccon}{IMDB-CAD} \\
 \midrule
-\mcomp &  $92.9\pm 0.2$ &  $88.9\pm 0.3$ &  $84.8\pm 0.5$ &  $85.1\pm 0.4$ &  $90.0\pm 0.3$ &  $90.8\pm 0.5$ &  $92.2\pm 0.6$ &  $86.5\pm 0.2$ \\
-\maug	 &  $92.7\pm 0.2$ &  $\mathbf{90.7\pm 0.4}$ &  $\mathbf{86.4\pm 0.1}$ &  $85.6\pm 0.8$ &  $90.1\pm 0.0$ &  $90.6\pm 0.3$ &  $\mathbf{94.0\pm 0.3}$ &  $\mathbf{89.7\pm 0.5}$ \\
+\mcomp & $92.9\pm 0.2$ & $88.9\pm 0.3$ & $84.8\pm 0.5$ & $85.1\pm 0.4$ & $90.0\pm 0.3$ & $90.8\pm 0.5$ & $92.2\pm 0.6$ & $86.5\pm 0.2$ \\
+\maug	 & $92.7\pm 0.2$ & $\mathbf{90.7\pm 0.4}$ & $\mathbf{86.4\pm 0.1}$ & $85.6\pm 0.8$ & $90.1\pm 0.0$ & $90.6\pm 0.3$ & $\mathbf{94.0\pm 0.3}$ & $\mathbf{89.7\pm 0.5}$ \\
  % imdb_contrast_test: 91.1 (9.4) / 92.8 (0.4)
  % imdb_contrast_test: 87.4 (0.0) / 89.6 (0.5)
  % imdb_iclr_test 93.0 (0.3) / 93.9 (0.4)
@@ -72,10 +72,10 @@
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{\sst model performance, with $n$=4,000 and $m$=2,000.
+\caption{\sst model performance, with $n{=}4,000$ and $m{=}2,000$.
 \textbf{Bolded} cells highlight significant improvements.
 \maug maintains the \colbox{cid}{in-domain} and \colbox{cood}{out-of-domain} accuracies on reviews (SST-2, Amzbook, Yelp, IMDb Movie Review~\cite{ni2019justifying, asghar2016yelp, maas2011learning}), but improves on Twitter data (Senti140 and SemEval 2017~\cite{go2009twitter, rosenthal2017semeval}), likely because their distributions are less similar to SST-2 than the reviews.
-The model also improves on the \colbox{ccon}{contrast sets} (IMDb-Contrast and IMDb-CAD~\cite{gardner2020contrast, kaushik2019learning}).
+The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020contrast, kaushik2019learning}).
 % we need to say it's cheaper
 %on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}) and contrast sets IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}, while maintaining the ones on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}).
 }
@@ -88,29 +88,29 @@ The model also improves on the \colbox{ccon}{contrast sets} (IMDb-Contrast and I
 \begin{table*}
 \small
 \centering
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{5.7pt}
 \begin{tabular}{@{}lllllllll@{}}
 \toprule
-     Model & \cellcolor{cid}SNLI & \cellcolor{cood}MNLI-m & \cellcolor{cood}MNLI-mm & \cellcolor{ccon}SNLI-CAD & \cellcolor{ccon}break & \cellcolor{ccon}DNC & \cellcolor{ccon}stress & \cellcolor{ccon}diagnostic \\
+ Model & \cellcolor{cid}SNLI & \cellcolor{cood}MNLI-m & \cellcolor{cood}MNLI-mm & \cellcolor{ccon}SNLI-CAD & \cellcolor{ccon}break & \cellcolor{ccon}DNC & \cellcolor{ccon}stress & \cellcolor{ccon}diagnostic \\
 \midrule
-\mcomp 	&  $85.7\pm 0.4$&  $86.1\pm 0.2$&  $\mathbf{86.6\pm 0.2}$&  $72.8\pm 0.3$&  $86.4\pm 1.5$&  $54.5\pm 0.6$&  $65.1\pm 0.6$&  $56.0\pm 0.8$\\
- %20,000 &  1,574 &  \texttt{aug-r} &  $85.7\pm 0.4$ &  $86.1\pm 0.1$ &  $86.2\pm 0.1$ &  $73.4\pm 0.5$ &  $87.2\pm 0.6$ &  $54.7\pm 0.3$ &  $64.6\pm 0.6$ &  $56.9\pm 0.8$ \\
+\mcomp 	& $85.7\pm 0.4$& $86.1\pm 0.2$& $\mathbf{86.6\pm 0.2}$& $72.8\pm 0.3$& $86.4\pm 1.5$& $54.5\pm 0.6$& $65.1\pm 0.6$& $56.0\pm 0.8$\\
+ %20,000 & 1,574 & \texttt{aug-r} & $85.7\pm 0.4$ & $86.1\pm 0.1$ & $86.2\pm 0.1$ & $73.4\pm 0.5$ & $87.2\pm 0.6$ & $54.7\pm 0.3$ & $64.6\pm 0.6$ & $56.9\pm 0.8$ \\
  
-\mcad &  $85.8\pm 0.6$ &  $\mathbf{86.6\pm 0.1}$ &  $85.6\pm 0.3$ &  $\mathbf{73.8\pm 0.2}$ &  $89.4\pm 2.9$ &  $55.8\pm 0.9$ &  $65.5\pm 0.5$ &  $56.4\pm 0.4$ \\
+\mcad & $85.8\pm 0.6$ & $\mathbf{86.6\pm 0.1}$ & $85.6\pm 0.3$ & $\mathbf{73.8\pm 0.2}$ & $89.4\pm 2.9$ & $55.8\pm 0.9$ & $65.5\pm 0.5$ & $56.4\pm 0.4$ \\
  
  
-\maug	&  $85.3\pm 0.3$&  $86.0\pm 0.1$&  $\mathbf{86.4\pm 0.0}$&  $\mathbf{73.6\pm 0.2}$&  $\mathbf{89.1\pm 1.2}$&  $\mathbf{57.7\pm 0.3}$&  $65.1\pm 0.2$&  $\mathbf{57.5\pm 0.5}$\\
+\maug	& $85.3\pm 0.3$& $86.0\pm 0.1$& $\mathbf{86.4\pm 0.0}$& $\mathbf{73.6\pm 0.2}$& $\mathbf{89.1\pm 1.2}$& $\mathbf{57.7\pm 0.3}$& $65.1\pm 0.2$& $\mathbf{57.5\pm 0.5}$\\
  
- %10000 &  1574 &     comp &  $85.3\pm 0.5$&  $85.2\pm 0.2$&  $85.4\pm 0.3$&  $72.4\pm 0.1$&  $86.1\pm 1.8$&  $54.2\pm 1.8$&  $64.0\pm 0.4$&  $56.0\pm 0.3$\\
- %10000 &  1574 &  aug\_gpt &  $85.3\pm 0.3$&  $85.0\pm 0.2$&  $85.1\pm 0.1$&  $73.4\pm 0.5$&  $90.5\pm 1.1$&  $56.5\pm 1.2$&  $64.6\pm 0.5$&  $57.0\pm 0.4$\\
+ %10000 & 1574 & comp & $85.3\pm 0.5$& $85.2\pm 0.2$& $85.4\pm 0.3$& $72.4\pm 0.1$& $86.1\pm 1.8$& $54.2\pm 1.8$& $64.0\pm 0.4$& $56.0\pm 0.3$\\
+ %10000 & 1574 & aug\_gpt & $85.3\pm 0.3$& $85.0\pm 0.2$& $85.1\pm 0.1$& $73.4\pm 0.5$& $90.5\pm 1.1$& $56.5\pm 1.2$& $64.6\pm 0.5$& $57.0\pm 0.4$\\
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{\nli model performance, with $n=20,000$ and $m=1,574$.  
-\maug improves on various \colbox{ccon}{contrast sets or challenge sets}~\cite{kim2019probing, naik2018stress, glockner-etal-2018-breaking, wang2018glue}, and the improvement is compatible to \mcad.
+\caption{\nli model performance, with $n{=}20,000$ and $m{=}1,574$. 
+\maug improves on various \colbox{ccon}{contrast sets} or \colbox{ccon}{challenge sets}~\cite{kim2019probing, naik2018stress, glockner-etal-2018-breaking, wang2018glue}, and the improvement is compatible to (or better than) \mcad.
 \sysname counterfactuals are as effective as manually created ones, but with less implementation and annotation effort.
 }
-\vspace{-5pt}
+\vspace{-10pt}
 \label{table:aug_nli}
 \end{table*}
 }
@@ -123,36 +123,36 @@ The model also improves on the \colbox{ccon}{contrast sets} (IMDb-Contrast and I
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}p{0.4\textwidth} r@{}}
 \toprule
-TESTNAME &   $\Delta$ fail\%  \\
+TESTNAME & $\Delta$ fail\% \\
 \midrule
- Order does not matter for symmetric relations &  -18.4\% \\
- Order does not matter for comparison &  -26.5\% \\
- Order does matter for asymmetric relations &  -14.5\% \\
+ Order does not matter for symmetric relations & -18.4\% \\
+ Order does not matter for comparison & -26.5\% \\
+ Order does matter for asymmetric relations & -14.5\% \\
 %\midrule
-% Is it \{ok, bad,..\} to \{smoke, do,..\} \{\emph{before $\not\eq$ after}\} &  -52.5\% \\
-% %What was person's life \{\emph{before $\not\eq$ after}\} becoming X &  -46.6\% \\
-% Do you have to X your dog \{\emph{before $\not\eq$ after}\} Y it &  -35.4\% \\
+% Is it \{ok, bad,..\} to \{smoke, do,..\} \{\emph{before $\not\eq$ after}\} & -52.5\% \\
+% %What was person's life \{\emph{before $\not\eq$ after}\} becoming X & -46.6\% \\
+% Do you have to X your dog \{\emph{before $\not\eq$ after}\} Y it & -35.4\% \\
 %\midrule
-% Is person X $\not\eq$ Is person becoming X &  -8.5\% \\
-% Is person X $\not\eq$ Did person use to be X &  -5.4\% \\
+% Is person X $\not\eq$ Is person becoming X & -8.5\% \\
+% Is person X $\not\eq$ Did person use to be X & -5.4\% \\
 \midrule
- How can I become \{\emph{more X $\not\eq$ less X}\} &  -30.7\% \\
- How can I become \{\emph{more X $=$ less antonym(X)}\} &  28.0\% \\
- How can I become \{\emph{X $\not\eq$ not X}\} &  -10.4\% \\
- How can I become \{\emph{X $\not\eq$ not antonym(X)}\} &  -5.5\% \\
+ How can I become \{\emph{more X $\not\eq$ less X}\} & -30.7\% \\
+ How can I become \{\emph{more X $=$ less antonym(X)}\} & 28.0\% \\
+ How can I become \{\emph{X $\not\eq$ not X}\} & -10.4\% \\
+ How can I become \{\emph{X $\not\eq$ not antonym(X)}\} & -5.5\% \\
  %\midrule
- %traditional SRL: wrong active / passive swap &  2.2\% \\
- %traditional SRL: active / passive swap with people &  -6.4\% \\
- %traditional SRL: active / passive swap &  -15.2\% \\
+ %traditional SRL: wrong active / passive swap & 2.2\% \\
+ %traditional SRL: active / passive swap with people & -6.4\% \\
+ %traditional SRL: active / passive swap & -15.2\% \\
 %\midrule
- %Change first and last name in one of the questions &  -11.5\% \\
- %(q, paraphrase(q)) &  -5.3\% \\
+ %Change first and last name in one of the questions & -11.5\% \\
+ %(q, paraphrase(q)) & -5.3\% \\
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
 \caption{
 Sample \qqp CheckList tests, with $\Delta$fail\% denoting the failure rate change from \mcomp to \maug. 
-%However, the model gets significantly better on  \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
+%However, the model gets significantly better on \texttt{more X $\not\eq$ less X} by sacrificing \texttt{more X $=$ less antonym(X)}.
 With $n=20,000$ and $m=1,911$, \maug failed less on 11 tests (out of the 27 where \mcomp failed), while only becoming worse on 2.
 %Meanwhile, the models have similar accuracies on the test set ($84.5 \pm 0.6$ for \maug, and $84.7 \pm 1.0$ for \mcomp).
 %Some sample tests are in Table~\ref{table:aug_qqp}.
@@ -168,9 +168,12 @@ The model improves consistently on most related cases, but possibly overfits on 
 \section{Counterfactual Evaluation \& Training}
 \label{sec:app_label}
 
-We ask crowdworkers to label automatically generated counterfactuals for \sst, \nli, and \qqp, for the purposes of evaluation and training. In each labeling round, the worker is presented with an original $x$ and its label,\footnote{We collect \emph{asymmetric counterfactuals}~\cite{garg2019counterfactual} by only perturbing \emph{duplicate} and \emph{entailment} examples in \qqp and \nli, due to the difficulty of flipping other labels.} and asked to label three $\xp$, rejecting invalid (non-fluent) counterfactuals (details and interface in Appendix \ref{appendix:label_instruct}).
+We ask crowdworkers to label automatically generated counterfactuals for \sst, \nli, and \qqp, for the purposes of evaluation and training. In each labeling round, the worker is presented with an original $x$ and its label,\footnote{We collect \emph{asymmetric counterfactuals}~\cite{garg2019counterfactual} by only perturbing \emph{duplicate} and \emph{entailment} examples in \qqp and \nli, due to the difficulty of flipping other labels.} and asked crowdworkers to annotate the groundtruth for three $\xp$, rejecting non-fluent ones (details and interface in Appendix~\ref{appendix:label_instruct}).
 
-We use a simple heuristic to select which counterfactuals are presented for labeling, aimed at increasing diversity. Having each $\xp$ be represented by its token changes, control code, and dependency tree structure, we greedily select the counterfactual least similar to those already selected for labeling. This avoids redundancy in the labeling set, \eg common perturbation patterns such as \swap{black}{white}, or counterfactuals that repeatedly change one token \remove{black} to \add{blue}, \add{red}, etc.
+We use a simple heuristic to select which counterfactuals are presented for labeling, aimed at increasing diversity. 
+Having each $\xp$ be represented by its token changes, control code, and dependency tree structure, we greedily select the ones that are least similar to those already selected for labeling. 
+This avoids redundancy in the labeling set, \eg common perturbation patterns such as \swap{black}{white}.
+%, or counterfactuals that repeatedly change one token, \eg \remove{black} to \add{blue}, \add{red}, etc.
 % being applied to many original $x$.
 % Manually created counterfactuals are useful for evaluating and improving models~\cite{gardner2020contrast,kaushik2019learning}, but are expensive.
 % To verify that \sysname helps achieve the same purposes, we task crowdworkers to \emph{only label} automatically generated counterfactuals for \sst, \nli, and \qqp (the same as in \S\ref{subsec:intrinsic}).
@@ -200,20 +203,15 @@ We use a simple heuristic to select which counterfactuals are presented for labe
 %$$d(\xp_1, \xp_2) = \alpha\cdot\mathbb{1}(s_1 = s_2) + \beta\cdot\mathbb{1}(r_1 = r_2) + \gamma\cdot\mathbb{1}(a_1=a_2)$$
 %With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 
-\TableContrastSet
 
 
 \subsection{Evaluation with Contrast Sets}
 \label{subsec:contrast_set}
 
-%%%%%%%%%%%%%%%%%%%%%
-\TableAugSST
-\TableAugNLI
-%%%%%%%%%%%%%%%%%%%%%
-We verify whether \sysname counterfactuals can be used to create \emph{contrast sets} \cite{gardner2020contrast}, \ie evaluation sets where each instance has a nearby counterfactual with a \emph{different} label, to better evaluate models' decision boundaries.
-We contruct these sets by simply filtering out counterfactuals that were labeled by workers with the same label as their original instances.
+We verify whether \sysname counterfactuals can be used to create \emph{contrast sets}~\cite{gardner2020contrast}, \ie evaluation sets where each instance has a nearby counterfactual with a \emph{different} groundtruth, to better evaluate model decision boundaries.
+We construct these sets by simply filtering out counterfactuals that were given the same labels as their original instances during the crowd labeling (40\%--63\% depending on the task).
 
-We finetune various pretrained models open-sourced by Huggingface \cite{Wolf2019HuggingFacesTS} on each of the tasks, and report the accuracy of the best performing model for each\footnote{\UrlFont{huggingface.co/\{roberta-large-mnli, textattack/roberta-base-SST-2,  ji-xin/roberta\_base-QQP-two\_stage\}}} in Table \ref{table:contrast_set_result} (results for other models are analogous). \sysname contrast sets display performance gaps consistent with those of \citet{gardner2020contrast}, where contrast sets are constructed by NLP researchers.
+For each task, we test multiple classifers open-sourced by Huggingface~\cite{Wolf2019HuggingFacesTS}, and report the best performing model for each\footnote{\UrlFont{huggingface.co/\{roberta-large-mnli, textattack/roberta-base-SST-2, ji-xin/roberta\_base-QQP-two\_stage\}}} in Table~\ref{table:contrast_set_result} (results for other models are analogous). \sysname contrast sets display performance gaps consistent with those of \citet{gardner2020contrast}, where the sets are constructed by NLP researchers.
 
 % Do \sysname counterfactuals serve as a useful test set for uncovering model errors?
 % \citet{gardner2020contrast} created \emph{contrast sets}, \ie minimally edited instances for inspecting model deficiencies, which we try to replicate.
@@ -223,23 +221,28 @@ We finetune various pretrained models open-sourced by Huggingface \cite{Wolf2019
 
 %\paragraph{Models \& results.}
 % We test finetuned BERT~\cite{devlin-etal-2019-bert}, RoBERTa~\cite{liu2019roberta}, and DistilBERT~\cite{Sanh2019DistilBERTAD} models opensourced on Huggingface~\cite{Wolf2019HuggingFacesTS}, and report the best performing models on the validation set, which happen to be the RoBERTa model across tasks.\footnote{
-% \UrlFont{huggingface.co/\{roberta-large-mnli, textattack/roberta-base-SST-2,  ji-xin/roberta\_base-QQP-two\_stage\}}}
+% \UrlFont{huggingface.co/\{roberta-large-mnli, textattack/roberta-base-SST-2, ji-xin/roberta\_base-QQP-two\_stage\}}}
 %We report model accuracies on the full validation sets, the original examples for collecting counterfactuals, and the contrast sets.
 %We also report consistency, \ie cases where the model predicts both the originals and the counterfactuals correctly.
-% Table~\ref{table:contrast_set_result} shows that all state-of-the-art models perform significantly worse on our contrast sets, and the performance decreases for a similar amount as in \cite{gardner2020contrast}.
+% Table~\ref{table:contrast_set_result} shows that all state-of-the-art models perform significantly worse on our contrast sets, and the performance decreases for a similar amount as in~\cite{gardner2020contrast}.
 % Results on other unreported models are consistent.
 % In other words, \sysname counterfactuals can reveal models' limited capabilities as the original contrast sets.
 
+\TableContrastSet
 
+%%%%%%%%%%%%%%%%%%%%%
+\TableAugSST
+\TableAugNLI
+%%%%%%%%%%%%%%%%%%%%%
 \subsection{Training with Counterfactuals}
 
 \label{subsec:augmentation}
 %\paragraph{Collection.}
 Following \citet{kaushik2019learning}, we augment training sets with counterfactual examples.
-In all experiments, we finetune HuggingFace \texttt{roberta-base} on datasets of $n$ original examples and $m$ counterfactuals, which are generated by \sysname (\maug) or crafted from scratch by humans (\mcad from  \citet{kaushik2019learning}, only available for \nli). To disentangle the benefit of counterfactuals from just adding more data, we further add a baseline where we ``augment'' the training set with original examples (\mcomp).
+In all experiments, we finetune HuggingFace \texttt{roberta-base} on datasets of $n$ original examples and $m$ counterfactuals, which are generated by \sysname (\maug) or crafted from scratch by humans (\mcad from \citet{kaushik2019learning}, only available for \nli). To disentangle the benefit of counterfactuals from just adding more data, we further add a baseline that uses $n+m$ original examples (\mcomp).
 % examples from the original dataset
-In addition to in-domain test set accuracy, we measure the resulting models' generalization on out-of-domain datasets, as well as contrast sets and challenge sets. As such datasets are unavailable for \qqp, we instead evaluate model capabilities with CheckList tests~\cite{checklist:acl20}.
-Reported accuracies are averaged across multiple data samples and random seeds (details in Appendix~\ref{appendix:data_collection}).
+In addition to in-domain test set accuracy, we measure models' generalization on out-of-domain datasets, as well as contrast sets and challenge sets. As such datasets are unavailable for \qqp, we instead evaluate model capabilities with CheckList~\cite{checklist:acl20}.
+Reported model performances are averaged across multiple data samples and random seeds (Appendix~\ref{appendix:data_collection}).
 
 % We finetune \texttt{roberta-base} models in HuggingFace.
 % For each augmented model (\maug), we include $m$ counterfactuals, as well as $n$ examples from the original dataset (that contain all the base $x$).
@@ -249,10 +252,10 @@ Reported accuracies are averaged across multiple data samples and random seeds (
 % The reported performances are averaged across multiple data samples and random seeds (More in Appendix~\ref{appendix:data_collection}).
 
 
-For \sst, we select random \sysname counterfactuals regardless of their label, as long as each original $x$ has at least one $\xp$ that flips the label.
+For \sst, we select random \sysname counterfactuals regardless of their label, as long as an original $x$ has at least one $\xp$ that flips the label.
 For \nli and \qqp, we observed in a pilot study that randomly chosen counterfactuals may not be more effective than the same amount of additional data.
-We suspect that, \sysname lacks domain knowledge or context to create some critical pairs, and therefore can bring benefits redundant to pre-training~\cite{longpre2020effective}.
-As a compensation, we use the slicing functions of \citet{chen2019slice} to find patterns of interest (\eg prepositions in \nli~\cite{kim2019probing}), and perturb those patterns by placing \texttt{[BLANK]}s on the matched spans. For example, \exinline{His surfboard is beneath him} becomes \exinline{His surfboard is \texttt{[BLANK]} him}, and \sysname generates counterfactuals such as  \exinline{His surfboard is \swap{beneath}{next to} him}.
+We suspect that \sysname lacks domain knowledge and context for identifying critical perturbations, and therefore can bring benefits that are redundant to pre-training~\cite{longpre2020effective}.
+As a compensation, we use the slicing functions of \citet{chen2019slice} to find patterns of interest (\eg the impact of prepositions in \nli), and perturb those patterns by placing \texttt{[BLANK]}s on the matched spans. For example, \exinline{His surfboard is beneath him} becomes \exinline{His surfboard is \texttt{[BLANK]} him}, and \sysname generates counterfactuals such as \exinline{His surfboard is \swap{beneath}{next to} him.}
 
 
 % Do \sysname counterfactuals help yield better model generalization? 
@@ -272,13 +275,14 @@ As a compensation, we use the slicing functions of \citet{chen2019slice} to find
 % When such datasets are unavailable (in \qqp), we instead quantify the model capabilities with CheckList tests~\cite{checklist:acl20}.
 
 \textbf{Results.}
-Tables \ref{table:aug_sst} \& \ref{table:aug_nli} indicate that \sysname augmentation is effective for \sst and \nli, maintaining in-domain test accuracy while consistently improving generalization accuracy in various out-of-domain and challenge datasets. On \nli, \sysname counterfactuals are as effective or more effective than counterfactuals created from scratch (\mcad).
-On \qqp ($n=20,000$, $m=1,636$), \maug also maintains in-domain accuracy when compared to \mcomp, while significantly lowering error rates (at least $10\%$ relative difference, with a minimum of $5$ percentage points) in $11$ out of $27$ tests that previously had high error rates (\sysname{} increases error rates in $2/27$ tests).
+Tables \ref{table:aug_sst} \& \ref{table:aug_nli} indicate that \sysname augmentation is effective for \sst and \nli: \maug maintains in-domain test accuracy while consistently improving generalization accuracy in various out-of-domain and challenge datasets. 
+On \nli, \sysname counterfactuals are as effective or more effective than counterfactuals created from scratch (\mcad).
+On \qqp ($n{=}20,000$, $m{=}1,636$), \maug also maintains in-domain accuracy when compared to \mcomp, while significantly lowering error rates (the absolute rate drops for at least $5$ points, with a relative difference of more than $10\%$) in $11$ out of $27$ tests that previously had high error rates (\sysname{} increases error rates in $2/27$ tests).
 
 %\TableAugQQP
 % \emph{However, targeted augmentation is necessary.}
 % Randomly generated counterfactuals are beneficial for \sst, but not so much for \nli or \qqp, echoing \citet{huang2020counterfactually} (numbers omitted for space.)
-% This is likely because certain automatically generated  patterns bring redundant benefits as pre-training~\cite{longpre2020effective}.
+% This is likely because certain automatically generated patterns bring redundant benefits as pre-training~\cite{longpre2020effective}.
 % Inspired by \citet{chen2019slice}, we instead focus on known tricky cases to maximize the augmentation utility.
 % We adjust their slicing functions to find $x$ with patterns of interest, \eg prepositions in DNC~\cite{kim2019probing} for \nli (\exinline{His surfboard is \swap{beneath}{lying on} him}).
 % Then, we simply blank the corresponding patterns so \sysname can perform relevant changes: \exinline{His surfboard is \texttt{[BLANK]} him.}
@@ -298,7 +302,7 @@ On \qqp ($n=20,000$, $m=1,636$), \maug also maintains in-domain accuracy when co
 %\subsection{Takeaways}
 %\label{subsec:label_takeaway}
 
-%  but \emph{creating} variations is much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
+% but \emph{creating} variations is much more difficult than \emph{validating} them~\cite{ribeiro2018sear}.
 
 
 
@@ -309,19 +313,19 @@ On \qqp ($n=20,000$, $m=1,636$), \maug also maintains in-domain accuracy when co
 
 \subsection{Discussion}
 \label{subsec:label_efficiency}
-We showed that \sysname counterfactuals are useful for evaluation, and more effective than additional (non-counterfactual) data for training in a variety of tasks. 
-In contrast to prior work where humans generate counterfactuals from scratch, we only ask humans to \emph{label} automatically generated ones, while still achieving similar or better results.
+We show that \sysname counterfactuals are useful for evaluation, and more effective than additional (non-counterfactual) data for training in a variety of tasks. 
+In contrast to prior work where humans generate counterfactuals from scratch, we only ask them to \emph{label} automatically generated ones, while still achieving similar or better results.
 
 We believe our approach is more effective than manual creation (although both are beneficial): in terms of implementation effort, the process of labeling counterfactuals is the same as labeling original examples, such that no additional annotator training or separate pipelines are required (in contrast, \citet{kaushik2019learning} set up two separate crowdsourcing tasks for creating and labeling the counterfactuals). 
-Further, annotator effort is much lower, as evaluating examples is easier than creating them -- the median time for labeling one round (three $\xp$) was $30$ seconds, while \citet{kaushik2019learning} report that workers spent roughly 4 minutes on each \nli sentence, \emph{prior} to quality-based validation.
-Even when we apply aggressive post-hoc filtering (\eg only keeping $\xp$ that flip labels for contrast sets), and discard a fraction of $\xp$ as invalid (\eg 18\% of \nli counterfactuals) or not satisfying the desired relationship (\eg 40\% of valid \nli counterfactuals when collecting label-flipping contrast sets), we still obtain suitable $\xp$ in at most 1--2.5 minutes.
+Further, annotator effort is much lower, as evaluating examples is easier than creating them --- the median time for labeling one round (three $\xp$) was $30$ seconds, while \citet{kaushik2019learning} report that workers spent roughly 4 minutes on each \nli sentence, \emph{prior} to quality-based validation.
+Even after we remove noisy annotators and labels, disregard non-fluent counterfactuals, and apply aggressive post-hoc filtering (\eg only keeping $\xp$ that flip labels for contrast sets), we still obtain suitable $\xp$ in at most 1--2.5 minutes.
 %It is also cheaper than labeling non-counterfactuals, as annotators only need to parse the corresponding perturbations, rather than the full instance~\cite{Khashabi2020MoreBF}.
 
-In terms of the utility per counterfactual, manual creation and \sysname thrives in different dimensions. 
-People's creativity can be unreliable and incomplete on certain forms of counterfactuals~\cite{ribeiro2018semantically}, whereas \sysname may be too broad to elucidate the most tricky features if without appropriate controls.
-In fact, prior work has observed that it is also important to collect targeted counterfactual augmentations, even in manual creations~\cite{longpre2020effective, Khashabi2020MoreBF}.
+In terms of the utility per counterfactual, manual creation and \sysname thrive in complementary dimensions. 
+People's creativity can be unreliable and incomplete on certain forms of counterfactuals~\cite{ribeiro2018semantically}, whereas \sysname improves perturbation coverage but can mix critical perturbations with trivial ones, requiring appropriate controls.
+%not always emphasize on critical features if not appropriately controlled.
+In fact, prior work suggests that it is important to collect targeted counterfactual augmentations, even in manual creation~\cite{huang2020counterfactually, Khashabi2020MoreBF}.
 \sysname's flexibility opens up possibilities for hybrids between human creativity and human verification of targeted, machine-generated counterfactuals in future work.
-
 
 
 %\emph{The necessity for human efforts.}

@@ -1,15 +1,19 @@
 \section{Conclusion and Future Work}
 \label{sec:discuss}
 
-We propose \sysname, a general-purpose counterfactual generator that produces fluent and diverse counterfactuals, allowing for control over the kinds and locations of perturbations. 
+We propose \sysname, a general-purpose generator that produces fluent and diverse counterfactuals, allowing for control over the kinds and locations of perturbations. 
 % With \emph{task-agnostic} controls over perturbation types and locations, \sysname produces general-purpose counterfactuals that are fluent, diverse, close to the original instance.
-With simple, \emph{task-specific} selection heuristics, we show how \sysname supports various downstream tasks on different domains, including counterfactual data augmentation, contrast set generation, counterfactual explanation, and error analysis.
+With simple, \emph{task-specific} selection heuristics, \sysname supports various downstream tasks on different domains, including counterfactual data augmentation, contrast set generation, counterfactual explanation, and error analysis.
 
-While \sysname is broadly applicable, it is not bias-free: control codes are pre-defined and certainly not exhaustive, and the model is finetuned on a collection of paired datasets where certain perturbations are more or less likely (\eg we observe that words with negative sentiment tend to be slightly more likely than words with positive sentiment in some contexts) . We think the sourcing of datasets with naturally occurring counterfactuals is an important area of future research, as well as the development of generators that allow for control even without \emph{a-priori} control codes.
+While \sysname is broadly applicable, it is not bias-free: control codes are pre-defined and certainly not exhaustive, and the model is finetuned on a collection of paired datasets where certain perturbations are more or less likely (\eg we observe that words with negative sentiment tend to be slightly more likely than positive ones in some contexts). 
+Collecting naturally occurring counterfactuals is an important area of future research, as well as the development of generators that allow for control even without \emph{a-priori} control codes.
 
-Though all of our applications involved humans in some way, the human-\sysname collaboration in labeling and explanations is very simple, not allowing for much interactivity. 
-We believe tools like \sysname motivate future research on more expressive forms of counterfactual training, where users label counterfactual \emph{patterns} rather than individual instances, potentially in an interactive rather than static manner. 
-Similarly, interactive explanations and analysis are exciting directions of future work, especially as we develop new ways of aggregating groups of counterfactuals and their effects. Having noted these opportunities, we believe that \sysname is already a powerful tool for counterfactual reasoning in NLP, in particular for tasks where humans are involved. \sysname will be open-sourced, together with the selection strategies used in this paper.
+Though our applications all involved humans, the human-\sysname collaboration in labeling and explanations has yet to allow rich interactions. 
+We believe \sysname motivates future research on more expressive forms of counterfactual training, where users generate counterfactuals together with \sysname, and label counterfactual \emph{patterns} rather than individual instances. 
+Similarly, interactive explanations and analysis are exciting directions, especially as we develop new ways of selecting, presenting, and aggregating counterfactuals and their effects for various analysis objectives.
+%aggregating counterfactuals and their effects. 
+Having noted these opportunities, we believe that \sysname is already a powerful tool for counterfactual reasoning in NLP, in particular for tasks with humans involved. 
+\sysname will be open-sourced, together with the selection strategies in this paper.
 
 
 %We create counterfactuals through \emph{task-agnostic} generation, and \emph{task-specific} selection.
@@ -34,36 +38,3 @@ Similarly, interactive explanations and analysis are exciting directions of futu
 % On the other hand, we would also like to tune the filtering and constraints, to verify that \sysname can also advance automated use cases like adversarial attacks.
 
 % We plan to open source both the \sysname model and our counterfactual selection methods.
-
-
-
-
-\begin{comment}
-%In tasks that require context-dependent generations --- difficult for the sentence-based model alone --- human annotators can also initiate seed counterfactuals for \sysname to extend.
-%For example, to perturb question answering instances~\cite{gardner2020contrast}, the human can add the compositional reasoning steps \emph{related to} the corresponding paragraph for \sysname to perturb around.
-
-\emph{More balanced sentence pairs and sampling.}
-\sysname inherits some most most salient contrasts pairs from existing paired datasets.
-For example, it is more likely to change \remove{man} to \add{woman} than \add{child}.
-To further improve vocabulary diversity, we can emphasize more on \emph{finding naturally occurring sentence pairs in non-paired dataset}.
-We used heuristics on text overlaps to broaden some \tagstrs, but methods like syntactic tree editing or knowledge graph distances can also be useful.
-
-
-
-We plan to opensource both the \sysname model and the implementation of the selection methods.
-
-
-
-
-\emph{Supporting existing counterfactual reasoning tools.}
-Besides independent use cases, \sysname may also be plugged into existing tools that involve counterfactual generation.
-%featurizing counterfactuals into Snorkel labeling functions~\cite{ratner2017snorkel} helps collect the training and evaluation data more efficiently (similar to \S\ref{subsec:global_exp}).
-For example, domain experts can create perturbation tests more easily if \sysname serves as an additional building block for model testing~\cite{checklist:acl20}.
-Or, they may translate $\relation{\xp}$ into labeling functions for data programming~\cite{ratner2017snorkel}.
-
-
-\emph{Human-in-the-loop counterfactual generation.}
-Humans can add more values than placing blanks and labeling counterfactuals, \eg supply missing perturbation patterns after seeing \sysname's generations.
-In tasks that require context-dependent generations --- difficult for the sentence-based model alone --- human annotators can also initiate seed counterfactuals for \sysname to extend.
-For example, to perturb question answering instances~\cite{gardner2020contrast}, the human can add the compositional reasoning steps \emph{related to} the corresponding paragraph for \sysname to perturb around.
-\end{comment}

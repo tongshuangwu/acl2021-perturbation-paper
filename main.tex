@@ -89,11 +89,7 @@
 %\renewcommand{\add}[1]{{\color{cadd}#1\xspace}} %
 
 
-\newcommand{\ensuretext}[1]{#1}
-\newcommand{\marker}[2]{\ensuremath{^{\textsc{#1}}_{\textsc{#2}}}}
-\newcommand{\arkcomment}[3]{\ensuretext{\textcolor{#3}{[#1 #2]}}}
-%\renewcommand{\arkcomment}[3]{}  % uncomment for submission
-\newcommand{\hao}[1]{\arkcomment{\marker{H}{P}}{#1}{purple}}
+
 
 
 \definecolor{cexample}{rgb}{0.23, 0.30, 0.45}
@@ -168,20 +164,23 @@
 \def \dqqp{QQP\xspace}
 \def \dnli{SNLI\xspace}
 
-% annotations
-\newcommand{\note}[2]{\xspace{\color{#1}[ #2 ]}\xspace}
-%\newcommand{\note}[2]{}
-\newcommand{\wts}[1]{\note{violet}{S: #1}}
+
 \newcommand{\xp}{\hat{x}}
 \newcommand{\yp}{\hat{y}}
 \newcommand{\xset}{\mathbf{X}}
 \newcommand{\tofix}[1]{{\color{red}#1}\xspace}
-\newcommand{\dan}[1]{{\color{orange}#1}\xspace}
 
 
-
-
-
+% annotations
+\newcommand{\ensuretext}[1]{#1}
+\newcommand{\marker}[2]{\ensuremath{^{\textsc{#1}}_{\textsc{#2}}}}
+\newcommand{\arkcomment}[3]{\ensuretext{\textcolor{#3}{[#1 #2]}}}
+%\renewcommand{\arkcomment}[3]{}  % uncomment for submission
+\newcommand{\hao}[1]{\arkcomment{\marker{H}{P}}{#1}{purple}}
+\newcommand{\wts}[1]{\arkcomment{\marker{S}{W}}{#1}{orange}}
+\newcommand{\victor}[1]{\arkcomment{\marker{V}{Z}}{#1}{blue}}
+\newcommand{\dq}[1]{\arkcomment{\marker{D}{Q}}{#1}{cyan}}
+\newcommand{\dan}[1]{\arkcomment{\marker{D}{W}}{#1}{red}}
 
 % teal, cyan
 %\title{\sysname: General-purpose Counterfactual Generation}
@@ -213,7 +212,11 @@ $^{3}$Allen Institute for Artificial Intelligence\hspace{5mm}\\
 \begin{abstract}
 
 
-While counterfactual examples (or perturbations) are useful for analysis and training of NLP models, current generation methods either rely on manual labor to create very few counterfactuals, or only instantiate a small set of automatic perturbations such as paraphrases or word substitutions.
+While counterfactual examples
+%(or perturbations) \dq{} 
+are useful for analysis and training of NLP models, current generation methods either rely on manual labor to create very few counterfactuals, or 
+%only instantiate a small set of automatic perturbations such as paraphrases or word substitutions.
+only instantiate limited types of perturbations such as paraphrases or word substitutions. %, lacking variety.
 We present \sysname, a general-purpose counterfactual generator that allows for control over perturbation types and locations, trained by finetuning GPT-2 on multiple datasets of paired sentences. 
 We show that \sysname produces diverse sets of realistic counterfactuals, which in turn are useful in various distinct applications: improving training and evaluation on three different tasks (with up to 75\% less annotation effort than manual generation), augmenting state-of-the-art explanation techniques, and supporting systematic counterfactual error analysis that reveals behaviors easily missed by human experts.
 
