@@ -37,10 +37,9 @@ Even when the scores correlate with the importance, they can be too abstract for
 \includegraphics[trim={0 21cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
 \vspace{-15pt}
 \caption{
-(A) A \qqp instance where the model\footnotemark{} predicts ``duplicate'' ($=$) with 98.2\% confidence, as well as the SHAP weights for tokens in Q2.
+(A) A \qqp instance where the task model\footnotemark{} predicts $f(x)$ to be \emph{duplicate} ($=$) with 98.2\% confidence, as well as the SHAP weights for tokens in Q2.
 %Counterfactual explanations complement SHAP with concrete, readable examples, \eg (C) depicts a surprising flipped prediction ($\neq)$ that was missed by SHAP.
-Counterfactual explanations complement SHAP with concrete examples and surprising behaviors, \eg (C)
-depicts an unexpected flipped prediction ($\neq)$, given the low SHAP weight of the perturbed token \swap{friend}{woman}.
+Counterfactual explanations complement SHAP with concrete examples and surprising behaviors, \eg (C) asserts that even changing the low weight token \swap{friend}{woman} can surprisingly flip the prediction ($\neq)$.
 }
 \vspace{-10pt}
 \label{fig:explanation}
