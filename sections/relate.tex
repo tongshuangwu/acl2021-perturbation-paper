@@ -2,9 +2,9 @@
 \label{sec:relate}
 
 Some prior work in counterfactual training and evaluation relies on humans to generate counterfactuals from scratch~\cite{gardner2020contrast, teney2020learning, kaushik2019learning}. 
-Our experiments in \S\ref{sec:app_label} indicate that a hybrid approach where humans \emph{label} \sysname{} counterfactuals displays similar or better results at a much lower cost, and that it may be worth exploring a mixture of manual and automated generation. 
+Our experiments in \S\ref{sec:app_label} indicate that a hybrid approach where humans \emph{label} \sysname{} counterfactuals displays similar or better results at lower cost, and that it may be worth exploring a mixture of manual and automated generation. 
 Similarly, prior work on analysis relies on experts to create individual counterfactuals or perturbation functions~\cite{wu2019errudite, checklist:acl20}. 
-In \S\ref{sec:app_err_analysis}, we show how \sysname{} can enhance current practice by generating multiple counterfactuals that might have been overlooked, and by providing abstractions that allow for new kinds of analyses.
+In \S\ref{sec:app_err_analysis}, we show that \sysname{} enhances current practice by generating multiple counterfactuals that might have been overlooked, and by providing abstractions that allow for new kinds of analyses.
 
 At the other end of the spectrum, prior work on automatically generating counterfactuals typically narrows its scope in terms of the relationships $x \veryshortarrow \xp$.
 For example, adversarial generators aim to maintain semantics while changing model predictions~\cite{ribeiro2018semantically, iyyer2018adversarial, alzantot-etal-2018-generating}.
