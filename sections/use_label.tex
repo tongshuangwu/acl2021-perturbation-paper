@@ -40,7 +40,7 @@
 \end{tabular}
 \vspace{-5pt}
 \caption{Counterfactuals as contrasts sets. The table contains accuracies on the development set, the original set of $x$, the contrast sets, and consistency (cases where the model predicts both $x$ and $\xp$ correctly).}
-\vspace{-10pt}
+\vspace{-5pt}
 \label{table:contrast_set_result}
 \end{table}
 }
@@ -71,7 +71,7 @@
  % imdb_iclr_dev 92.0 (0.2) / 92.7 (0.2)
 \bottomrule
 \end{tabular}
-\vspace{-5pt}
+%\vspace{-5pt}
 \caption{\sst model performance, with $n{=}4,000$ and $m{=}2,000$.
 \textbf{Bolded} cells highlight significant improvements.
 \maug maintains the \colbox{cid}{in-domain} and \colbox{cood}{out-of-domain} accuracies on reviews (SST-2, Amzbook, Yelp, IMDb Movie Review~\cite{ni2019justifying, asghar2016yelp, maas2011learning}), but improves on Twitter data (Senti140 and SemEval 2017~\cite{go2009twitter, rosenthal2017semeval}), likely because their distributions are less similar to SST-2 than the reviews.
@@ -79,7 +79,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 % we need to say it's cheaper
 %on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}) and contrast sets IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}, while maintaining the ones on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}).
 }
-\vspace{-5pt}
+%\vspace{-5pt}
 \label{table:aug_sst}
 \end{table*}}
 
@@ -117,7 +117,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 \caption{\nli models, with $n{=}20,000$ and $m{=}1,574$. 
 \maug improves on \colbox{ccon}{contrast} and \colbox{ccon}{challenge sets}~\cite{kim2019probing, naik2018stress, glockner-etal-2018-breaking, wang2018glue}; it gets compatible (or better) gains than \mcad (trained using manual counterfactuals), but with less implementation and annotation effort.
 }
-\vspace{-10pt}
+\vspace{-5pt}
 \label{table:aug_nli}
 \end{table*}
 }
@@ -142,7 +142,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 \end{tabular}
 \vspace{-5pt}
 \caption{\sysname in \qqp improves on \colbox{ccon}{PAWS}~\cite{zhang2019paws}, with $n{=}20,000$ and $m{=}1,911$.}
-\vspace{-10pt}
+\vspace{-5pt}
 \label{table:aug_qqp}
 \end{table}
 }
@@ -191,7 +191,7 @@ With $n=20,000$ and $m=1,911$, \maug failed less on 11 tests (out of the 27 wher
 The model improves consistently on most related cases, but possibly overfits on \texttt{more/less}. 
 }
 \label{table:aug_qqp}
-\vspace{-10pt}
+\vspace{-5pt}
 \end{table}}
 
 

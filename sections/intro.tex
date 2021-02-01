@@ -25,12 +25,12 @@ As a result, they neglect prediction-preserving counterfactuals that are equally
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 18cm 30.5cm 0cm},clip, width=1\columnwidth]{figures/teaser.pdf}
-\vspace{-15pt}
+\vspace{-5pt}
 \caption{
 Overview: (A) given a sentiment analysis instance $x$, \sysname generates (B) various counterfactuals $\xp$, which are then (C) selected for downstream use.
 \eg in (D) we select counterfactual explanations that complement a black box explanation: though ``great'' and ``kids'' are deemed important, perturbing them may not affect the prediction $f(x)=f(\xp)=\text{\emph{positive}}$, revealing model failures not covered by feature attributions.\footnotemark
 }
-\vspace{-12pt}
+\vspace{-5pt}
 \label{fig:teaser}
 \end{figure} 
 \footnotetext{We open source both the \sysname model and the selection heuristics at \modelurl.}

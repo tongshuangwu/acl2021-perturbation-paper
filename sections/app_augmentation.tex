@@ -16,7 +16,7 @@ Instructions are similar for \qqp and \sst, except for the label definitions and
 \end{comment}
 
 
-\section{Additional Details to Train \& Eval \S\ref{sec:app_label}}
+\section{Additional Train \& Eval Details, \S\ref{sec:app_label}}
 \label{appendix:app_label}
 
 
@@ -72,9 +72,9 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 The study started with an introduction that explained the context and tasks.
 %: given a reference example, the crowdworker should annotate its counterfactual variations, based on whether the counterfactual is valid (\emph{fluent}), and the classification task label.
 To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
-The annotator then completed 22 tasks, labeling 3 counterfactuals of a single example in each round, as in Figure~\ref{fig:mturk_ui}.
+Each annotator then completed 22 tasks, labeling 3 counterfactuals of a single example in each round, as in Figure~\ref{fig:mturk_ui}.
 The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'' with known correct labels.
-The gold cases later served as filters for high-quality crowdworkers.
+The gold cases later served to filter low-quality crowdworkers.
 %As a result, each annotator contributed $20 \times 3=60$ labels.
 % (14.9 for \qqp, 16.7 for \sst, and 19.8 for \nli)
 The median annotation time was around 15 minutes, and participants received \$2.5.
@@ -89,7 +89,7 @@ We only kept data from participants whose median labeling time per round was mor
 (2) \emph{Majority vote labeling.}
 We collected two annotations per counterfactual, and only kept those that at least one annotator deemed valid, and both annotators agreed on a particular class label.
 %Due to the crowdsourcing noise, when set out to collect counterfactuals on 1,000 original examples (thus 3,000 counterfactuals), we typically collect counterfactuals for 1,000 counterfactuals on 600 original examples.
-One of the authors labeled a subset of 100 $\xp$ on 100 $x$ in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, the raw labeling agreement $88\%$).
+One of the authors labeled a subset of 100 $\xp$ on 100 $x$ in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, raw labeling agreement $88\%$).
 
 
 \begin{figure}
@@ -108,7 +108,7 @@ One of the authors labeled a subset of 100 $\xp$ on 100 $x$ in \sst, and reached
 %We finetuned \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
 For each given $(m,n)$, we created three different samples of training data.
 Each sample was further averaged over four random seeds.
-For each run, we heuristically picked the initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
+For each run, we heuristically picked the initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp (respectively), trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
 We selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and counterfactual examples.)
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
 

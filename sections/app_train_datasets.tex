@@ -41,7 +41,7 @@ To make sure we can use the contrast set to evaluate the \sst model, we excluded
 
 
 \textbf{Counterfactually-augmented data (CAD).}
-\citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k), of which we split into paired sentences to match the text length of other datasets.
+\citet{kaushik2019learning} crowdsourced counterfactuals for IMDb movie review (1.7k), which we split into paired sentences to match the text length of other datasets.
 CAD's perturbation patterns also vary based on the task, but can especially contribute to \ctrltag{negation}.
 As NLI is in our demonstrating applications, we did not use their 6.6k SNLI counterfactuals.\footnote{Similarly, though \qqp is suitable for training \sysname, we omitted it so \qqp can be used in our evaluation.}
 % and SNLI (6.6k).
@@ -73,24 +73,24 @@ To exclude tricky cases (\eg \exinline{how do I not be} can be incorrectly regar
 \subsection{Training Prompts \& Parameters}
 
 We use a pair of two sentences interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.
-For a $(x, \xp)$, we compute its primary \tagstr using part-of-speech tags and dependency trees, and blank out the changed subtrees in $\xp$.
-For example, \ctrltag{negation} occurs when we observe changes on negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlaps between tokens deleted and added.
+For each $(x, \xp)$ pair, we compute its primary \tagstr using part-of-speech tags and dependency trees, and blank out the changed subtrees in $\xp$.
+For example, \ctrltag{negation} occurs when we observe changes on negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlap between tokens deleted and added.
 When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
 In Figure~\ref{fig:blank}A, we use \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
 If we cannot identify the \tagstr for a $(x, \xp)$ or if the editing distance is too large, we denote it with \ctrltag{global} and use it as a negative training sample.
 To balance the distribution (Table~\ref{table:gpt_train_stats}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstrshorts.
 
-To allow flexible blanking at generation time, we generate multiple training prompts from one $(x, \xp)$, by blanking (1) just the changed tokens, (2) the associated parsing structures, (3) the merged changes, and (4) the entire sentence (examples are in Figure~\ref{fig:blank}).
+To allow flexible blanking at generation time, we generate multiple training prompts from each $(x, \xp)$, by blanking (1) just the changed tokens, (2) the associated parsing structures, (3) the merged changes, and (4) the entire sentence (examples are in Figure~\ref{fig:blank}).
 %As a result, we form up to four unique training prompts given one $(x, \xp)$ pair 
 %max_log_prob_diff
 %With the interchangeable orders and the blanks, we generate 657,144 training prompts from 191,415 sentence pairs.
 %\wts{Add the training hyperparameters; And maybe eventually move them to appendix.}
 We finetuned an off-the-shelf GPT-2 model from \citet{Wolf2019HuggingFacesTS} for 10 epochs with an initial learning rate 5e-5, a batch size of 8, and a sequence length of 120 (but any LM can potentially be used).
 We select the best epoch based on the evaluation loss on a holdout set of size 5,000.
-The training took around 8 hours on two Titan's RTX.
+The training took around 8 hours on two Titan RTXs.
 
 
-\subsection{Intrinsic Evaluations}
+\subsection{Additional Intrinsic Evaluation}
 \label{appendix:intrinsic}
 
 \subsubsection{Controllability with Ablation Studies}
@@ -98,10 +98,10 @@ The training took around 8 hours on two Titan's RTX.
 
 
 
-We finetune another GPT-2 model with training prompts that \emph{do not} contain \tagstrs (called \emph{\sysname-a}), and quantify the impact of the \tagstrshorts through an ablation study.
+We finetune GPT-2 on training prompts that \emph{do not} contain \tagstrs (called \emph{\sysname-a}), and quantify the impact of the \tagstrshorts through an ablation study.
 For each \tagstr, we compare the \emph{control success rate} of \sysname and \sysname-a on 300 prompts.
-For each prompt, we generate counterfactuals through beam search (beam $=5$), and recompute the \tagstrshorts on the top three returns.
-We deem the control successful if at least one of the three recomputed \tagstrshorts matches the input (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
+For each prompt, we generate counterfactuals through beam search (beam $=5$), and recompute the \tagstrshorts on the top three generated $\xp$.
+We deem the control successful if at least one of the three recomputed \tagstrshorts matches the desired control code (though in \sysname-a, we only measure whether the \tagstrshort naturally occurs in the uncontrolled generation.)
 The success rate increases by $26\% \pm 13\%$ across all \tagstrs, ranging from \ctrltag{quantifier} (increasing 6\%, from 50\% to 56\%) to \ctrltag{negation} (42\%, from 5\% to 47\%).
 %\ctrltag{lexical} has the smallest increment \tofix{from $93\%$ to $100\%$}, mostly because \emph{\sysname-a} tend to frequently replace words.
 %\ctrltag{insert} is the most impactful \tagstrshort (from \tofix{$12\%$ to $100\%$}) --- \sysname-a rarely insert additional clues on its own.
@@ -111,7 +111,7 @@ Common failure cases include
 %Note that all the prompts used are guaranteed to allow the corresponding \tagstrs, and the \tagstrshorts can be less effective on more general prompts:
 (1) The \tagstrs conflict with the blanks, \eg \exinline{a dog is embraced by a \texttt{[BLANK]}} would not respond to \ctrltag{negation}.
 (2) $x$ does not have a corresponding pattern, \eg \ctrltag{shuffle} is not applicable to \exinline{the movie is good}.
-(3) Certain pattern is very prominent that it dominates the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
+(3) certain salient patterns dominate the generation probability, \eg the model tends to perturb the quantifier ``two'' in \exinline{two dogs are running}, regardless of the \tagstrshort.
 %In the ablation study, we filtered out prompts that fell under cases 1 and 2.
 
 
@@ -163,20 +163,20 @@ Common failure cases include
 \subsubsection{Closeness and Diversity}
 Similar to \citet{madaan2020generate}, we also compare the \emph{diversity} and \emph{closeness} of \sysname with alternative generators, \ie RoBERTa, representing masked language models that prioritize word substitutions, and original \emph{GPT-2}, representing the standard generative model not conditioned on $x$. 
 For a given $x$ and its counterfactuals $\hat{\xset}$, we approximate \emph{diversity} using self-BLEU~\cite{zhu2018texygen} within $\hat{\xset}$.
-Meanwhile, \emph{closeness} is the average distance between $x$ and every $\xp \in \hat{\xset}$, both with the normalized word level Levenshtein edit distance (\cite{levenshtein1966binary}, used in MiCE~\cite{ross2020explaining}), and the syntactic tree edit distance (\cite{zhang1989simple} in GYC~\cite{madaan2020generate}).
+Meanwhile, \emph{closeness} is the average distance between $x$ and every $\xp \in \hat{\xset}$, both with the normalized word level Levenshtein edit distance (\cite{levenshtein1966binary}, used in MiCE~\cite{ross2020explaining}), and syntactic tree edit distance (\cite{zhang1989simple} in GYC~\cite{madaan2020generate}).
 
 We run the three generators on 300 sentences in total.
 In GPT-2, we take the first two words of an $x$ as the input context (prompt), limit the length of the generation to be similar to $x$, and collect 10 counterfactuals.
-As for RoBERTa, we repeatedly perturb $x$ for three times, each time randomly placing up to three \texttt{[MASK]} tokens, and ask the generator to generate 5 counterfactuals through beam search~\cite{checklist:acl20}.
-\sysname uses the same blank (mask) placement as in RoBERTa, but additionally enumerate through all \tagstrs.
+As for RoBERTa, we repeatedly perturb $x$ for three times, each time randomly placing up to three \texttt{[MASK]} tokens, and ask the generator to generate 5 counterfactuals through beam search, following \citet{checklist:acl20}.
+\sysname uses the same blank (mask) placement as in RoBERTa, but we additionally enumerate through all \tagstrs.
 For each $x$, we randomly sample 5 counterfactuals to form $\hat{\xset}$ per generator.
 
 As shown in Table~\ref{table:intrinsic}, \sysname achieves a balance between diversity and closeness.
-Ideally, we would also like to compare \sysname with our concurrent work GYC~\cite{madaan2020generate} and MiCE~\cite{ross2020explaining}.
+Ideally, we would also like to compare \sysname with concurrent work \cite{madaan2020generate, ross2020explaining}, but these are yet to be open-sourced and require extensive implementation or finetuning.
 %Inspired by style transfer~\cite{yang2018unsupervised} and controlled text generation, GYC performs the perturbation on the latent space of the input $x$.
 %Meanwhile, MiCE uses a two-step framework to generate counterfactual explanations, with the generator being T5~\cite{JMLR:v21:20-074} finetuned on the task-specific dataset.
 %As mentioned in \S\ref{sec:relate}, both generators focus on flipping the class label of a given $x$.
-Unfortunately, both require extensive implementation or finetuning, and has yet to be opensourced.
+% Unfortunately, both require extensive implementation or finetuning, and has yet to be opensourced.
 
 %Still, we believe that our infilling (\texttt{BLANK}) structure will improve the \emph{closeness} over the unconstrained GYC (called content and syntactic preservation in their case).
 %We also hypothesize that \sysname has better (or at least compatible) diversity than GYC. 

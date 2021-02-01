@@ -59,7 +59,7 @@
 }
 %\wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
 \label{table:ctrltag}
-\vspace{-12pt}
+\vspace{-5pt}
 \end{table*}
 }
 % on a particular instance
@@ -117,12 +117,13 @@ we expect $g$ to output a (4) \textbf{diverse} set of $\xp$ in terms of relation
 %On the other hand, evaluations and explanations require more (4) \emph{controlled} perturbations for systematic and targeted inspections.
 %The diversity and the controllability are two competing factors, and prior work focusing on certain applications follow one of two extremes.
 %Those that thrive in diversity are either too uncontrolled (\eg text generation~\cite{iyyer2018adversarial}) or hard to scale (\eg manual rewrites~\cite{kaushik2019learning, gardner2020contrast}), whereas those that rely on templates or heuristic rules usually only cover limited linguistic patterns~\cite{li2020linguistically}.
+\TagTable
 
 
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 18.6cm 31.5cm 0cm}, clip, width=1\columnwidth]{figures/blank.pdf}
-\vspace{-15pt}
+\vspace{-5pt}
 \caption{ 
 (A) \sysname prompt format, which concatenates the original $x$, the \tagstr, and the $\xp$ (\exinline{It is not great for children} converted to the infilling structure).
 At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 1), or optionally with the \tagstrshort and the \texttt{[BLANK]}s (Lines 2--3), and fill in the blanks sequentially with spans separated by \texttt{[ANSWER]}s (Line 4).
@@ -131,7 +132,7 @@ At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 
 %\dq{}
 %We get multiple training texts per pair, by blanking $\xp$ subtrees that contain the change, or the entire sentence.
 }
-\vspace{-10pt}
+\vspace{-5pt}
 \label{fig:blank}
 \end{figure}
 
@@ -140,7 +141,6 @@ At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 
 \label{subsec:nlg}
 
 
-\TagTable
 
 We frame counterfactual generation as a conditional text generation task using language models (LMs). To ensure that $\xp$ is \emph{close} to $x$ rather than arbitrary text, we condition the generation on $x$, followed by a special token (Line 1 in Figure~\ref{fig:blank}A).
 In Line 2, we have \emph{\tagstrs} \cite{ctrl} such as \ctrltag{negation}, which specify the type of perturbation from among lexical, syntactic, or semantic \tagstrshorts (see Table \ref{table:ctrltag}), inspired by prior work that categorizes manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}.

@@ -20,7 +20,7 @@
 \label{fig:explanation_ui}
 \end{figure*}
 
-\section{Additional Details to Explanations \S\ref{sec:app_explain}}
+\section{Additional Explanation Details \S\ref{sec:app_explain}}
 \label{appendix:explanation}
 
 
@@ -36,8 +36,8 @@ The weight corresponds to the number of words modified in $\xp$: If $e(\xp)$ den
 Intuitively, the more words changed in $\xp$, the less impact each word has; In Figure~\ref{fig:explanation}D, we regard ``depression'' to be responsible for half of the impact in \swap{in depression}{suicidal}.
 We group $\xp$ based on their affected words $G_t = \{\xp\ |\ t \in e(\xp)\}$. $\dist(t, x)$ then becomes:
 $$\dist(t, x) = \frac{1}{|G_t|+1} \left(s(t) + \sum_{\xp \in G_t} w(t)\cdot |\fp(x)-\fp(\xp)|\right)$$
-The additional SHAP weight $s(t)$ acts as a smoothing factor to punish dominating outlier $\xp$.
-Then the gap between the expectation and the reality is:
+The additional SHAP weight $s(t)$ acts as a smoothing factor to penalize outliers.
+Then the gap between the expectation and reality is:
 $$\Delta\dist(t, x) = \dist(t, x)-\E[\dist(t, x)]$$
 We first find the abnormal tokens: (1) $t$ with small SHAP weight, but $\xp$ that change $t$ experience large prediction change on average: $t_L = \argmax_{t\in x} \Delta\dist(t, x)$, and (2) $t$ with large SHAP weight, but $\xp$ with $t$ changed usually have intact prediction: $t_U = \argmax_{t\in x} -\Delta\dist(t, x)$.
 
