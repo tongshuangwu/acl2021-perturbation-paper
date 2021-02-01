@@ -7,11 +7,11 @@ We only finetune GPT-2 rather than training it from scratch, such that our compu
 % To reduce the cost, we may consider optimizing the finetuning dataset to reduce repetitive sentence pairs, and thereby train \sysname with fewer shots.
 
 More critically, with most of our demonstrated applications using a human-generator hybrid mechanism, we stress that the interaction between the two deserves careful consideration.
-It has long been reported that algorithms interacting with humans can negatively impact the human;\footnote{\url{https://www.nytimes.com/interactive/2017/04/02/technology/uber-drivers-psychological-tricks.html?_r=0}}
-In our case, the concern might be that users can develop an over-reliance on \sysname~\cite{bansal2021does} and hastily rely on its generations.
+It has long been reported that algorithms interacting with humans can negatively impact the human.\footnote{\url{https://www.nytimes.com/interactive/2017/04/02/technology/uber-drivers-psychological-tricks.html?_r=0}}
+In our case, the concern might be that users can develop an over-reliance on \sysname~\cite{bansal2021does} and hastily accept its generations.
 Not only can this decrease users' creativity~\cite{green-etal-2014-human}, but it may bias their analysis process: as discussed in \S\ref{sec:discuss}, \sysname generation is not exhaustive, and may favor some perturbation patterns over others in unpredictable ways.
 % Hastily relying on \sysname generations may risk incomplete explorations.
-In the short term, we plan to highlight these limitations as part of the model documentation, while future research should identify interaction mechanisms that ensure that \sysname or other counterfactual generators support humans, rather than hindering their performance.
+In the short term, we plan to highlight these limitations as part of the model documentation, while future research should identify interaction mechanisms, so to ensure that \sysname or other counterfactual generators support humans, rather than hindering their performance.
 
 
 

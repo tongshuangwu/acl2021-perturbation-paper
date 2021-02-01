@@ -54,7 +54,7 @@
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{A list of \tagstrs used for semantically driving the counterfactual generation in \sysname, their examples, and the representative training datasets for the corresponding patterns. details are in Appendix~\ref{appendix:train_data}.
+\caption{A list of \tagstrs we designed to drive the generation, their \emph{\sysname-generated} examples, and the representative training datasets for the corresponding patterns. Details are in Appendix~\ref{appendix:train_data}.
 %More examples are in Appendix~\ref{appendix:example}.
 }
 %\wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
@@ -169,10 +169,10 @@ However, depending on the application at hand, the user can also specify the \ta
 % When we exclusively condition the generation on $x$ (Line 1), \sysname can generate Line 2--3 on its own by sampling the \tagstr and the location of blanks.
 
 To train a conditional model, we combine six existing datasets with paired sentences, each containing a subset of the desired phenomena in Table~\ref{table:ctrltag}. 
-Further, we find naturally occurring sentence pairs (filtered by edit distance to guarantee closeness) in non-paired datasets including CommonGen~\cite{lin-etal-2020-commongen}, Natural Questions~\cite{kwiatkowski-etal-2019-natural} and SQuAD~\cite{rajpurkar-etal-2016-squad}. 
-The resulting final training dataset then contains \emph{diverse} counterfactuals.\footnote{We excluded related data related to our applications, \eg \qqp in \cite{zhang2019paws}. }
+Further, we find naturally occurring sentence pairs (filtered by edit distance to guarantee closeness) in non-paired datasets including CommonGen~\cite{lin-etal-2020-commongen}, Natural Questions~\cite{kwiatkowski-etal-2019-natural}, and SQuAD~\cite{rajpurkar-etal-2016-squad}. 
+The resulting final training dataset then contains \emph{diverse} counterfactuals.\footnote{We excluded data related to our applications, \eg PAWS-QQP in \cite{zhang2019paws}. }
 %(details in Appendix~\ref{appendix:train_data}). 
-We translate each $(x, \xp)$ in the dataset into the format given in Figure~\ref{fig:blank}A, by computing the \tagstr from linguistic features (POS tags and dependency trees), and placing \texttt{[BLANK]}s in $\xp$. 
+We translate each $(x, \xp)$ in the dataset into the format given in Figure~\ref{fig:blank}A, by computing the \tagstr from syntactic features (POS tags and dependency trees), and placing \texttt{[BLANK]}s in $\xp$. 
 To allow flexible blanking at generation time, we create multiple prompts per pair that cover  different dependency tree structures related to the perturbed spans (Figure~\ref{fig:blank}B), resulting in $657,144$ prompts from $186,451$ pairs.
 % we train gpt-2 on this and add filtering
 
@@ -187,10 +187,10 @@ Fully automated uses of \sysname (\eg adversarial attacks) may benefit from stri
 
 
 
-We verify the \emph{fluency} for \sysname counterfactuals in three tasks / datasets: (1) \sst Analysis, \dsst~\cite{socher2013recursive},
+We verify the \emph{fluency} for \sysname counterfactuals in three tasks/datasets: (1) \sst Analysis, \dsst~\cite{socher2013recursive},
 (2) Natural Language Inference (\nli), \dnli~\cite{bowman-etal-2015-large}, and 
 (3) Duplicate Question Detection (\dqqp)~\cite{wang2018glue}.
-We randomly select 100 sentences per dataset, generate 3 \sysname $\xp$ per $x$, and ask crowd workers to rate whether they were \emph{``likely written by native speakers.''}
+We randomly select 100 sentences per dataset, generate 3 \sysname $\xp$ per $x$, and ask crowd workers to rate whether they are \emph{``likely written by native speakers.''}
 The workers rated most counterfactuals as fluent: $78\%$ for \dsst, $76\%$ for \dqqp, and $86\%$ for \dnli.
 We show in subsequent sections that the rate is suitable for applications where people ``team up'' with \sysname.
 % One of the authors also manually labeled counterfactuals of 120 instances, and arrived at similar fluency.
