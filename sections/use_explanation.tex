@@ -103,10 +103,10 @@ Simulation error rates on counterfactuals. Higher error rates are better, indica
 \end{figure}
 % \end{comment}
 
-\paragraph{Results.}
+%\paragraph{Results.}
 As shown in Figure~\ref{fig:err_rate}, humans simulated model behavior on \cshap counterfactuals only slightly better than random guessing ($45\%\pm6\%$), \ie these examples display model behavior that is surprising to users even after seeing explanations and creating their own counterfactuals. \chuman also had a high error rate, but at a much higher cost: generating these for just 20 original instances took 1.5--2 hours of expert labor.
 
-While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntactic tree edit (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker'', in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences to find surprising behaviors.
+While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntactic tree edit (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker,'' in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences to find surprising behaviors.
 
 % Have to decide if it's worth keeping this paragraph
 Qualitatively, the study participants tended to create counterfactuals by perturbing the token with the highest weights (84\% of their $\xp$ perturbed tokens in the top 15\% quantile of weights), not gaining a real understanding of how the other tokens impact predictions. Participants also made a significant number of mistakes even for tokens they had inspected, \eg a participant perturbed the example in Figure~\ref{fig:explanation}A by replacing \swap{help}{play with}, yielding a \emph{Non-Duplicate} model prediction. When faced with \swap{help}{find} in Figure~\ref{fig:explanation}D, they incorrectly assumed the behavior would be the same.

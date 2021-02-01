@@ -11,10 +11,10 @@
 \begin{table}
 \small
 \centering
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{} c c c l c @{}}
 \toprule
-\textbf{Task} & \textbf{Dev.} & \textbf{Orig. set} & \textbf{Contrast set} & \textbf{Consistency} \\ 
+\textbf{Task} & \textbf{Dev.} & \textbf{Orig. set} & \textbf{Contrast set} $\downarrow$ & \textbf{Consistency} $\downarrow$ \\ 
 \midrule
 \sst & 94.3 & 93.8 & 84.9 (-8.9) & 76.1 \\
 \nli & 86.5 & 91.6 & 72.3 (-19.3) & 56.4 \\
@@ -39,8 +39,11 @@
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{Counterfactuals as contrasts sets. The table contains accuracies on the development set, the original set of $x$, the contrast sets, and consistency (cases where the model predicts both $x$ and $\xp$ correctly).}
-\vspace{-5pt}
+\caption{\sysname $\xp$ as contrasts sets, with model accuracies on the development set, the original set of $x$, the contrast sets, and consistency (cases where the model predicts both $x$ and $\xp$ correctly).
+Models similarly struggle on \sysname contrast sets as they do on the manual ones, \ie with similar drop in performance (on average $-9.8$ for all classification tasks in \cite{gardner2020contrast}) and consistency (${\approx}64.1$).
+%The model performance here drops for a similar degree compared to the manually created contrast sets~\cite{gardner2020contrast} ($-9.78$ for all )
+}
+\vspace{-10pt}
 \label{table:contrast_set_result}
 \end{table}
 }
@@ -79,7 +82,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 % we need to say it's cheaper
 %on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}) and contrast sets IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}, while maintaining the ones on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}).
 }
-%\vspace{-5pt}
+\vspace{-5pt}
 \label{table:aug_sst}
 \end{table*}}
 
@@ -142,7 +145,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 \end{tabular}
 \vspace{-5pt}
 \caption{\sysname in \qqp improves on \colbox{ccon}{PAWS}~\cite{zhang2019paws}, with $n{=}20,000$ and $m{=}1,911$.}
-\vspace{-10pt}
+\vspace{-15pt}
 \label{table:aug_qqp}
 \end{table}
 }
@@ -244,7 +247,7 @@ This avoids redundancy in the labeling set, \eg common perturbation patterns suc
 We verify whether \sysname counterfactuals can be used to create \emph{contrast sets}~\cite{gardner2020contrast}, \ie evaluation sets where each instance has a nearby counterfactual with a \emph{different} groundtruth, to better evaluate model decision boundaries.
 We construct these sets by simply filtering out counterfactuals that are labeled the same as their original instances (40\%--63\% depending on the task).
 
-For each task, we test multiple classifers open-sourced by Huggingface~\cite{Wolf2019HuggingFacesTS}, and report the best performing model for each\footnote{\UrlFont{huggingface.co/\{roberta-large-mnli, textattack/roberta-base-SST-2, ji-xin/roberta\_base-QQP-two\_stage\}}} in Table~\ref{table:contrast_set_result} (results for other models are analogous). \sysname contrast sets display performance gaps consistent with those of \citet{gardner2020contrast}, where the sets are constructed by NLP researchers.
+For each task, we test multiple classifers open-sourced by Huggingface~\cite{Wolf2019HuggingFacesTS}, and report the best performing model for each\footnote{\UrlFont{huggingface.co/\{roberta-large-mnli, textattack/roberta-base-SST-2, ji-xin/roberta\_base-QQP-two\_stage\}}} in Table~\ref{table:contrast_set_result} (results for other models are analogous). \sysname contrast sets display performance gaps consistent with those of \citet{gardner2020contrast}, where the sets are constructed manually by NLP researchers.
 
 \TableContrastSet
 
@@ -286,7 +289,6 @@ For \sst, we select random \sysname counterfactuals regardless of their label, a
 For \nli and \qqp, we observed in a pilot study that randomly chosen counterfactuals may not be more effective than the same amount of additional data.
 We suspect that \sysname lacks domain knowledge and context for identifying critical perturbations, and therefore brings benefits redundant with pre-training~\cite{longpre2020effective}.
 Thus, we use the slicing functions of \citet{chen2019slice} to find patterns of interest (\eg prepositions in \nli), and perturb those patterns by placing \texttt{[BLANK]}s on the matched spans. For example, \exinline{His surfboard is beneath him} becomes \exinline{His surfboard is \texttt{[BLANK]} him}, and \sysname generates counterfactuals such as \exinline{His surfboard is \swap{beneath}{next to} him.}
-
 
 
 \textbf{Results.}
