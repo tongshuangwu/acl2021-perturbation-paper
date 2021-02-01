@@ -22,11 +22,11 @@ The \nli model cannot perform the actual counting when the exact number is missi
 As a follow-up to Figure~\ref{fig:err_analysis_quantifier}, we slice the data to find \emph{entailment} instances that have numbers in the hypothesis sentence, and perturb their \ctrltag{quantifiers}.
 The extracted templates show that the model does not perform actual counting. 
 When changing one number to another (\swap{\texttt{NUM}}{\texttt{NUM}}), the model only flips the label in 64.7\% cases, while we would expect all cases to be like in Figure~\ref{fig:err_analysis_two_three}A.
-An inspection of instances indicates the model gets confused when the premise does not contain a number explicitly. 
+An inspection of instances indicates the model gets confused when the premise does not contain the same number explicitly. 
 Indeed, when we filter for such instances (e.g. Figure~\ref{fig:err_analysis_two_three}B), the label flip rate of \swap{\texttt{NUM}}{\texttt{NUM}} is lowered to 30.2\%.
 
 Further, the model only reacts to \emph{some} quantifier phrase modifiers. 
-\addplus{at least} (\exinline{\add{at least} two women are at a bar}) will always still result in \emph{entailment}, prediction, \addplus{only} and \swap{}{exactly} flip the predicted label to \emph{neutral} 90\% of the time (\exinline{\add{exactly} two women are at a bar}), but the model only changes the prediction 52.6\% of the time when we add \addplus{more than} (\exinline{\add{more than} two women are at a bar}).
+\addplus{at least} (\exinline{\add{at least} two women are at a bar}) will always still result in \emph{entailment}, prediction, \addplus{only} and \addplus{exactly} flip the predicted label to \emph{neutral} 90\% of the time (\exinline{\add{exactly} two women are at a bar}), but the model only changes the prediction 52.6\% of the time when we add \addplus{more than} (\exinline{\add{more than} two women are at a bar}).
 
 
 \subsection{Representative Perturbation Templates}
@@ -36,7 +36,7 @@ Similar to \citet{wu2020tempura}, the process of finding representative perturba
 
 \textbf{Extract template.}
 For each $\xp$, we compare it with its $x$, and translate the perturbed spans into templates using different combinations of texts, lemmas, sparse and fine-grained part-of-speech tags.
-We optionally include surrounding contexts determined by the parsing tree structure (tokens that share the same parents as the perturbed span).
+We optionally include surrounding contexts determined by the dependency tree structure (tokens that share the same parents as the perturbed span).
 For example, \exinline{is \add{not} reading} can result in templates $t$ as fine-grained as \swap{is reading}{is not reading}, or as sparse as \addplus{\texttt{PART}}.
 Meanwhile, \exinline{are \add{not} playing} also translates to \addplus{\texttt{PART}} or \addplus{\texttt{not}}, but not \swap{is reading}{is not reading}.
 As such, the $\xp$ and templates form a many-to-many relationship: each $\xp$ generates multiple templates, and each template covers a different group of $\xp$.

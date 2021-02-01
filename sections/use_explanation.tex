@@ -25,7 +25,7 @@ $f(x)$ is \emph{duplicate} ($=$) with 98.2\% confidence, as well as SHAP importa
 %Counterfactual explanations complement SHAP with concrete, readable examples, \eg (C) depicts a surprising flipped prediction ($\neq)$ that was missed by SHAP.
 Counterfactual explanations complement SHAP with concrete examples and surprising behaviors, \eg (B) shows that \swap{friend}{woman} surprisingly flips the prediction ($\neq)$, despite the low weight on ``friend''.
 }
-\vspace{-5pt}
+\vspace{-10pt}
 \label{fig:explanation}
 \end{figure}
 \section{Counterfactual Explanations}
@@ -41,7 +41,7 @@ Counterfactual explanations complement SHAP with concrete examples and surprisin
 % \subsection{Foils to Feature Attribution Explanations}
 A popular way of explaining NLP models is to attribute importance weights to the input tokens, either using attention scores~\cite{wiegreffe2019attention} or by summarizing the model behavior on perturbed instances (\eg LIME~\cite{Ribeiro2016WhySI} and SHAP~\cite{NIPS2017_7062}).
 Though ubiquitous, prior work indicates token scores may not always reflect their real importance~\cite{pruthi2020learning}.
-Popular packages like LIME or SHAP estimate scores by \emph{masking} words, and therefore may not reflect model behaviors on natural counterfactual cases. For example, the token ``friend'' in Figure \ref{fig:explanation}A is not considered important even though a natural substitution in Figure \ref{fig:explanation}B flips the prediction. The opposite happens to ``in depression'', where a significant change makes no difference to the model's prediction (Figure \ref{fig:explanation}C).
+Popular packages like LIME or SHAP estimate scores by \emph{masking} words, and therefore may not reflect model behavior on natural counterfactual cases. For example, the token ``friend'' in Figure \ref{fig:explanation}A is not considered important even though a natural substitution in Figure \ref{fig:explanation}B flips the prediction. The opposite happens to ``in depression,'' where a significant change makes no difference to the model's prediction (Figure \ref{fig:explanation}C).
 % With the feature importance in Figure~\ref{fig:explanation}A, it is hard for users to imagine the model changing predictions when the trivial token ``friend'' in Q2 is perturbed (in B), or that changing the important ``in depression'' may not matter (in C).
 Even perfect importance scores may be too abstract for users to gain real understanding~\cite{miller}, \eg users may not grasp the significance of a low importance score for the token ``help'' without concrete examples such as the one in Figure \ref{fig:explanation}D. 
 % --- without the concrete example in Figure~\ref{fig:explanation}D, users may not grasp what it means that the score for ``help'' ${\approx}0.05$. 
@@ -60,7 +60,7 @@ Of course, users can also view additional counterfactuals that perturb tokens of
 
 \newcommand{\cshap}{\emph{\sysname-surprise}\xspace}
 \newcommand{\crandom}{\emph{\sysname-random}\xspace}
-\newcommand{\chuman}{\emph{Expert}\xspace}
+\newcommand{\chuman}{\emph{Expert-surprise}\xspace}
 
 \paragraph{User evaluation.} We study the scenario where an expert has access to a model and local explanations, and evaluate the \emph{additional} benefit of showing counterfactuals, \ie whether they bring \emph{new} insights. 
 We evaluate three ways of generating counterfactuals: (1) \crandom, a baseline where we show random \sysname{} counterfactuals, (2) \chuman, where two graduate students (non-participants) were given access to the model and instructed to create counterfactuals that are surprising given the associated SHAP scores, and (3) \cshap, which uses the selection procedure described in the previous paragraph.
@@ -94,19 +94,19 @@ Finally, users simulated what the model would do on six counterfactuals, two fro
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/err_rate.pdf}
-\vspace{-10pt}
+\vspace{-15pt}
 \caption{
 Simulation error rates on counterfactuals. Higher error rates are better, indicating counterfactuals that would add more information to users if displayed.
 }
-\vspace{-5pt}
+\vspace{-10pt}
 \label{fig:err_rate}
 \end{figure}
 % \end{comment}
 
 \paragraph{Results.}
-As shown in Figure~\ref{fig:err_rate}, humans simulated model behavior on \cshap counterfactuals only slightly better than random guessing ($45\%\pm6\%$), \ie these examples display model behavior that is surprising to users even after seeing explanations and creating their own counterfactuals. \chuman ones also had a high error rate, but at a much higher cost: generating these for just 20 original instances took 1.5--2 hours of expert labor.
+As shown in Figure~\ref{fig:err_rate}, humans simulated model behavior on \cshap counterfactuals only slightly better than random guessing ($45\%\pm6\%$), \ie these examples display model behavior that is surprising to users even after seeing explanations and creating their own counterfactuals. \chuman also had a high error rate, but at a much higher cost: generating these for just 20 original instances took 1.5--2 hours of expert labor.
 
-While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntactic tree edit (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker'', in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences in order to find surprising behaviors.
+While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntactic tree edit (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker'', in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences to find surprising behaviors.
 
 % Have to decide if it's worth keeping this paragraph
 Qualitatively, the study participants tended to create counterfactuals by perturbing the token with the highest weights (84\% of their $\xp$ perturbed tokens in the top 15\% quantile of weights), not gaining a real understanding of how the other tokens impact predictions. Participants also made a significant number of mistakes even for tokens they had inspected, \eg a participant perturbed the example in Figure~\ref{fig:explanation}A by replacing \swap{help}{play with}, yielding a \emph{Non-Duplicate} model prediction. When faced with \swap{help}{find} in Figure~\ref{fig:explanation}D, they incorrectly assumed the behavior would be the same.

@@ -44,7 +44,7 @@ We use \dqqp as the base dataset~\cite{wang2018glue}, a collection of question p
 \subsection{Diversity Ranking in \S\ref{subsec:gen_counterfactual_for_labeling}}
 \label{appendix:app_label_distance}
 
-To select diverse counterfactuals for labeling, we first over generate a large number of candidates.
+To select diverse counterfactuals for labeling, we first over-generate a large number of candidates.
 For each original example, we randomly generate up to 10 blanked sentences. Each sentence contains up to three \BLANK tokens that spread over different parsing tree structures.
 We generate prompts using all combinations of \tagstrs and blanked sentences, and collect counterfactuals with a beam search (for each prompt, we used 10 beams and kept the top three generations.)
 
@@ -71,7 +71,7 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 %, in which we explained the context and tasks (Figure~\ref{fig:mturk_instruction})
 The study started with an introduction that explained the context and tasks.
 %: given a reference example, the crowdworker should annotate its counterfactual variations, based on whether the counterfactual is valid (\emph{fluent}), and the classification task label.
-To familiarize them with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
+To familiarize crowdworkers with the task, we asked them to complete 1-2 training rounds, and explained the expected labels.
 Each annotator then completed 22 tasks, labeling 3 counterfactuals of a single example in each round, as in Figure~\ref{fig:mturk_ui}.
 The 22 rounds consisted of 20 actual labeling tasks and 2 extra ``gold rounds'' with known correct labels.
 The gold cases later served to filter low-quality crowdworkers.
@@ -108,8 +108,8 @@ One of the authors labeled a subset of 100 $\xp$ on 100 $x$ in \sst, and reached
 %We finetuned \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
 For each given $(m,n)$, we created three different samples of training data.
 Each sample was further averaged over four random seeds.
-For each run, we heuristically picked the initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp (respectively), trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
-We selected the epoch that had the highest accuracy on the corresponding validation set (1/5 of the training data size, with the same ratio of original and counterfactual examples.)
+For each run, we heuristically picked the initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp (respectively), and trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
+We selected the epoch that had the highest accuracy on the corresponding validation set, which takes 1/5 of the training data size, with the same ratio of $m/n$ counterfactual and original examples.
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
 
 
@@ -117,7 +117,7 @@ We selected the epoch that had the highest accuracy on the corresponding validat
 \subsection{Criteria for CheckList Tests}
 \label{appendix:checklist}
 \wts{Maybe remove.}
-As a behavioral testing framework, CheckList defines multiple tests, and measures models' linguistic capabilities using the failure rate of each test.
+As a behavioral testing framework, CheckList defines multiple tests and measures models' linguistic capabilities using the failure rate of each test.
 We define a test to have failed if the failure rate is over $20\%$.
 Because failure rates are more sensitive than the accuracy, we say a model capability is affected, if the failure rate of a test changes (increases or decreases) more then 5\% (\eg failure rates going from 20\% to 21\% is insignificant), and the delta accounts for 10\% (\eg failure rate decreasing 8\% from 100\% to 92\% does not count.)
 \end{comment}
