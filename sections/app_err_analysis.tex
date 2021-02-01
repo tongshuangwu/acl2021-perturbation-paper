@@ -26,7 +26,7 @@ An inspection of instances indicates the model gets confused when the premise do
 Indeed, when we filter for such instances (e.g. Figure~\ref{fig:err_analysis_two_three}B), the label flip rate of \swap{\texttt{NUM}}{\texttt{NUM}} is lowered to 30.2\%.
 
 Further, the model only reacts to \emph{some} quantifier phrase modifiers. 
-\addplus{at least} (\exinline{\add{at least} women are at a bar}) will always still result in \emph{entailment}, prediction, \addplus{only} and \swap{}{exactly} flip the predicted label to \emph{neutral} 90\% of the time (\exinline{\add{exactly} women are at a bar}), but the model only changes the prediction 52.6\% of the time when we add \addplus{more than} (\exinline{\add{more than} women are at a bar}).
+\addplus{at least} (\exinline{\add{at least} two women are at a bar}) will always still result in \emph{entailment}, prediction, \addplus{only} and \swap{}{exactly} flip the predicted label to \emph{neutral} 90\% of the time (\exinline{\add{exactly} two women are at a bar}), but the model only changes the prediction 52.6\% of the time when we add \addplus{more than} (\exinline{\add{more than} two women are at a bar}).
 
 
 \subsection{Representative Perturbation Templates}
