@@ -18,7 +18,7 @@
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 21cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
-\vspace{-5pt}
+\vspace{-10pt}
 \caption{
 (A) A \qqp instance where %the task model\footnotemark{} prediction
 $f(x)$ is \emph{duplicate} ($=$) with 98.2\% confidence, as well as SHAP importance weights for tokens in Q2.
@@ -94,7 +94,7 @@ Finally, users simulated what the model would do on six counterfactuals, two fro
 \begin{figure}[t]
 \centering
 \includegraphics[width=1\columnwidth]{figures/err_rate.pdf}
-\vspace{-5pt}
+\vspace{-10pt}
 \caption{
 Simulation error rates on counterfactuals. Higher error rates are better, indicating counterfactuals that would add more information to users if displayed.
 }
@@ -103,7 +103,7 @@ Simulation error rates on counterfactuals. Higher error rates are better, indica
 \end{figure}
 % \end{comment}
 
-% \paragraph{Results.}
+\paragraph{Results.}
 As shown in Figure~\ref{fig:err_rate}, humans simulated model behavior on \cshap counterfactuals only slightly better than random guessing ($45\%\pm6\%$), \ie these examples display model behavior that is surprising to users even after seeing explanations and creating their own counterfactuals. \chuman ones also had a high error rate, but at a much higher cost: generating these for just 20 original instances took 1.5--2 hours of expert labor.
 
 While high error rates could be achieved with unrelated or nonsensical examples, all counterfactuals under evaluation were close to the original examples, when measured by syntactic tree edit (${\approx}1.0$) or Levenshtein distance (${\approx}0.2$), \cshap being the closest on both. An independent rater labeled $95\%$ of \cshap counterfactuals as ``likely written by a native speaker'', in contrast to $85\%$ for \chuman, indicating that experts sometimes resorted to ungrammatical or nonsensical sentences in order to find surprising behaviors.

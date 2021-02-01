@@ -197,8 +197,10 @@ The workers rated most counterfactuals as fluent: $78\%$ for \dsst, $76\%$ for \
 % Without automatic filtering, the fluency rate decreases to $61\%$.
 
 Further, we quantify the impact of \tagstrs by comparing \sysname with finetuning GPT-2 on prompts without \tagstrshorts.
-We verify that the \tagstrshorts improve the success rate of generating counterfactuals with the desired perturbation types set out in Table~\ref{table:ctrltag} by as much as 42\% for perturbations such as \ctrltag{negation} and \ctrltag{insert} (Appendix \ref{appendix:ablation_control}).
-% For some perturbations that rarely occur naturally (\eg negation, insert), the rate can improve as much as 42\%.
+We verify that the \tagstrshorts improve the success rate of generating counterfactuals with the desired perturbation types set out in Table~\ref{table:ctrltag} 
+by as much as 42\% for perturbations such as \ctrltag{negation} and \ctrltag{insert}
+(Appendix \ref{appendix:ablation_control}).
+%For some perturbations that rarely occur naturally (\eg negation, insert), the rate can improve as much as 42\%.
 
 We also compare \sysname to RoBERTa and GPT-2, in terms of their generation closeness and diversity (Appendix \ref{appendix:intrinsic}).
 Using syntactic tree~\cite{zhang1989simple} and Levenshtein edit distance~\cite{levenshtein1966binary}, we show that besides having the benefit of control, \sysname counterfactuals are still close to the original $x$ (syntactic ${\approx}2$ and edit ${\approx}0.2$, compared to ${\approx}6$ and ${\approx}0.7$ on GPT-2's arbitrary text).
