@@ -2,7 +2,7 @@
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 12.5cm 33cm 0cm},clip,width=1\columnwidth]{figures/err_analysis.pdf}
-\vspace{-10pt}
+\vspace{-15pt}
 \caption{
 (A) An \nli case with a \emph{Neutral} prediction (\uline{underlined} $f(\xp)$ are correct).
 \sysname generates counterfactual hypotheses conditioned on the \texttt{negation} \tagstr. 
@@ -48,7 +48,7 @@ This leads to the discovery of unstable and erroneous behaviors regarding \emph{
 
 \paragraph{Discussion.} 
 \sysname{} is a powerful tool for interactive analysis.
-Generating multiple counterfactuals per instance leads to insights that might be missed by manual analysis, and the controls provided by \tagstrs and \texttt{[BLANK]}s allow for analyses that would be very hard to do manually~\cite{wu2019errudite} or with masked language models (\eg Figure~\ref{fig:err_analysis}B places negations in various parts of sentences, and Figure~\ref{fig:err_analysis_quantifier} replaces spans with other spans of varying lengths). Besides error analysis, an analogous interactive use of \sysname{} may be suitable for test creation~\cite{checklist:acl20} and forms of data augmentation that are more guided than what we presented in \S\ref{sec:app_label}.
+Generating multiple counterfactuals per instance leads to insights that might be missed by manual analysis, and the controls provided by \tagstrs and \texttt{[BLANK]}s allow for analyses that would be non-trivial to do manually~\cite{wu2019errudite} or with masked language models (\eg Figure~\ref{fig:err_analysis}B places negations in various parts of sentences, and Figure~\ref{fig:err_analysis_quantifier} replaces spans with other spans of varying lengths). Besides error analysis, an analogous interactive use of \sysname{} may be suitable for test creation~\cite{checklist:acl20} and forms of data augmentation that are more guided than what we presented in \S\ref{sec:app_label}.
 
 % \emph{Verify the hypothesis by generalizing the pattern.}
 % Does the observation generalize beyond one instance? 

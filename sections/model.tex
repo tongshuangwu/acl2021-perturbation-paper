@@ -54,7 +54,10 @@
 \bottomrule
 \end{tabular}
 \vspace{-5pt}
-\caption{A list of \tagstrs we designed to drive the generation, their \emph{\sysname-generated} examples, and the representative training datasets for the corresponding patterns. Details are in Appendix~\ref{appendix:train_data}.
+\caption{
+We design a list of \tagstrs to drive the generation.
+We show their \emph{\sysname-generated} examples, and the representative training datasets for the corresponding patterns. 
+Details are in Appendix~\ref{appendix:train_data}.
 %More examples are in Appendix~\ref{appendix:example}.
 }
 %\wts{Change all the examples to be on an identical sentence, not all different cases. And consider further annotate the tags based on whether they just do semantic change or also syntactic change.}}
@@ -123,7 +126,7 @@ we expect $g$ to output a (4) \textbf{diverse} set of $\xp$ in terms of relation
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 18.6cm 31.5cm 0cm}, clip, width=1\columnwidth]{figures/blank.pdf}
-\vspace{-5pt}
+\vspace{-15pt}
 \caption{ 
 (A) \sysname prompt format, which concatenates the original $x$, the \tagstr, and the $\xp$ (\exinline{It is not great for children} converted to the infilling structure).
 At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 1), or optionally with the \tagstrshort and the \texttt{[BLANK]}s (Lines 2--3), and fill in the blanks sequentially with spans separated by \texttt{[ANSWER]}s (Line 4).
@@ -132,7 +135,7 @@ At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 
 %\dq{}
 %We get multiple training texts per pair, by blanking $\xp$ subtrees that contain the change, or the entire sentence.
 }
-\vspace{-5pt}
+\vspace{-10pt}
 \label{fig:blank}
 \end{figure}
 
@@ -143,7 +146,8 @@ At \emph{generation} time, \sysname accepts prompts that just include $x$ (Line 
 
 
 We frame counterfactual generation as a conditional text generation task using language models (LMs). To ensure that $\xp$ is \emph{close} to $x$ rather than arbitrary text, we condition the generation on $x$, followed by a special token (Line 1 in Figure~\ref{fig:blank}A).
-In Line 2, we have \emph{\tagstrs} \cite{ctrl} such as \ctrltag{negation}, which specify the type of perturbation from among lexical, syntactic, or semantic \tagstrshorts (see Table \ref{table:ctrltag}), inspired by prior work that categorizes manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}.
+In Line 2, we have \emph{\tagstrs} \cite{ctrl} such as \ctrltag{negation}.
+We design them to specify types of perturbation from among lexical, syntactic, or semantic aspects (see Table \ref{table:ctrltag}), inspired by prior work that categorizes manually created counterfactuals~\cite{kaushik2019learning, gardner2020contrast}.
 % All the \tagstrshorts are described in Table~\ref{table:ctrltag}. 
 As an additional layer of control over $x \veryshortarrow \xp$, % $\relation{\xp}$,
 we allow users to specify \emph{where} changes happen by having the LM infill \texttt{[BLANK]} tokens~\cite{donahue2020enabling}, rather than generating arbitrary counterfactuals (Lines 3--4).
@@ -192,17 +196,16 @@ We verify the \emph{fluency} for \sysname counterfactuals in three tasks/dataset
 (2) Natural Language Inference (\nli), \dnli~\cite{bowman-etal-2015-large}, and 
 (3) Duplicate Question Detection (\dqqp)~\cite{wang2018glue}.
 We randomly select 100 sentences per dataset, generate 3 $\xp$ per $x$, and ask crowd workers to rate whether they are \emph{``likely written by native speakers.''}
-The workers rated most counterfactuals as fluent: $78\%$ for \dsst, $76\%$ for \dqqp, and $86\%$ for \dnli. In subsequence sections, we show these rates are suitable for applications where people ``team up'' with \sysname.
+The workers rated most counterfactuals as fluent: $78\%$ for \dsst, $76\%$ for \dqqp, and $86\%$ for \dnli. In subsequent sections, we show these rates are suitable for applications where people ``team up'' with \sysname.
 % One of the authors also manually labeled counterfactuals of 120 instances, and arrived at similar fluency.
 % Without automatic filtering, the fluency rate decreases to $61\%$.
 
-Further, we quantify the impact of \tagstrs by comparing \sysname with finetuning GPT-2 on prompts without \tagstrshorts.
-We verify that the \tagstrshorts improve the success rate of generating counterfactuals with the desired perturbation types set out in Table~\ref{table:ctrltag} 
-by as much as 42\% for perturbations such as \ctrltag{negation} and \ctrltag{insert}
+Further, we quantify the impact of \tagstrs by comparing \sysname with finetuning GPT-2 on prompts \emph{without} \tagstrshorts.
+We verify that the \tagstrshorts improve the success rate of generating counterfactuals with the desired perturbation types set out in Table~\ref{table:ctrltag} by as much as 42\% for perturbations such as \ctrltag{negation} and \ctrltag{insert}
 (Appendix \ref{appendix:ablation_control}).
 %For some perturbations that rarely occur naturally (\eg negation, insert), the rate can improve as much as 42\%.
 
-We also compare \sysname to RoBERTa and GPT-2, in terms of their generation closeness and diversity (Appendix \ref{appendix:intrinsic}).
+We also compare \sysname to RoBERTa and GPT-2, in terms of their generation closeness and diversity (Appendix \ref{appendix:closeness}).
 Using syntactic tree~\cite{zhang1989simple} and Levenshtein edit distance~\cite{levenshtein1966binary}, we show that besides having the benefit of control, \sysname counterfactuals are still close to the original $x$ (syntactic ${\approx}2$ and edit ${\approx}0.2$, compared to ${\approx}6$ and ${\approx}0.7$ on GPT-2's arbitrary text).
-Meanwhile, they have more perturbation diversity than RoBERTa (which is restricted to word substitutions), measured by self-BLEU~\cite{zhu2018texygen}.
+Meanwhile, they have more perturbation diversity than RoBERTa, which is restricted to word substitution, measured by self-BLEU~\cite{zhu2018texygen}.
 % More details are in Appendix~\ref{appendix:intrinsic}.
