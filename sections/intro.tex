@@ -3,7 +3,7 @@
 
 
 
-Counterfactual reasoning --- mentally simulating what \emph{would have happened} if conditions were different --- is a common tool for making causality assessments~\cite{kahneman}, which in turn are crucial for model training, evaluation, error analysis and explanation~\cite{miller}. 
+Counterfactual reasoning --- mentally simulating what \emph{would have happened} if conditions were different --- is a common tool for making causality assessments~\cite{kahneman}, which in turn are crucial for model training, evaluation, error analysis, and explanation~\cite{miller}. 
 For example, in Figure~\ref{fig:teaser}, \exinline{It is great for kids} is perturbed into multiple variations, each providing unique insights by simulating what would have happened if the sentence was different.
 
 Applications of counterfactual reasoning to NLP generally specify the relationship $x \veryshortarrow \xp$, and then create $\xp$ according to the relationship.
@@ -16,7 +16,7 @@ As a result, prior work has tailored counterfactual generators for many differen
 For example, to support {\em model training and evaluation}, human annotators create counterfactuals that change the groundtruth labels by manually rewriting instances~\cite{gardner2020contrast} or defining perturbation functions~\cite{checklist:acl20}.
 The manual rewrites are costly (\eg 4--5 minutes per counterfactual~\cite{kaushik2019learning}) and susceptible to systematic omissions (\eg human annotators may miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B).
 Meanwhile, automated generators aiming for \emph{model analysis and explanation} usually focus on another relationship, \ie generating $\xp$ that have different model predictions than $x$~\cite{ross2020explaining, Zhang2019GeneratingFA}. 
-As a result, they neglect prediction-preserving counterfactuals, even though they are equally effective for revealing model behaviors, \eg examples in Figure~\ref{fig:teaser}D.
+As a result, they neglect prediction-preserving counterfactuals even though they are equally effective for revealing model behaviors, like the examples in Figure~\ref{fig:teaser}D.
 
 
 %In contrast, adversarial examples\dan{now you come to another use case, but 'adversarial examples' is 1) not a reason or use for Cfs; it's a characterization of theirs style, 2) it doesn't match the list of uses cases you've lined up above and (crucially) in fig 1, so 3) it doesn't reinforce Fig 1, which is the central framing of the paper. I suggest you rewrite to follow the use cases. It really matters to explain the motivation of thge paper simply and clearly and to repeat it (in a non annoying way) - avoids confusion} specify a different relationship: $x$ and $\xp$ must have the same groundtruth but different model predictions, driving the generator to prioritize paraphrasing~\cite{iyyer2018adversarial, ribeiro2018semantically}, over the non-paraphrasing changes that still preserve the groundtruth~\cite{li2020contextualized}.
@@ -46,14 +46,14 @@ Overview: (A) given a sentiment analysis instance $x$, \sysname generates (B) va
 % 
 However, counterfactual generation does not \emph{have} to be task-specific.
 The same set of counterfactuals in Figure~\ref{fig:teaser} can support a variety of applications.
-Moreover, for cases like counterfactual explanation and analysis, a general-purpose pool of counterfactuals is preferable, as the relationship-of-interest can be more exploratory and user-oriented~\cite{wu2019errudite}.
+Moreover, for cases like model explanation and analysis, a general-purpose pool of counterfactuals is preferable, as the relationship-of-interest can be more exploratory and user-oriented~\cite{wu2019errudite}.
 In this work, we formalize the task of \emph{counterfactual generation}, which disentangles generation from the application of counterfactuals (\S\ref{sec:general_purpose}).
 Given an input $x$, our generator produces a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with \emph{application-agnostic} relationships $x \veryshortarrow \xp_i$ (Figure~\ref{fig:teaser}B).
 Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for a use case (Figure~\ref{fig:teaser}C).
 
 We frame the generation step as conditional text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using $(x, \xp)$ pairs. 
 We also allow for targeted counterfactuals, by specifying where the perturbation occurs~\cite{donahue2020enabling} and using \tagstrs like \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).
-Intrinsic evaluations show that \sysname generates $\xp$ that are \emph{fluent}, \emph{diverse}, and \emph{close to $x$}, and that the \emph{control} effectively retrieve perturbations that are rare to sample from off-the-shelf language models. %(\eg 42\% more negations).
+Intrinsic evaluations show that \sysname generates $\xp$ that are \emph{fluent}, \emph{diverse}, and \emph{close to $x$}, and that the \emph{control} effectively retrieves perturbations that are rare to sample from off-the-shelf language models. %(\eg 42\% more negations).
 
 %--- the control is \emph{the backbone of} various downstream applications.
 
