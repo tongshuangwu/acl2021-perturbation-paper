@@ -130,7 +130,7 @@ we allow users to specify \emph{where} changes happen by having the LM infill \t
 %At generation time, if the user provides only the original example, \sysname will generate the \tagstr, the blank locations, and the infilling (Lines 2--4). 
 %Alternatively, the user can specify the \tagstr, or the \tagstr \emph{and} the location of the blanks, to exercise different degrees of control depending on the application.
 
-\fixed{Finetuning GPT-2 --- a causual LM for predicting next tokens --- additionally allows us to exercise controls at various levels of granularity.
+\fixed{Finetuning GPT-2 --- a causual LM for predicting next tokens --- additionally allows us to exercise control at various levels of granularity.
 At generation time, if the user provides only the original example, \sysname will generate the \tagstr, the blank locations, and the infilling (Lines 2--4).
 Alternatively, the user can specify the \tagstr, or the \tagstr \emph{and} the blanks, to exercise different degrees of control depending on the application.
 As later shown in Figure~\ref{fig:explanation} and~\ref{fig:err_analysis}, such controls are essential for different use cases.}
@@ -170,8 +170,7 @@ For each $(x, \xp)$, we compute its primary \tagstr using part-of-speech tags an
 For example, \ctrltag{negation} occurs when we observe changes to negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlaps between tokens deleted and added.
 When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
 In Figure~\ref{fig:blank}A, we use \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
-We use a pair of two sentences interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.
-To balance the distribution (Table~\ref{table:gpt_train_stats} in Appendix~\ref{appendix:train_data}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstrshorts.
+To balance the distribution (Table~\ref{table:gpt_train_stats} in Appendix~\ref{appendix:train_data}), for each dataset, we extract \tagstrs from all the $(x, \xp)$\footnote{We use a pair of two sentences interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.}, and randomly sample up to 10,000 instances per \tagstrshorts.
 %Still, \ctrltag{quantifier} and \ctrltag{negation} have less training data compared to other codes. 
 %Fortunately, these codes tend to be limited to more specific patterns (``more than'', ``not'', ``never'') when compared to ``broad'' codes like \ctrltag{lexical}, and thus even a small sample is enough to learn them. 
 
@@ -208,25 +207,26 @@ Fully automated uses of \sysname (\eg adversarial attacks) may benefit from stri
     \bottomrule
     \end{tabular}
     \vspace{-5pt}
-    \caption{\fixed{Intrinsic evaluations: \sysname counterfactuals are \emph{closer} to the original instance than non-fintuned GPT-2 and T5~\cite{JMLR:v21:20-074}, and more \emph{diverse} than RoBERTa~\cite{liu2019roberta}.}}
-    \vspace{-5pt}
+    \caption{\fixed{Intrinsic evaluations: \sysname counterfactuals are \emph{closer} to the original instance than non-fintuned GPT-2 and T5, and more \emph{diverse} than RoBERTa. Computational details are in Appendix~\ref{appendix:intrinsic}.}}
+    \vspace{-10pt}
     \label{table:intrinsic}
 \end{table}
 
 
 \fixed{
-We compare \sysname with baselines on \emph{closeness}, \emph{diversity}, and \emph{controllability}, by perturbing 300 randomly selected sentences with all the generators (computation details are in Appendix~\ref{appendix:intrinsic}).
+We evaluate \sysname on \emph{closeness}, and \emph{diversity} by comparing its perturbations on 300 randomly selected sentences with three baselines: 
+(1) the non-finetuned GPT-2 (to highlight the gain of finetuning), 
+as well as (2) the token-infilling RoBERTa~\cite{liu2019roberta} and (3) the span-infilling T5~\cite{JMLR:v21:20-074}, since infilling LMs that are more capable of perturbations.
 
 As shown in Table~\ref{table:intrinsic}, \sysname generates counterfactuals that are close to the original instance, measured by syntactic tree~\cite{zhang1989simple} and Levenshtein edit distance~\cite{levenshtein1966binary}.
 In comparison, the non-finetuned GPT-2 generates arbitrary text instead of perturbations when given the starting tokens of a sentence, as it only leverages context in a single direction. 
-We also compare \sysname with infilling language models, which are more capable of perturbations.
-\sysname counterfactuals are more diverse than RoBERTa ones, which is restricted to word substitution, measured by self-BLEU~\cite{zhu2018texygen}.
-Meanwhile, T5 (the span-infilling model) displays higher diversity, but still considers less context than \sysname, and achieves less closeness.
-For example, in Figure~\ref{fig:teaser} \exinline{It is great for kids,} T5 replaces \exinline{for kids} with \exinline{idea}, \exinline{to meet you,} whereas \sysname generates \exinline{for kids yet adults can enjoy}, \exinline{for any audience.} 
+As for infilling models, \sysname counterfactuals are more diverse than RoBERTa ones, which is restricted to word substitution, measured by self-BLEU~\cite{zhu2018texygen}.
+Meanwhile, T5 displays higher diversity, but still considers less context than \sysname, and achieves less closeness.
+For example, in Figure~\ref{fig:teaser} \exinline{It is great for kids,} T5 replaces \exinline{for kids} with \exinline{idea}, \exinline{to meet you,} whereas \sysname generates \exinline{for kids yet adults can enjoy,} \exinline{for any audience.} 
 
 On the other hand, to evaluate controllability, we compare \sysname with T5 as well as GPT-2 finetuned on prompts \emph{without} \tagstrshorts (called \sysname\emph{-a}), such that both baselines consider sufficient context.
 We verify that the \tagstrshorts improve the success rate of generating counterfactuals with the desired perturbation types set out in Table~\ref{table:ctrltag} by as much as 42\% for perturbations such as \ctrltag{negation} and \ctrltag{insert}.
-For example, given \exinline{It is \texttt{[BLANK]} great for kids}, baselines generate \exinline{also}, \exinline{fun and}, rather than \exinline{not} (\ctrltag{negation}).
+For example, given \exinline{It is \texttt{[BLANK]} great for kids,} baselines generate \exinline{also,} \exinline{fun and,} rather than \exinline{not} (\ctrltag{negation}).
 
 We further verify the \emph{fluency} for \sysname counterfactuals in three tasks/datasets: (1) \sst Analysis, \dsst~\cite{socher2013recursive},
 (2) Natural Language Inference (\nli), \dnli~\cite{bowman-etal-2015-large}, and 
