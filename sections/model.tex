@@ -170,10 +170,10 @@ For each $(x, \xp)$, we compute its primary \tagstr using part-of-speech tags an
 For example, \ctrltag{negation} occurs when we observe changes to negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlaps between tokens deleted and added.
 When multiple changes occur, we label it with the primary \tagstr, which most significantly changes the semantic meaning on the corresponding subphrase.
 In Figure~\ref{fig:blank}A, we use \ctrltag{negation}, as \swap{great}{not great} is more significant than \swap{kids}{children}.
-\tofix{We use a pair of two sentences interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.}
-To balance the distribution (Table~\ref{table:gpt_train_stats} in \tofix{Appendix~\ref{TODO}}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstrshorts.
-Still, \ctrltag{quantifier} and \ctrltag{negation} have less training data compared to other codes. 
-Fortunately, these codes tend to be limited to more specific patterns (``more than'', ``not'', ``never'') when compared to ``broad'' codes like \ctrltag{lexical}, and thus even a small sample is enough to learn them. 
+We use a pair of two sentences interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.
+To balance the distribution (Table~\ref{table:gpt_train_stats} in Appendix~\ref{appendix:train_data}), for each dataset, we extract \tagstrs from all the $(x, \xp)$, and randomly sample up to 10,000 instances per \tagstrshorts.
+%Still, \ctrltag{quantifier} and \ctrltag{negation} have less training data compared to other codes. 
+%Fortunately, these codes tend to be limited to more specific patterns (``more than'', ``not'', ``never'') when compared to ``broad'' codes like \ctrltag{lexical}, and thus even a small sample is enough to learn them. 
 
 To allow flexible blanking at generation time, we generate multiple training prompts per pair that cover different dependency tree structures related to the perturbed spans (Figure~\ref{fig:blank}B), including (1) just the changed tokens, (2) the associated parsing structures, (3) the merged changes, and (4) the entire sentence.
 We eventually obtain $657,144$ prompts from $186,451$ pairs.}
@@ -209,7 +209,7 @@ Fully automated uses of \sysname (\eg adversarial attacks) may benefit from stri
     \end{tabular}
     \vspace{-5pt}
     \caption{\fixed{Intrinsic evaluations: \sysname counterfactuals are \emph{closer} to the original instance than non-fintuned GPT-2 and T5~\cite{JMLR:v21:20-074}, and more \emph{diverse} than RoBERTa~\cite{liu2019roberta}.}}
-    \vspace{-15pt}
+    \vspace{-5pt}
     \label{table:intrinsic}
 \end{table}
 

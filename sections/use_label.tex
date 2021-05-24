@@ -45,7 +45,7 @@ This indicates \sysname can also reveal model insufficiencies.
 %\ie with similar drop in performance (on average $-9.8$ for all classification tasks in \cite{gardner2020contrast}) and consistency (${\approx}64.1$ in manual contrast set).
 %The model performance here drops for a similar degree compared to the manually created contrast sets~\cite{gardner2020contrast} ($-9.78$ for all )
 }
-\vspace{-5pt}
+%\vspace{-5pt}
 \label{table:contrast_set_result}
 \end{table}
 }
@@ -84,7 +84,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 % we need to say it's cheaper
 %on \colbox{cid}{in domain}, \colbox{cood}{out of domain}, and \colbox{ccon}{contrast sets}. \maug performs better than \mcomp on twitter datasets (Senti140~\cite{go2009twitter}, SemEval 2017~\cite{rosenthal2017semeval}) and contrast sets IMDb-Contrast~\cite{gardner2020contrast} and IMDb-CAD~\cite{kaushik2019learning}, while maintaining the ones on reviews (SST-2, Amzbook~\cite{ni2019justifying}, Yelp~\cite{asghar2016yelp}, IMDb Movie Review~\cite{maas2011learning}).
 }
-\vspace{-5pt}
+%\vspace{-5pt}
 \label{table:aug_sst}
 \end{table*}}
 
@@ -121,7 +121,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
 \caption{\nli models, with $n{=}20,000$ and $m{=}1,574$. 
 \maug improves on \colbox{ccon}{contrast} and \colbox{ccon}{challenge sets}~\cite{kim2019probing, naik2018stress, glockner-etal-2018-breaking, wang2018glue}; it gets compatible (or better) gains than \mcad (trained using manual counterfactuals), but with less implementation and annotation effort.
 }
-\vspace{-10pt}
+%\vspace{-10pt}
 \label{table:aug_nli}
 \end{table*}
 }
@@ -144,7 +144,7 @@ The model also improves on the \colbox{ccon}{contrast sets}~\cite{gardner2020con
  %10000 & 1574 & aug\_gpt & $85.3\pm 0.3$& $85.0\pm 0.2$& $85.1\pm 0.1$& $73.4\pm 0.5$& $90.5\pm 1.1$& $56.5\pm 1.2$& $64.6\pm 0.5$& $57.0\pm 0.4$\\
 \bottomrule
 \end{tabular}
-\vspace{-5pt}
+%\vspace{-5pt}
 \caption{\sysname in \qqp improves on \colbox{ccon}{PAWS}~\cite{zhang2019paws}, with $n{=}20,000$ and $m{=}1,911$.}
 \vspace{-5pt}
 \label{table:aug_qqp}
@@ -305,7 +305,7 @@ it significantly lowers the error rates on 11 out of 27 \qqp tests,\footnote{The
 For \sst, it improves the model on 5 out of 15 tests, hurting 1.
 \fixed{Notably, we obtain largest gains on challenge and contrast sets (\eg \texttt{Break} and \texttt{DNC} in Table~\ref{table:aug_nli}) or when the out-of-domain dataset is sufficiently different from the training domain (\eg Senti140 and SemEval in Table~\ref{table:aug_sst}). 
 Here, we only report a low $m/n$ ratio (<10\% for NLI and QQP) to show that a small amount of augmentation is already beneficial. 
-The results are similar for other combinations we explored (see \tofix{Appendix~\ref{TODO}}), except when the ratio of counterfactual to original data was too high (\eg, $m=n$ may decrease vocabulary diversity or induce additional data bias, echoing~\cite{Khashabi2020MoreBF}).}
+The results are similar for other combinations we explored (see Appendix~\ref{appendix:data_collection}), except when the ratio of counterfactual to original data was too high (\eg, $m=n$ may decrease vocabulary diversity or induce additional data bias, echoing~\cite{Khashabi2020MoreBF}).}
 
 
 \subsection{Discussion}

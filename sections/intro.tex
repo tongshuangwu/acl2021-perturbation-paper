@@ -13,7 +13,7 @@ As a result, prior work has tailored counterfactual generators for many differen
 %Such counterfactuals are usually produced manually by human annotators ~\cite{gardner2020contrast} or by human-written perturbation functions~\cite{wu2019errudite}, making them costly to generate (\eg 4-5 minutes per counterfactual~\cite{kaushik2019learning}) and liable to systematic omissions (\eg human annotators may miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B). %Further, relying on human creativity may cause important but non-obvious patterns to be missed, \eg humans may cover \swap{great}{not great}, but miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B.
 %Though it is cheaper to automate the process with parsing templates~\cite{li2020linguistically}, the templates usually have limited coverage on either the patterns-to-perturb, or the applicable data points.
 %In contrast, adversarial examples specify a very different counterfactual relationship: $x$ and $\xp$ must have different model predictions \emph{despite} being semantically equivalent, such that automated methods often rely on paraphrasing models~\cite{iyyer2018adversarial,  ribeiro2018semantically}.
-For example, to support {\em model training and evaluation}, human annotators create counterfactuals that change the groundtruth labels by manually rewriting instances~\cite{gardner2020contrast} or defining perturbation functions~\cite{checklist:acl20}.
+For example, to support {\em model training and evaluation}, human annotators create counterfactuals that change the groundtruth labels by manually rewriting instances~\cite{gardner2020contrast, qin-etal-2019-counterfactual} or defining perturbation functions~\cite{checklist:acl20}.
 Manual rewrites are costly (\eg 4--5 minutes per counterfactual~\cite{kaushik2019learning}) and susceptible to systematic omissions (\eg human annotators may cover \swap{great}{not great}, but miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B).
 Meanwhile, automated generators aiming for \emph{model analysis and explanation} usually focus on another relationship, \ie generating $\xp$ that have different model predictions than $x$~\cite{ross2020explaining, Zhang2019GeneratingFA}. 
 As a result, they neglect prediction-preserving counterfactuals that are equally important for understanding or shaping model behaviors, like \swap{kids}{no one} and \swap{great}{scary} linked to Figure~\ref{fig:teaser}D.
@@ -25,12 +25,12 @@ As a result, they neglect prediction-preserving counterfactuals that are equally
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 18cm 30.5cm 0cm},clip, width=1\columnwidth]{figures/teaser.pdf}
-\vspace{-15pt}
+\vspace{-5pt}
 \caption{
 Overview: (A) given a sentiment analysis instance $x$, \sysname generates (B) various counterfactuals $\xp$, which are then (C) selected for downstream use.
 \eg in (D) we select counterfactual explanations that complement a black box explanation: though ``great'' and ``kids'' are deemed important, perturbing them may not affect the prediction $f(x)=f(\xp)=\text{\emph{positive}}$, revealing model failures not covered by feature attributions.\footnotemark
 }
-\vspace{-10pt}
+\vspace{-5pt}
 \label{fig:teaser}
 \end{figure} 
 %\footnotetext{We open source both the \sysname model and the selection heuristics at \modelurl.}
