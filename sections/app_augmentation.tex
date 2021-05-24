@@ -59,7 +59,14 @@ With $\gamma = \beta > \alpha$ (empirically $2/5$, $2/5$, $1/5$).
 \end{comment}
 
 
-
+\begin{figure}
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/mturk_label}
+\vspace{-5pt}
+\caption{A sample labeling task: The crowdworkers annotate three counterfactuals based on their validity and class label, with respect to the original instance.}
+\vspace{-15pt}
+\label{fig:mturk_ui}
+\end{figure}
 
 
 
@@ -92,25 +99,44 @@ We collected two annotations per counterfactual, and only kept those that at lea
 One of the authors labeled a subset of 100 $\xp$ on 100 $x$ in \sst, and reached high agreement with the majority-voted results ($\kappa=0.77$, raw labeling agreement $88\%$).
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.9\columnwidth]{figures/mturk_label}
-\vspace{-5pt}
-\caption{A sample labeling task: The crowdworkers annotate three counterfactuals based on their validity and class label, with respect to the original instance.}
-\vspace{-15pt}
-\label{fig:mturk_ui}
-\end{figure}
 
-\subsection{Training Details for \S\ref{subsec:augmentation}}
+
+\subsection{Training Details \& $m/n$ Ratios, for \S\ref{subsec:augmentation}}
 \label{appendix:data_collection}
 
 %\paragraph{Model.}
 %We finetuned \texttt{roberta-base} models~\cite{liu2019roberta} provided by HuggingFace Transformers~\cite{Wolf2019HuggingFacesTS}.
-For each given $(m,n)$, we created three different samples of training data.
+For each $(m,n)$, we created three samples of training data.
 Each sample was further averaged over four random seeds.
-For each run, we heuristically picked the initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp (respectively), and trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
+For each run, we heuristically picked the initial learning rates 1e-5, 2e-5, 2e-5 for \sst, \nli and \qqp, and trained 20 epochs with a dropout rate of 0.1 and a batch size of 16. 
 We selected the epoch that had the highest accuracy on the corresponding validation set, which takes 1/5 of the training data size, with the same ratio of $m/n$ counterfactual and original examples.
 %\wts{Double check the reproducibility requirement to see if there's anything missing. And should I move the whole section to appendix?}
+
+
+\fixed{
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\columnwidth]{figures/sst_trend_2}
+\vspace{-15pt}
+\caption{
+\fixed{The accuracy trend on two \sst datasets, as the total training datasize ($m+n$) varies. The blue line shows an augmentation of $m=2k$ counterfactuals, and the blue one represents the corresponding \mcomp.
+Though the counterfactuals remains useful on datasets like SemEval across all $m+n$, it appears too many counterfactuals may be harmful (Amzbook).
+}
+% (when $m+n=4k$, we have $m=n=2k$ on the orange line)
+}
+\vspace{-15pt}
+\label{fig:sst_trend}
+\end{figure}
+
+%\emph{The ratio of the counterfactuals matters. }
+%In both \nli and \qqp, just adding $m/n < 10\%$ data is sufficient to boost the performance.
+We further explore ratios of added counterfactuals. 
+%The ratio of counterfactual also matters.
+Take \sst as an example: while the counterfactual remains effective on most datasets, it hurts the model performance on Amzbook when the counterfactual takes a large proportion (Figure~\ref{fig:sst_trend}, Yelp followed a similar but more mild trend).
+We suspect that flipping out too much original data affects the data diversity, and in turn decreases the model performance.
+Similarly, \citet{huang2020counterfactually} asserted that augmenting $n=1.7k$ NLI data with $m=6.6k$ counterfactuals did not improve model generalization accuracy.% over augmenting with non-counterfactual data.
+}
+
 
 
 \begin{comment}
@@ -121,4 +147,3 @@ As a behavioral testing framework, CheckList defines multiple tests and measures
 We define a test to have failed if the failure rate is over $20\%$.
 Because failure rates are more sensitive than the accuracy, we say a model capability is affected, if the failure rate of a test changes (increases or decreases) more then 5\% (\eg failure rates going from 20\% to 21\% is insignificant), and the delta accounts for 10\% (\eg failure rate decreasing 8\% from 100\% to 92\% does not count.)
 \end{comment}
-

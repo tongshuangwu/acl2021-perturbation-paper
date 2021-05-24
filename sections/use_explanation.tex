@@ -18,14 +18,14 @@
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 21cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
-\vspace{-10pt}
+\vspace{-15pt}
 \caption{
-(A) A \qqp instance where %the task model\footnotemark{} prediction
-$f(x)$ is \emph{duplicate} ($=$) with 98.2\% confidence, as well as SHAP importance weights for tokens in Q2.
+(A) An instance where the \qqp model prediction
+$f(x)$ is \emph{Duplicate} ($=$) at 98.2\% confidence, with SHAP importance weights for tokens in Q2.
 %Counterfactual explanations complement SHAP with concrete, readable examples, \eg (C) depicts a surprising flipped prediction ($\neq)$ that was missed by SHAP.
-Counterfactual explanations complement SHAP with concrete examples and surprising behaviors, \eg (B) shows that \swap{friend}{woman} surprisingly flips the prediction ($\neq)$, despite the low weight on ``friend''.
+Counterfactual explanations complement SHAP with concrete examples and surprising behaviors, \eg (B) shows that \swap{friend}{woman} surprisingly flips the prediction to \emph{Non-Duplicate} ($\neq)$, despite the low weight on ``friend.''
 }
-\vspace{-10pt}
+\vspace{-5pt}
 \label{fig:explanation}
 \end{figure}
 \section{Counterfactual Explanations}
@@ -51,9 +51,9 @@ Even perfect importance scores may be too abstract for users to gain real unders
 
 
 Since presenting a large number of concrete counterfactuals would be overwhelming, we propose a hybrid approach, displaying feature attributions as a high-level summary, together with a judicious selection of \sysname counterfactuals that make behaviors concrete and highlight potential limitations.
-Following \citet{miller}'s observation that people look for explanations revealing \emph{unexpected} behavior, we select \emph{surprising} counterfactuals.
-That is, we estimate the expected change in prediction with feature attributions, and select counterfactuals that violate these expectations, \ie examples where the \emph{real} change in prediction is large even though importance scores are low (Figure~\ref{fig:explanation}B), and examples where the change is small but importance scores are high (Figure~\ref{fig:explanation}C).\footnote{
-Details in Appendix~\ref{appendix:exp_rank}.} 
+Following \citet{miller}'s observation that people look for explanations revealing \emph{unexpected} behavior, we select \emph{surprising} counterfactuals.\footnote{
+Details in Appendix~\ref{appendix:exp_rank}.}
+That is, we estimate the expected change in prediction with feature attributions, and select counterfactuals that violate these expectations, \ie examples where the \emph{real} change in prediction is large even though importance scores are low (Figure~\ref{fig:explanation}B), and examples where the change is small but importance scores are high (Figure~\ref{fig:explanation}C). 
 Of course, users can also view additional counterfactuals that perturb tokens of particular interest, a technique that we explore in the next section.
 % Alternatively, based on their own understandings of token scores, \emph{users} can interactively view counterfactuals that perturb certain tokens of interest, a technique we explore in the next section. 
 
@@ -68,7 +68,7 @@ We evaluate three ways of generating counterfactuals: (1) \crandom, a baseline w
 % We aim to answer: does seeing counterfactuals bring new insights, or are counterfactuals redundant with manual analysis or explanations?
 
 We recruited 13 participants (graduate students with experience in model explanation), and had them analyze the aforementioned \qqp model. In each round, users were shown an example, the model prediction, and a SHAP explanation, as in Figure~\ref{fig:explanation}A. Users were instructed to create up to $10$ counterfactuals in order to better understand model behavior around the example, for which model predictions were given (users created $6$ on average). 
-Finally, users simulated what the model would do on six counterfactuals, two from each condition (in random order). Counterfactuals where users make mistakes are preferable, as displaying these would add information that users do not already have.
+Finally, users simulated what the model would do on six counterfactuals~\cite{hase2020evaluating}, two from each condition (in random order). Counterfactuals where users make mistakes are preferable, as displaying these would add information that users do not already have.
 
 
 
@@ -96,7 +96,8 @@ Finally, users simulated what the model would do on six counterfactuals, two fro
 \includegraphics[width=1\columnwidth]{figures/err_rate_surprise.pdf}
 \vspace{-15pt}
 \caption{
-Simulation error rates on counterfactuals. Higher error rates are better, indicating counterfactuals that would add more information to users if displayed.
+Simulation error rates per condition (higher the better). 
+\cshap has the highest error rate, indicating these counterfactuals would add the most information to users if displayed.
 }
 \vspace{-10pt}
 \label{fig:err_rate}

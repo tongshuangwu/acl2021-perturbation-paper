@@ -43,8 +43,8 @@
 \usepackage{bbold}
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 
-
-%\aclfinalcopy % Uncomment this line for the final submission
+%\usepackage{draftwatermark}
+\aclfinalcopy % Uncomment this line for the final submission
 \def\aclpaperid{183} %  Enter the acl Paper ID here
 
 %\setlength\titlebox{5cm}
@@ -133,7 +133,7 @@
 % constants
 \newcommand{\sysname}{\textsc{Polyjuice}\xspace}
 \newcommand{\modelurl}{\url{https://huggingface.co/uw-hai/polyjuice}}
-\renewcommand{\modelurl}{\texttt{[URL omitted]}}
+\renewcommand{\modelurl}{\url{https://github.com/tongshuangwu/polyjuice}}
 
 \newcommand{\mturkurl}{\url{https://tongshuangwu.github.io/perturb-exp-ui/?assignmentId=1&platform=standalone&debug=debug&task=nli}}
 \newcommand{\tagstr}{control code\xspace}
@@ -169,6 +169,7 @@
 \newcommand{\yp}{\hat{y}}
 \newcommand{\xset}{\mathbf{X}}
 \newcommand{\tofix}[1]{{\color{red}#1}\xspace}
+\newcommand{\fixed}[1]{{\color{blue}#1}\xspace}
 
 
 % annotations
@@ -176,11 +177,10 @@
 \newcommand{\marker}[2]{\ensuremath{^{\textsc{#1}}_{\textsc{#2}}}}
 \newcommand{\arkcomment}[3]{\ensuretext{\textcolor{#3}{[#1 #2]}}}
 %\renewcommand{\arkcomment}[3]{}  % uncomment for submission
-\newcommand{\hao}[1]{\arkcomment{\marker{H}{P}}{#1}{purple}}
 \newcommand{\wts}[1]{\arkcomment{\marker{S}{W}}{#1}{orange}}
-\newcommand{\victor}[1]{\arkcomment{\marker{V}{Z}}{#1}{blue}}
 \newcommand{\dq}[1]{\arkcomment{\marker{D}{Q}}{#1}{cyan}}
-\newcommand{\dan}[1]{\arkcomment{\marker{D}{W}}{#1}{red}}
+\newcommand{\dan}[1]{\arkcomment{\marker{D}{W}}{#1}{purple}}
+
 
 % teal, cyan
 %\title{\sysname: General-purpose Counterfactual Generation}
@@ -218,7 +218,7 @@ are useful for analysis and training of NLP models, current generation methods e
 %only instantiate a small set of automatic perturbations such as paraphrases or word substitutions.
 only instantiate limited types of perturbations such as paraphrases or word substitutions. %, lacking variety.
 We present \sysname, a general-purpose counterfactual generator that allows for control over perturbation types and locations, trained by finetuning GPT-2 on multiple datasets of paired sentences. 
-We show that \sysname produces diverse sets of realistic counterfactuals, which in turn are useful in various distinct applications: improving training and evaluation on three different tasks (with up to 75\% less annotation effort than manual generation), augmenting state-of-the-art explanation techniques, and supporting systematic counterfactual error analysis by revealing behaviors easily missed by human experts.
+We show that \sysname produces diverse sets of realistic counterfactuals, which in turn are useful in various distinct applications: improving training and evaluation on three different tasks (with around 70\% less annotation effort than manual generation), augmenting state-of-the-art explanation techniques, and supporting systematic counterfactual error analysis by revealing behaviors easily missed by human experts.
 
 % Counterfactual examples are useful for various applications, but current methods for generating them either rely on crowdsourcing, or only instantiate a small set of possible perturbations-of-interest (\eg changing the groundtruth label through a single antonym substitution.)
 % We propose \sysname, a general purpose counterfactual generator, by finetuning GPT-2 on multiple datasets with paired sentences. 
@@ -255,11 +255,12 @@ We show that \sysname produces diverse sets of realistic counterfactuals, which 
 
 \input{sections/relate}
 \input{sections/discussion}
+\input{sections/ack}
+
 %\clearpage
 \newpage
 
 \input{sections/ethical}
-%\input{sections/ack}
 \bibliography{ref}
 \bibliographystyle{acl_natbib}
 

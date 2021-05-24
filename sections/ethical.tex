@@ -2,6 +2,7 @@
 \section{Ethical Considerations}
 Our work includes labeling counterfactuals on crowdsourcing platforms, as well as conducting user studies with graduate students.
 As detailed in Appendix~\ref{appendix:label_instruct} and \ref{appendix:exp_user_study}, we compensated the MTurk workers \$2.5 for ${\approx}15$ minutes of labeling, and the graduate students \$20 for the user study (one hour), above the U.S. federal minimum wage.
+The studies are with IRB approval.
 
 We only finetune GPT-2 rather than training it from scratch, such that our compute costs are relatively low (around 8 hours for finetuning, Appendix~\ref{appendix:train_data}). All of our finetuning experiments involved finetuning RoBERTa on smaller datasets.
 % To reduce the cost, we may consider optimizing the finetuning dataset to reduce repetitive sentence pairs, and thereby train \sysname with fewer shots.
