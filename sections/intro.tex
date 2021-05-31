@@ -7,7 +7,7 @@ Counterfactual reasoning --- mentally simulating what \emph{would have happened}
 For example, in Figure~\ref{fig:teaser}, \exinline{It is great for kids} is perturbed into multiple variations, each providing unique insights by simulating what would have happened if the sentence was different.
 
 Applications of counterfactual reasoning to NLP generally specify the relationship $x \veryshortarrow \xp$, and then create $\xp$ according to the relationship.
-As a result, prior work has tailored counterfactual generators for many different applications, only collecting subsets of useful $\xp$.
+As a result, prior work has tailored counterfactual generators for different applications, only collecting subsets of $\xp$ that are useful for the specific task.
 %inducing different limitations.
 %For example, a minimal edit of a sentence $x$ that results in a different label is useful for model training and evaluation.
 %Such counterfactuals are usually produced manually by human annotators ~\cite{gardner2020contrast} or by human-written perturbation functions~\cite{wu2019errudite}, making them costly to generate (\eg 4-5 minutes per counterfactual~\cite{kaushik2019learning}) and liable to systematic omissions (\eg human annotators may miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B). %Further, relying on human creativity may cause important but non-obvious patterns to be missed, \eg humans may cover \swap{great}{not great}, but miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B.
@@ -15,7 +15,7 @@ As a result, prior work has tailored counterfactual generators for many differen
 %In contrast, adversarial examples specify a very different counterfactual relationship: $x$ and $\xp$ must have different model predictions \emph{despite} being semantically equivalent, such that automated methods often rely on paraphrasing models~\cite{iyyer2018adversarial,  ribeiro2018semantically}.
 For example, to support {\em model training and evaluation}, human annotators create counterfactuals that change the groundtruth labels by manually rewriting instances~\cite{gardner2020contrast, qin-etal-2019-counterfactual} or defining perturbation functions~\cite{checklist:acl20}.
 Manual rewrites are costly (\eg 4--5 minutes per counterfactual~\cite{kaushik2019learning}) and susceptible to systematic omissions (\eg human annotators may cover \swap{great}{not great}, but miss \swap{kids}{no one} in Figure~\ref{fig:teaser}B).
-Meanwhile, automated generators aiming for \emph{model analysis and explanation} usually focus on another relationship, \ie generating $\xp$ that have different model predictions than $x$~\cite{ross2020explaining, Zhang2019GeneratingFA}. 
+Meanwhile, automated generators for \emph{model analysis and explanation} usually focus on other relationships, \eg generating $\xp$ that have different model predictions than $x$~\cite{ross2020explaining, Zhang2019GeneratingFA}. 
 As a result, they neglect prediction-preserving counterfactuals that are equally important for understanding or shaping model behaviors, like \swap{kids}{no one} and \swap{great}{scary} linked to Figure~\ref{fig:teaser}D.
 
 
@@ -27,8 +27,8 @@ As a result, they neglect prediction-preserving counterfactuals that are equally
 \includegraphics[trim={0 18cm 30.5cm 0cm},clip, width=1\columnwidth]{figures/teaser.pdf}
 \vspace{-5pt}
 \caption{
-Overview: (A) given a sentiment analysis instance $x$, \sysname generates (B) various counterfactuals $\xp$, which are then (C) selected for downstream use.
-\eg in (D) we select counterfactual explanations that complement a black box explanation: though ``great'' and ``kids'' are deemed important, perturbing them may not affect the prediction $f(x)=f(\xp)=\text{\emph{positive}}$, revealing model failures not covered by feature attributions.\footnotemark
+Overview: (A) given a sentiment analysis instance $x$, \sysname\footnotemark generates (B) various counterfactuals $\xp$, which are then (C) selected for downstream use.
+\eg in (D) we select counterfactual explanations that complement a black box explanation: though ``great'' and ``kids'' are deemed important, perturbing them may not affect the prediction $f(x)=f(\xp)=\text{\emph{positive}}$, revealing model failures not covered by feature attributions.
 }
 \vspace{-5pt}
 \label{fig:teaser}
@@ -47,25 +47,25 @@ Overview: (A) given a sentiment analysis instance $x$, \sysname generates (B) va
 % 
 However, counterfactual generation does not \emph{have} to be task-specific.
 The same set of counterfactuals in Figure~\ref{fig:teaser} can support a variety of applications.
-Moreover, for cases like model explanation and analysis, a general-purpose pool of counterfactuals is preferable, as the relationship-of-interest can be more exploratory and user-oriented~\cite{wu2019errudite}.
-In this work, we formalize the task of \emph{counterfactual generation}, disentangling generation from the application of counterfactuals (\S\ref{sec:general_purpose}).
+Moreover, for cases like model explanation and analysis, a general-purpose pool of counterfactuals may be preferable, as the relationship of interest can be more exploratory and user-oriented~\cite{wu2019errudite}.
+In this work, we formalize the task of \emph{counterfactual generation}, disentangling generation from the application of counterfactuals.
 Given an input $x$ (Figure~\ref{fig:teaser}A), our generator produces a set of counterfactuals $\hat{\xset} = \{\xp_1, \xp_2, ...\}$ with \emph{application-agnostic} relationships $x \veryshortarrow \xp_i$ (Figure~\ref{fig:teaser}B).
 Afterwards, we use \emph{application-specific} selection methods to find subsets of $\xp$ that are most effective for a given use case (Figure~\ref{fig:teaser}C).
 
 We frame the generation step as conditional text generation, and finetune GPT-2~\cite{radford2019language} into a generator called \emph{\sysname} using $(x, \xp)$ pairs. 
 To allow for targeted counterfactuals, we also design \tagstrs like \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B), and adopt fill-in-the-blank structures~\cite{donahue2020enabling} to specify where the perturbation occurs and how.
 %We also allow for targeted counterfactuals, by specifying where the perturbation occurs~\cite{donahue2020enabling} and designing \tagstrs like \ctrltag{negation} or \ctrltag{delete} (Figure~\ref{fig:teaser}B).
-Intrinsic evaluation shows that \sysname generates $\xp$ that are \emph{fluent}, \emph{diverse}, and \emph{close to $x$}, and that the \emph{control} mechanisms effectively retrieve perturbations that are rare to sample from off-the-shelf language models. %(\eg 42\% more negations).
+Intrinsic evaluation shows that \sysname generates $\xp$ that are \emph{fluent}, \emph{diverse}, and \emph{close to $x$}, and that the \emph{control} mechanisms retrieve perturbations that would likely not be sampled from off-the-shelf language models. %(\eg 42\% more negations).
 
 %--- the control is \emph{the backbone of} various downstream applications.
 
 %We propose simple yet effective selection strategies, 
 With simple selection heuristics, we show that a single \sysname model can significantly aid humans in diverse downstream applications.\footnote{We demonstrate \sysname in semi-automatic settings, but as discussed in \S\ref{subsec:nlg}, it can also work automatically.} 
 For \emph{counterfactual training and evaluation} (\S\ref{sec:app_label}), humans label \sysname counterfactuals rather than creating them from scratch.
-They produce training data that significantly improves model generalization, as well as contrast sets that help identify model vulnerabilities~\cite{gardner2020contrast}, with around 70\% less annotation effort. 
-In another application, \sysname produces \emph{counterfactual explanations} (\S\ref{sec:app_explain}), bringing significant insight on top of state-of-the-art explanation techniques. 
+They produce training data that significantly improve model generalization, as well as contrast sets that help identify model vulnerabilities~\cite{gardner2020contrast}, with around 70\% less annotation effort. 
+In another application, \sysname produces \emph{counterfactual explanations} (\S\ref{sec:app_explain}), providing significant insight on top of state-of-the-art explanation techniques. 
 Finally, \sysname supports counterfactual \emph{error analysis} (\S\ref{sec:app_err_analysis}).
-It allows users to explore related counterfactuals (\eg the model responds differently to different negation forms in Figure~\ref{fig:teaser}B), and to aggregate individual counterfactuals into patterns, gaining systematic understanding of model behavior. 
+It allows users to explore related counterfactuals (\eg the model responds differently to different negation forms in Figure~\ref{fig:teaser}B), and to aggregate individual counterfactuals into patterns in order to gain systematic understanding of model behavior. 
 
 %First, 
 % By lifting the burden of manual rewrite, \sysname \emph{facilitates effective counterfactual training and evaluation}.

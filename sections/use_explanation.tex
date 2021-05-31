@@ -20,7 +20,7 @@
 \includegraphics[trim={0 21cm 33cm 0cm},clip,width=1\columnwidth]{figures/explanation_v2.pdf}
 \vspace{-15pt}
 \caption{
-(A) An instance where the \qqp model prediction
+(A) An instance in \qqp where the model prediction
 $f(x)$ is \emph{Duplicate} ($=$) at 98.2\% confidence, with SHAP importance weights for tokens in Q2.
 %Counterfactual explanations complement SHAP with concrete, readable examples, \eg (C) depicts a surprising flipped prediction ($\neq)$ that was missed by SHAP.
 Counterfactual explanations complement SHAP with concrete examples and surprising behaviors, \eg (B) shows that \swap{friend}{woman} surprisingly flips the prediction to \emph{Non-Duplicate} ($\neq)$, despite the low weight on ``friend.''
@@ -40,7 +40,7 @@ Counterfactual explanations complement SHAP with concrete examples and surprisin
 
 % \subsection{Foils to Feature Attribution Explanations}
 A popular way of explaining NLP models is to attribute importance weights to the input tokens, either using attention scores~\cite{wiegreffe2019attention} or by summarizing the model behavior on perturbed instances (\eg LIME~\cite{Ribeiro2016WhySI} and SHAP~\cite{NIPS2017_7062}).
-Though ubiquitous, prior work indicates token scores may not always reflect their real importance~\cite{pruthi2020learning}.
+Though ubiquitous, token scores may not always reflect their real importance~\cite{pruthi2020learning}.
 Popular packages like LIME or SHAP estimate scores by \emph{masking} words, and therefore may not reflect model behavior on natural counterfactual cases. For example, the token ``friend'' in Figure \ref{fig:explanation}A is not considered important even though a natural substitution in Figure \ref{fig:explanation}B flips the prediction. The opposite happens to ``in depression,'' where a significant change makes no difference to the model's prediction (Figure \ref{fig:explanation}C).
 % With the feature importance in Figure~\ref{fig:explanation}A, it is hard for users to imagine the model changing predictions when the trivial token ``friend'' in Q2 is perturbed (in B), or that changing the important ``in depression'' may not matter (in C).
 Even perfect importance scores may be too abstract for users to gain real understanding~\cite{miller}, \eg users may not grasp the significance of a low importance score for the token ``help'' without concrete examples such as the one in Figure \ref{fig:explanation}D. 
