@@ -170,7 +170,7 @@ For each $(x, \xp)$, we compute its primary \tagstr using part-of-speech tags an
 For example, \ctrltag{negation} occurs when we observe changes to negation modifiers or specific words like ``supposedly'', and \ctrltag{shuffle} occurs when we have overlap between tokens deleted and added.
 When multiple changes occur, we label it with the \tagstr which most significantly changes the semantics of the corresponding subphrase as computed by SBERT~\cite{reimers-2019-sentence-bert}.
 For example, in Figure~\ref{fig:blank}A, \ctrltag{negation} (\swap{great}{not great}) is more significant than \ctrltag{lexical} (\swap{kids}{children}).
-To balance the distribution (Table~\ref{table:gpt_train_stats} in Appendix~\ref{appendix:train_data}), for each dataset, we extract \tagstrs from all the $(x, \xp)$\footnote{We use sentences in a pair interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.}, and randomly sample up to 10,000 instances per \tagstrshorts.
+To balance the distribution (Table~\ref{table:gpt_train_stats} in Appendix~\ref{appendix:train_data}), for each dataset, we extract \tagstrs from all the $(x, \xp)$,\footnote{We use sentences in a pair interchangeably as $x$ and $\xp$ to learn the \tagstrs both ways.} and randomly sample up to 10,000 instances per \tagstrshorts.
 %Still, \ctrltag{quantifier} and \ctrltag{negation} have less training data compared to other codes. 
 %Fortunately, these codes tend to be limited to more specific patterns (``more than'', ``not'', ``never'') when compared to ``broad'' codes like \ctrltag{lexical}, and thus even a small sample is enough to learn them. 
 
@@ -223,7 +223,7 @@ As for infilling models, \sysname counterfactuals are more diverse (measured by 
 Meanwhile, T5 displays higher diversity but less closeness, probably due to the fact that it does not consider the original masked tokens when generating $\xp$.
 For example, in Figure~\ref{fig:teaser} \exinline{It is great for kids,} T5 replaces \exinline{for kids} with \exinline{idea}, \exinline{to meet you,} whereas \sysname generates \exinline{for kids yet adults can enjoy,} \exinline{for any audience.} 
 
-We evaluate controllability by comparing \sysname with T5 as well as with GPT-2 finetuned on prompts \emph{without} \tagstrshorts.
+We evaluate \emph{controllability} by comparing \sysname with T5 as well as with GPT-2 finetuned on prompts \emph{without} \tagstrshorts.
 We verify that the \tagstrshorts improve the success rate of generating counterfactuals with the desired perturbation types set out in Table~\ref{table:ctrltag} by as much as 42\% for perturbations such as \ctrltag{negation} and \ctrltag{insert}.
 For example, given \exinline{It is \texttt{[BLANK]} great for kids,} baselines generate \exinline{also,} \exinline{fun and,} rather than \exinline{not} (\ctrltag{negation}).
 
